@@ -64,8 +64,8 @@ const unsigned long STEP_DELAY_MICROSEC = (60L * 1000L * 1000L) / (STEPS_PER_REV
 
 // Pins controlling the motor. Change this depending on your exact wiring!
 const unsigned int MOTOR_PIN_1 = 11; // Blue   - 28BYJ48 pin 1
-const unsigned int MOTOR_PIN_2 = 10; // Pink   - 28BYJ48 pin 2
-const unsigned int MOTOR_PIN_3 =  9; // Yellow - 28BYJ48 pin 3
+const unsigned int MOTOR_PIN_2 =  9; // Yellow - 28BYJ48 pin 3
+const unsigned int MOTOR_PIN_3 = 10; // Pink   - 28BYJ48 pin 2
 const unsigned int MOTOR_PIN_4 =  8; // Orange - 28BYJ48 pin 4
 
 const unsigned int POSITION_EEPROM_BASE_ADDR = 0;
@@ -74,7 +74,7 @@ const unsigned int POSITION_EEPROM_BASE_ADDR = 0;
 
 // While moving, steps_left > 0
 // When not moving, steps_left == 0
-unsigned int steps_left;
+int steps_left;
 
 enum Direction {
     forward = 1,
@@ -82,7 +82,7 @@ enum Direction {
 } direction;
 
 // The current position, which we store in EEPROM
-unsigned int position;
+int position;
 
 unsigned long last_step_time;
 
@@ -109,6 +109,10 @@ void setup() {
     last_step_time = 0L;
 
     EEPROM.get(POSITION_EEPROM_BASE_ADDR, position);
+    if (position > MAX_STEPS) {
+        // The position likely had never been stored in EEPROM...
+        position = 0;
+    }
 }
 
 // The `loop` function runs over and over again until power down or reset.
@@ -150,58 +154,54 @@ void loop() {
 //-- UTILITY FUNCTIONS -----------------------------------------------------
 
 void step() {
-    if (steps_left <= 0) {
-        // Nothing to do if steps_left == 0
-        // steps_left < 0 is not a normal case.
-        return;
-    }
+    if (steps_left > 0) {
+        // Make sure we don't prematurely take a step if it's too early...
+        unsigned long now = micros();
+        if (now - last_step_time < STEP_DELAY_MICROSEC) {
+            return;
+        }
+    
+        last_step_time = now;
+    
+        steps_left--;
 
-    // Make sure we don't prematurely take a step if it's too early...
-    unsigned long now = micros();
-    if (now - last_step_time < STEP_DELAY_MICROSEC) {
-        return;
-    }
+        if (direction == forward) {
+            position++;
+        } else {
+            position--;
+        }
+    
+        switch (position % 4) {
+            case 0: // 1010
+                digitalWrite(MOTOR_PIN_1, HIGH);
+                digitalWrite(MOTOR_PIN_2, LOW);
+                digitalWrite(MOTOR_PIN_3, HIGH);
+                digitalWrite(MOTOR_PIN_4, LOW);
+                break;
+            case 1: // 0110
+                digitalWrite(MOTOR_PIN_1, LOW);
+                digitalWrite(MOTOR_PIN_2, HIGH);
+                digitalWrite(MOTOR_PIN_3, HIGH);
+                digitalWrite(MOTOR_PIN_4, LOW);
+                break;
+            case 2: // 0101
+                digitalWrite(MOTOR_PIN_1, LOW);
+                digitalWrite(MOTOR_PIN_2, HIGH);
+                digitalWrite(MOTOR_PIN_3, LOW);
+                digitalWrite(MOTOR_PIN_4, HIGH);
+                break;
+            case 3: // 1001
+                digitalWrite(MOTOR_PIN_1, HIGH);
+                digitalWrite(MOTOR_PIN_2, LOW);
+                digitalWrite(MOTOR_PIN_3, LOW);
+                digitalWrite(MOTOR_PIN_4, HIGH);
+                break;
+        }
 
-    last_step_time = now;
-
-    steps_left--;
-
-    if (direction == forward) {
-        position++;
-    } else {
-        position--;
-    }
-
-    switch (position) {
-        case 0: // 1010
-            digitalWrite(MOTOR_PIN_1, HIGH);
-            digitalWrite(MOTOR_PIN_2, LOW);
-            digitalWrite(MOTOR_PIN_3, HIGH);
-            digitalWrite(MOTOR_PIN_4, LOW);
-            break;
-        case 1: // 0110
-            digitalWrite(MOTOR_PIN_1, LOW);
-            digitalWrite(MOTOR_PIN_2, HIGH);
-            digitalWrite(MOTOR_PIN_3, HIGH);
-            digitalWrite(MOTOR_PIN_4, LOW);
-            break;
-        case 2: // 0101
-            digitalWrite(MOTOR_PIN_1, LOW);
-            digitalWrite(MOTOR_PIN_2, HIGH);
-            digitalWrite(MOTOR_PIN_3, LOW);
-            digitalWrite(MOTOR_PIN_4, HIGH);
-            break;
-        case 3: // 1001
-            digitalWrite(MOTOR_PIN_1, HIGH);
-            digitalWrite(MOTOR_PIN_2, LOW);
-            digitalWrite(MOTOR_PIN_3, LOW);
-            digitalWrite(MOTOR_PIN_4, HIGH);
-            break;
-    }
-
-    // If this was the last step to reach our target position, store the position in EEPROM now.
-    if (steps_left <= 0) {
-        EEPROM.put(POSITION_EEPROM_BASE_ADDR, position);
+        // If this was the last step to reach our target position, store the position in EEPROM now.
+        if (steps_left == 0) {
+            EEPROM.put(POSITION_EEPROM_BASE_ADDR, position);
+        }
     }
 }
 
