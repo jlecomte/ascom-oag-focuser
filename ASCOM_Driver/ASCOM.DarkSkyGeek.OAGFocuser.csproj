@@ -19,7 +19,8 @@
     <ApplicationIcon>
     </ApplicationIcon>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>ASCOMDriverTemplate.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -129,7 +130,6 @@
     <None Include="Resources\icon-cancel-24.png" />
     <None Include="Resources\darkskygeek.bmp" />
     <None Include="app.config" />
-    <None Include="ASCOMDriverTemplate.snk" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
