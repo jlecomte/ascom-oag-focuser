@@ -182,15 +182,26 @@ namespace ASCOM.DarkSkyGeek
                     {
                         throw new ASCOM.InvalidValueException("You have not specified which filter wheel to connect to");
                     }
+
                     filterWheel = new ASCOM.DriverAccess.FilterWheel(filterWheelId);
+                    filterWheel.Connected = true;
+
                     focuser = new ASCOM.DriverAccess.Focuser(Focuser.driverID);
+                    focuser.Connected = true;
+
                     connectedState = true;
                 }
                 else
                 {
                     connectedState = false;
+
+                    filterWheel.Connected = false;
                     filterWheel.Dispose();
+                    filterWheel = null;
+
+                    focuser.Connected = false;
                     focuser.Dispose();
+                    focuser = null;
                 }
             }
         }
@@ -266,6 +277,7 @@ namespace ASCOM.DarkSkyGeek
             }
         }
 
+        // And this is where literally all the magic happens. No kidding!
         public short Position
         {
             get
@@ -276,7 +288,16 @@ namespace ASCOM.DarkSkyGeek
             set
             {
                 CheckConnected("Position");
-                filterWheel.Position = value;
+
+                short oldPosition = filterWheel.Position;
+                short newPosition = value;
+
+                filterWheel.Position = newPosition;
+
+                int oldFilterOffset = filterOffsets[oldPosition];
+                int newFilterOffset = filterOffsets[newPosition];
+
+                focuser.Move(focuser.Position + (newFilterOffset - oldFilterOffset));
             }
         }
 
