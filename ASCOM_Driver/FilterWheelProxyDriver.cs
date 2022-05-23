@@ -297,6 +297,9 @@ namespace ASCOM.DarkSkyGeek
                 int oldFilterOffset = filterOffsets[oldPosition];
                 int newFilterOffset = filterOffsets[newPosition];
 
+                // This almost makes me want to switch the Focuser driver to use relative positioning.
+                // However, I still want to be able to use it in absolute mode when doing the initial
+                // calibration (which may have to be done once in a while)
                 focuser.Move(focuser.Position + (newFilterOffset - oldFilterOffset));
             }
         }
