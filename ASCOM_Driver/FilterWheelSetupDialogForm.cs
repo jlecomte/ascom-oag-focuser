@@ -31,14 +31,42 @@ namespace ASCOM.DarkSkyGeek
 
         private void FilterWheelSetupDialogForm_Load(object sender, EventArgs e)
         {
-            // Create initial set of rows in the DataGridView...
-            for (int i = 0; i < FilterWheelProxy.MAX_FILTER_COUNT; i++)
+            // Populate device list...
+            Profile profile = new Profile();
+            ArrayList filterWheelDevices = profile.RegisteredDevices("FilterWheel");
+            foreach (KeyValuePair kv in filterWheelDevices)
             {
-                filtersDataGridView.Rows.Add(i + 1, string.Empty, string.Empty);
+                // Don't include the filter wheel proxy in the list, for obvious reasons...
+                if (kv.Key != FilterWheelProxy.driverID)
+                {
+                    ComboboxItem item = new ComboboxItem();
+                    item.Text = kv.Value;
+                    item.Value = kv.Key;
+                    int index = devicesComboBox.Items.Add(item);
+                    // Select newly added item if it matches the value stored in the profile.
+                    if (kv.Key == FilterWheelProxy.filterWheelId)
+                    {
+                        devicesComboBox.SelectedIndex = index;
+                    }
+                }
             }
 
-            // Initialize current values of user settings from the ASCOM Profile
-            InitUI();
+            // Populate autofocus filter settings...
+            for (int i = 0; i < FilterWheelProxy.MAX_FILTER_COUNT; i++)
+            {
+                string name = FilterWheelProxy.filterNames[i];
+                int offset = FilterWheelProxy.filterOffsets[i];
+                if (string.IsNullOrEmpty(name))
+                {
+                    filtersDataGridView.Rows.Add(i + 1, string.Empty, string.Empty);
+                }
+                else
+                {
+                    filtersDataGridView.Rows.Add(i + 1, name, offset);
+                }
+            }
+
+            chkTrace.Checked = tl.Enabled;
         }
 
         private void cmdOK_Click(object sender, EventArgs e)
@@ -83,43 +111,6 @@ namespace ASCOM.DarkSkyGeek
         private void cmdCancel_Click(object sender, EventArgs e)
         {
             Close();
-        }
-
-        private void InitUI()
-        {
-            chkTrace.Checked = tl.Enabled;
-
-            // Populate device list...
-            Profile profile = new Profile();
-            ArrayList filterWheelDevices = profile.RegisteredDevices("FilterWheel");
-            foreach (KeyValuePair kv in filterWheelDevices)
-            {
-                // Don't include the filter wheel proxy in the list, for obvious reasons...
-                if (kv.Key != FilterWheelProxy.driverID)
-                {
-                    ComboboxItem item = new ComboboxItem();
-                    item.Text = kv.Value;
-                    item.Value = kv.Key;
-                    int index = devicesComboBox.Items.Add(item);
-                    // Select newly added item if it matches the value stored in the profile.
-                    if (kv.Key == FilterWheelProxy.filterWheelId)
-                    {
-                        devicesComboBox.SelectedIndex = index;
-                    }
-                }
-            }
-
-            // Populate autofocus filter settings...
-            for (int i = 0; i < FilterWheelProxy.MAX_FILTER_COUNT; i++)
-            {
-                string name = FilterWheelProxy.filterNames[i];
-                int offset = FilterWheelProxy.filterOffsets[i];
-                if (!string.IsNullOrEmpty(name))
-                {
-                    filtersDataGridView.Rows[i].Cells[1].Value = name;
-                    filtersDataGridView.Rows[i].Cells[2].Value = offset;
-                }
-            }
         }
 
         private void filtersDataGridView_Validating(object sender, System.ComponentModel.CancelEventArgs e)
@@ -167,6 +158,7 @@ namespace ASCOM.DarkSkyGeek
             switch (e.ColumnIndex)
             {
                 case 2:
+                    // Don't set e.Cancel to true because that would prevent the error icon from showing up...
                     filtersDataGridView.Rows[e.RowIndex].Cells[e.ColumnIndex].ErrorText =
                         (!string.IsNullOrEmpty(e.FormattedValue.ToString()) && !int.TryParse(e.FormattedValue.ToString(), out _))
                             ? "Filter offset must be an integer"

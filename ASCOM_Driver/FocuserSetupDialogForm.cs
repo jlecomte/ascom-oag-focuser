@@ -26,9 +26,26 @@ namespace ASCOM.DarkSkyGeek
 
             // Save the provided trace logger for use within the setup dialogue
             tl = tlDriver;
+        }
 
-            // Initialize current values of user settings from the ASCOM Profile
-            InitUI();
+        private void FocuserSetupDialogForm_Load(object sender, EventArgs e)
+        {
+            chkAutoDetect.Checked = Focuser.autoDetectComPort;
+            chkTrace.Checked = tl.Enabled;
+            comboBoxComPort.Enabled = !chkAutoDetect.Checked;
+
+            // Set the list of COM ports to those that are currently available
+            comboBoxComPort.Items.Clear();
+            // Use System.IO because it's static
+            comboBoxComPort.Items.AddRange(System.IO.Ports.SerialPort.GetPortNames());
+            // Select the current port if possible
+            if (comboBoxComPort.Items.Contains(Focuser.comPortOverride))
+            {
+                comboBoxComPort.SelectedItem = Focuser.comPortOverride;
+            }
+
+            backlashCompTextBox.Text = Focuser.backlashCompSteps.ToString();
+            stepRatioTextBox.Text = Focuser.stepRatio.ToString();
         }
 
         private void cmdOK_Click(object sender, EventArgs e)
@@ -47,26 +64,6 @@ namespace ASCOM.DarkSkyGeek
         private void cmdCancel_Click(object sender, EventArgs e)
         {
             Close();
-        }
-
-        private void InitUI()
-        {
-            chkAutoDetect.Checked = Focuser.autoDetectComPort;
-            chkTrace.Checked = tl.Enabled;
-            comboBoxComPort.Enabled = !chkAutoDetect.Checked;
-
-            // Set the list of COM ports to those that are currently available
-            comboBoxComPort.Items.Clear();
-            // Use System.IO because it's static
-            comboBoxComPort.Items.AddRange(System.IO.Ports.SerialPort.GetPortNames());
-            // Select the current port if possible
-            if (comboBoxComPort.Items.Contains(Focuser.comPortOverride))
-            {
-                comboBoxComPort.SelectedItem = Focuser.comPortOverride;
-            }
-
-            backlashCompTextBox.Text = Focuser.backlashCompSteps.ToString();
-            stepRatioTextBox.Text = Focuser.stepRatio.ToString();
         }
 
         private void chkAutoDetect_CheckedChanged(object sender, EventArgs e)

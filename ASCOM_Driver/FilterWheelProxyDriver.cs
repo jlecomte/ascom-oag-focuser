@@ -12,6 +12,7 @@ using System.Collections;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace ASCOM.DarkSkyGeek
 {
@@ -278,6 +279,9 @@ namespace ASCOM.DarkSkyGeek
         }
 
         // And this is where literally all the magic happens. No kidding!
+        // This is where we intercept filter wheel position changes, forward
+        // calls to the real filter wheel driver, and ask the OAG focuser
+        // driver to change its focus position.
         public short Position
         {
             get
@@ -296,11 +300,24 @@ namespace ASCOM.DarkSkyGeek
 
                 int oldFilterOffset = filterOffsets[oldPosition];
                 int newFilterOffset = filterOffsets[newPosition];
+                int delta = (int) ((newFilterOffset - oldFilterOffset) * Focuser.stepRatio);
 
-                // This almost makes me want to switch the Focuser driver to use relative positioning.
-                // However, I still want to be able to use it in absolute mode when doing the initial
-                // calibration (which may have to be done once in a while)
-                focuser.Move(focuser.Position + (newFilterOffset - oldFilterOffset));
+                if (delta > 0)
+                {
+                    // If we're moving OUT, we overshoot to deal with backlash...
+                    focuser.Move(focuser.Position + Focuser.backlashCompSteps + delta);
+                    while (focuser.IsMoving)
+                    {
+                        Thread.Sleep(100);
+                    }
+                    // Once the focuser has stopped moving, we tell it to move to its final position...
+                    focuser.Move(focuser.Position - Focuser.backlashCompSteps);
+                }
+                else
+                {
+                    // If we're moving IN, we don't have any backlash compensation code to apply.
+                    focuser.Move(focuser.Position + delta);
+                }
             }
         }
 
