@@ -198,9 +198,15 @@ void step() {
                 break;
         }
 
-        // If this was the last step to reach our target position, store the position in EEPROM now.
         if (steps_left == 0) {
+            // This was the last step to reach our target position, store the position in EEPROM.
             EEPROM.put(POSITION_EEPROM_BASE_ADDR, position);
+
+            // And de-energize the stepper by setting all the pins to LOW to prevent heat build up.
+            digitalWrite(MOTOR_PIN_1, LOW);
+            digitalWrite(MOTOR_PIN_2, LOW);
+            digitalWrite(MOTOR_PIN_3, LOW);
+            digitalWrite(MOTOR_PIN_4, LOW);
         }
     }
 }
