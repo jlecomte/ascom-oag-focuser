@@ -1,4 +1,10 @@
-﻿namespace ASCOM.DarkSkyGeek.FocuserApp
+﻿/*
+ * MainForm.Designer.cs
+ * Copyright (C) 2022 - Present, Julien Lecomte - All Rights Reserved
+ * Licensed under the MIT License. See the accompanying LICENSE file for terms.
+ */
+
+namespace ASCOM.DarkSkyGeek.FocuserApp
 {
     partial class MainForm
     {
@@ -51,9 +57,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.picIsMoving)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.SuspendLayout();
-            // 
+            //
             // lblCurPos
-            // 
+            //
             this.lblCurPos.AutoSize = true;
             this.lblCurPos.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCurPos.Location = new System.Drawing.Point(36, 192);
@@ -61,9 +67,9 @@
             this.lblCurPos.Size = new System.Drawing.Size(113, 17);
             this.lblCurPos.TabIndex = 1;
             this.lblCurPos.Text = "Current Position:";
-            // 
+            //
             // lblTgtPos
-            // 
+            //
             this.lblTgtPos.AutoSize = true;
             this.lblTgtPos.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTgtPos.Location = new System.Drawing.Point(36, 238);
@@ -71,18 +77,18 @@
             this.lblTgtPos.Size = new System.Drawing.Size(108, 17);
             this.lblTgtPos.TabIndex = 1;
             this.lblTgtPos.Text = "Target Position:";
-            // 
+            //
             // txtBoxTgtPos
-            // 
+            //
             this.txtBoxTgtPos.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtBoxTgtPos.Location = new System.Drawing.Point(155, 235);
             this.txtBoxTgtPos.Name = "txtBoxTgtPos";
             this.txtBoxTgtPos.Size = new System.Drawing.Size(52, 23);
             this.txtBoxTgtPos.TabIndex = 3;
             this.txtBoxTgtPos.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
+            //
             // btnMove
-            // 
+            //
             this.btnMove.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMove.Location = new System.Drawing.Point(238, 232);
             this.btnMove.Name = "btnMove";
@@ -91,9 +97,9 @@
             this.btnMove.Text = "Move";
             this.btnMove.UseVisualStyleBackColor = true;
             this.btnMove.Click += new System.EventHandler(this.btnMove_Click);
-            // 
+            //
             // lblIsMoving
-            // 
+            //
             this.lblIsMoving.AutoSize = true;
             this.lblIsMoving.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblIsMoving.Location = new System.Drawing.Point(201, 293);
@@ -101,9 +107,9 @@
             this.lblIsMoving.Size = new System.Drawing.Size(71, 17);
             this.lblIsMoving.TabIndex = 1;
             this.lblIsMoving.Text = "Is Moving:";
-            // 
+            //
             // btnMoveLeftHigh
-            // 
+            //
             this.btnMoveLeftHigh.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMoveLeftHigh.Location = new System.Drawing.Point(29, 288);
             this.btnMoveLeftHigh.Name = "btnMoveLeftHigh";
@@ -112,9 +118,9 @@
             this.btnMoveLeftHigh.Text = "<<";
             this.btnMoveLeftHigh.UseVisualStyleBackColor = true;
             this.btnMoveLeftHigh.Click += new System.EventHandler(this.btnMoveLeftHigh_Click);
-            // 
+            //
             // btnMoveLeftLow
-            // 
+            //
             this.btnMoveLeftLow.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMoveLeftLow.Location = new System.Drawing.Point(74, 288);
             this.btnMoveLeftLow.Name = "btnMoveLeftLow";
@@ -123,9 +129,9 @@
             this.btnMoveLeftLow.Text = "<";
             this.btnMoveLeftLow.UseVisualStyleBackColor = true;
             this.btnMoveLeftLow.Click += new System.EventHandler(this.btnMoveLeftLow_Click);
-            // 
+            //
             // btnMoveRightLow
-            // 
+            //
             this.btnMoveRightLow.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMoveRightLow.Location = new System.Drawing.Point(109, 288);
             this.btnMoveRightLow.Name = "btnMoveRightLow";
@@ -134,9 +140,9 @@
             this.btnMoveRightLow.Text = ">";
             this.btnMoveRightLow.UseVisualStyleBackColor = true;
             this.btnMoveRightLow.Click += new System.EventHandler(this.btnMoveRightLow_Click);
-            // 
+            //
             // btnMoveRightHigh
-            // 
+            //
             this.btnMoveRightHigh.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnMoveRightHigh.Location = new System.Drawing.Point(144, 288);
             this.btnMoveRightHigh.Name = "btnMoveRightHigh";
@@ -145,9 +151,9 @@
             this.btnMoveRightHigh.Text = ">>";
             this.btnMoveRightHigh.UseVisualStyleBackColor = true;
             this.btnMoveRightHigh.Click += new System.EventHandler(this.btnMoveRightHigh_Click);
-            // 
+            //
             // btnSetZeroPos
-            // 
+            //
             this.btnSetZeroPos.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSetZeroPos.Location = new System.Drawing.Point(57, 352);
             this.btnSetZeroPos.Name = "btnSetZeroPos";
@@ -156,9 +162,9 @@
             this.btnSetZeroPos.Text = "Set Zero position!";
             this.btnSetZeroPos.UseVisualStyleBackColor = true;
             this.btnSetZeroPos.Click += new System.EventHandler(this.btnSetZeroPos_Click);
-            // 
+            //
             // btnSettings
-            // 
+            //
             this.btnSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSettings.Image = global::ASCOM.DarkSkyGeek.FocuserApp.Properties.Resources.gears;
             this.btnSettings.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -171,9 +177,9 @@
             this.btnSettings.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnSettings.UseVisualStyleBackColor = true;
             this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
-            // 
+            //
             // picIsMoving
-            // 
+            //
             this.picIsMoving.BackColor = System.Drawing.Color.Transparent;
             this.picIsMoving.Image = global::ASCOM.DarkSkyGeek.FocuserApp.Properties.Resources.no;
             this.picIsMoving.Location = new System.Drawing.Point(278, 286);
@@ -181,9 +187,9 @@
             this.picIsMoving.Size = new System.Drawing.Size(32, 32);
             this.picIsMoving.TabIndex = 8;
             this.picIsMoving.TabStop = false;
-            // 
+            //
             // btnConnect
-            // 
+            //
             this.btnConnect.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnConnect.Image = global::ASCOM.DarkSkyGeek.FocuserApp.Properties.Resources.power_on;
             this.btnConnect.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -196,9 +202,9 @@
             this.btnConnect.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnConnect.UseVisualStyleBackColor = true;
             this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
-            // 
+            //
             // lblCurPosVal
-            // 
+            //
             this.lblCurPosVal.AutoSize = true;
             this.lblCurPosVal.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCurPosVal.Location = new System.Drawing.Point(152, 192);
@@ -206,13 +212,13 @@
             this.lblCurPosVal.Size = new System.Drawing.Size(31, 17);
             this.lblCurPosVal.TabIndex = 1;
             this.lblCurPosVal.Text = "N/A";
-            // 
+            //
             // errorProvider
-            // 
+            //
             this.errorProvider.ContainerControl = this;
-            // 
+            //
             // backlashCompLabel
-            // 
+            //
             this.backlashCompLabel.AutoSize = true;
             this.backlashCompLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.backlashCompLabel.Location = new System.Drawing.Point(36, 145);
@@ -220,9 +226,9 @@
             this.backlashCompLabel.Size = new System.Drawing.Size(266, 17);
             this.backlashCompLabel.TabIndex = 1;
             this.backlashCompLabel.Text = "Backlash compensation overshoot steps:";
-            // 
+            //
             // backlashCompTextBox
-            // 
+            //
             this.backlashCompTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.backlashCompTextBox.Location = new System.Drawing.Point(311, 142);
             this.backlashCompTextBox.Name = "backlashCompTextBox";
@@ -231,9 +237,9 @@
             this.backlashCompTextBox.Text = "0";
             this.backlashCompTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.backlashCompTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.backlashCompTextBox_Validating);
-            // 
+            //
             // btnHalt
-            // 
+            //
             this.btnHalt.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnHalt.Location = new System.Drawing.Point(318, 231);
             this.btnHalt.Name = "btnHalt";
@@ -242,9 +248,9 @@
             this.btnHalt.Text = "Halt!";
             this.btnHalt.UseVisualStyleBackColor = true;
             this.btnHalt.Click += new System.EventHandler(this.btnHalt_Click);
-            // 
+            //
             // MainForm
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
