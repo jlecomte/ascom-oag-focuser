@@ -66,6 +66,9 @@ namespace ASCOM.DarkSkyGeek
                 }
             }
 
+            backlashCompTextBox.Text = FilterWheelProxy.backlashCompSteps.ToString();
+            stepRatioTextBox.Text = FilterWheelProxy.stepRatio.ToString();
+
             chkTrace.Checked = tl.Enabled;
         }
 
@@ -99,6 +102,9 @@ namespace ASCOM.DarkSkyGeek
                         FilterWheelProxy.filterOffsets[i] = int.Parse(offset);
                     }
                 }
+
+                FilterWheelProxy.backlashCompSteps = Convert.ToInt32(backlashCompTextBox.Text);
+                FilterWheelProxy.stepRatio = Convert.ToDecimal(stepRatioTextBox.Text);
 
                 tl.Enabled = chkTrace.Checked;
             }
@@ -164,6 +170,40 @@ namespace ASCOM.DarkSkyGeek
                             ? "Filter offset must be an integer"
                             : "";
                     break;
+            }
+        }
+
+        private void backlashCompTextBox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            try
+            {
+                Convert.ToInt32(backlashCompTextBox.Text);
+                errorProvider.SetError(backlashCompTextBox, String.Empty);
+            }
+            catch (Exception)
+            {
+                e.Cancel = true;
+                backlashCompTextBox.Select(0, backlashCompTextBox.Text.Length);
+                errorProvider.SetError(backlashCompTextBox, "Must be an integer (positive or negative)");
+            }
+        }
+
+        private void stepRatioTextBox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            try
+            {
+                decimal value = Convert.ToDecimal(stepRatioTextBox.Text);
+                if (value <= 0)
+                {
+                    throw new FormatException("The decimal value must be strictly positive");
+                }
+                errorProvider.SetError(stepRatioTextBox, String.Empty);
+            }
+            catch (Exception)
+            {
+                e.Cancel = true;
+                stepRatioTextBox.Select(0, stepRatioTextBox.Text.Length);
+                errorProvider.SetError(stepRatioTextBox, "Must be a strictly positive decimal value");
             }
         }
 

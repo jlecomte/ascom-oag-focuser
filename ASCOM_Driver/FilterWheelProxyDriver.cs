@@ -54,6 +54,12 @@ namespace ASCOM.DarkSkyGeek
         internal static string filterOffsetsProfileName = "Filter Offsets";
         internal static int[] filterOffsetsDefault = Enumerable.Repeat(0, MAX_FILTER_COUNT).ToArray();
 
+        internal static string backlashCompStepsProfileName = "Backlash Compensation Steps";
+        internal static string backlashCompStepsDefault = "0";
+
+        internal static string stepRatioProfileName = "Telescope And OAG Focusers Step Ratio";
+        internal static string stepRatioDefault = "1.0";
+
         internal static string traceStateProfileName = "Trace Level";
         internal static string traceStateDefault = "false";
 
@@ -61,6 +67,8 @@ namespace ASCOM.DarkSkyGeek
         internal static string filterWheelId = string.Empty;
         internal static string[] filterNames = filterNamesDefault;
         internal static int[] filterOffsets = filterOffsetsDefault;
+        internal static int backlashCompSteps = Convert.ToInt32(backlashCompStepsDefault);
+        internal static decimal stepRatio = Convert.ToDecimal(stepRatioDefault);
 
         /// <summary>
         /// Private variable to hold the connected state
@@ -300,18 +308,21 @@ namespace ASCOM.DarkSkyGeek
 
                 int oldFilterOffset = filterOffsets[oldPosition];
                 int newFilterOffset = filterOffsets[newPosition];
-                int delta = (int) ((newFilterOffset - oldFilterOffset) * Focuser.stepRatio);
+                int delta = (int) ((newFilterOffset - oldFilterOffset) * stepRatio);
 
                 if (delta > 0)
                 {
                     // If we're moving OUT, we overshoot to deal with backlash...
-                    focuser.Move(focuser.Position + Focuser.backlashCompSteps + delta);
+                    focuser.Move(focuser.Position + backlashCompSteps + delta);
+
+                    // Wait for the focuser to reach the desired position...
                     while (focuser.IsMoving)
                     {
                         Thread.Sleep(100);
                     }
+
                     // Once the focuser has stopped moving, we tell it to move to its final position...
-                    focuser.Move(focuser.Position - Focuser.backlashCompSteps);
+                    focuser.Move(focuser.Position - backlashCompSteps);
                 }
                 else
                 {
@@ -444,6 +455,9 @@ namespace ASCOM.DarkSkyGeek
                 {
                     filterOffsets = Array.ConvertAll(filterOffsetsProfileValue.Split(','), int.Parse);
                 }
+
+                backlashCompSteps = Convert.ToInt32(driverProfile.GetValue(driverID, backlashCompStepsProfileName, string.Empty, backlashCompStepsDefault));
+                stepRatio = Convert.ToDecimal(driverProfile.GetValue(driverID, stepRatioProfileName, string.Empty, stepRatioDefault));
             }
         }
 
@@ -459,6 +473,8 @@ namespace ASCOM.DarkSkyGeek
                 driverProfile.WriteValue(driverID, filterWheelIdProfileName, filterWheelId);
                 driverProfile.WriteValue(driverID, filterNamesProfileName, String.Join(",", filterNames));
                 driverProfile.WriteValue(driverID, filterOffsetsProfileName, String.Join(",", filterOffsets));
+                driverProfile.WriteValue(driverID, backlashCompStepsProfileName, backlashCompSteps.ToString());
+                driverProfile.WriteValue(driverID, stepRatioProfileName, stepRatio.ToString());
             }
         }
 

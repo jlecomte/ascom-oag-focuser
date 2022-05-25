@@ -39,13 +39,10 @@ namespace ASCOM.DarkSkyGeek
             // Use System.IO because it's static
             comboBoxComPort.Items.AddRange(System.IO.Ports.SerialPort.GetPortNames());
             // Select the current port if possible
-            if (comboBoxComPort.Items.Contains(Focuser.comPortOverride))
+            if (Focuser.comPortOverride != null && comboBoxComPort.Items.Contains(Focuser.comPortOverride))
             {
                 comboBoxComPort.SelectedItem = Focuser.comPortOverride;
             }
-
-            backlashCompTextBox.Text = Focuser.backlashCompSteps.ToString();
-            stepRatioTextBox.Text = Focuser.stepRatio.ToString();
         }
 
         private void cmdOK_Click(object sender, EventArgs e)
@@ -57,8 +54,6 @@ namespace ASCOM.DarkSkyGeek
             Focuser.autoDetectComPort = chkAutoDetect.Checked;
             Focuser.comPortOverride = (string)comboBoxComPort.SelectedItem;
             tl.Enabled = chkTrace.Checked;
-            Focuser.backlashCompSteps = Convert.ToInt32(backlashCompTextBox.Text);
-            Focuser.stepRatio = Convert.ToDecimal(stepRatioTextBox.Text);
         }
 
         private void cmdCancel_Click(object sender, EventArgs e)
@@ -69,40 +64,6 @@ namespace ASCOM.DarkSkyGeek
         private void chkAutoDetect_CheckedChanged(object sender, EventArgs e)
         {
             comboBoxComPort.Enabled = !((CheckBox)sender).Checked;
-        }
-
-        private void backlashCompTextBox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            try
-            {
-                Convert.ToInt32(backlashCompTextBox.Text);
-                errorProvider.SetError(backlashCompTextBox, String.Empty);
-            }
-            catch (Exception)
-            {
-                e.Cancel = true;
-                backlashCompTextBox.Select(0, backlashCompTextBox.Text.Length);
-                errorProvider.SetError(backlashCompTextBox, "Must be an integer (positive or negative)");
-            }
-        }
-
-        private void stepRatioTextBox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            try
-            {
-                decimal value = Convert.ToDecimal(stepRatioTextBox.Text);
-                if (value <= 0)
-                {
-                    throw new FormatException("The decimal value must be strictly positive");
-                }
-                errorProvider.SetError(stepRatioTextBox, String.Empty);
-            }
-            catch (Exception)
-            {
-                e.Cancel = true;
-                stepRatioTextBox.Select(0, stepRatioTextBox.Text.Length);
-                errorProvider.SetError(stepRatioTextBox, "Must be a strictly positive decimal value");
-            }
         }
 
         private void BrowseToHomepage(object sender, EventArgs e)

@@ -51,17 +51,9 @@ namespace ASCOM.DarkSkyGeek
         internal static string traceStateProfileName = "Trace Level";
         internal static string traceStateDefault = "false";
 
-        internal static string backlashCompStepsProfileName = "Backlash Compensation Steps";
-        internal static string backlashCompStepsDefault = "0";
-
-        internal static string stepRatioProfileName = "Telescope And OAG Focusers Step Ratio";
-        internal static string stepRatioDefault = "1.0";
-
         // Variables to hold the current device configuration
         internal static bool autoDetectComPort = Convert.ToBoolean(autoDetectComPortDefault);
         internal static string comPortOverride = comPortDefault;
-        internal static int backlashCompSteps = Convert.ToInt32(backlashCompStepsDefault);
-        internal static decimal stepRatio = Convert.ToDecimal(stepRatioDefault);
 
         /// <summary>
         /// Variable to hold the trace logger object (creates a diagnostic log file with information that you specify)
@@ -617,8 +609,6 @@ namespace ASCOM.DarkSkyGeek
                 tl.Enabled = Convert.ToBoolean(driverProfile.GetValue(driverID, traceStateProfileName, string.Empty, traceStateDefault));
                 autoDetectComPort = Convert.ToBoolean(driverProfile.GetValue(driverID, autoDetectComPortProfileName, string.Empty, autoDetectComPortDefault));
                 comPortOverride = driverProfile.GetValue(driverID, comPortProfileName, string.Empty, comPortDefault);
-                backlashCompSteps = Convert.ToInt32(driverProfile.GetValue(driverID, backlashCompStepsProfileName, string.Empty, backlashCompStepsDefault));
-                stepRatio = Convert.ToDecimal(driverProfile.GetValue(driverID, stepRatioProfileName, string.Empty, stepRatioDefault));
             }
         }
 
@@ -636,8 +626,6 @@ namespace ASCOM.DarkSkyGeek
                 {
                     driverProfile.WriteValue(driverID, comPortProfileName, comPortOverride.ToString());
                 }
-                driverProfile.WriteValue(driverID, backlashCompStepsProfileName, backlashCompSteps.ToString());
-                driverProfile.WriteValue(driverID, stepRatioProfileName, stepRatio.ToString());
             }
         }
 
