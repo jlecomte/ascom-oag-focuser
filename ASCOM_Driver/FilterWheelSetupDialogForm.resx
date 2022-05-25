@@ -121,7 +121,7 @@
     <value>This driver fowards calls to the real filter wheel device selected below. When a filter change has been requested by a client application, since the call is intercepted, this driver can also request to adjust the focus of the guide camera by some number of steps computed using the newly selected filter offset and the ratio between the telescope and OAG focusers steps (specified in the focuser setup dialog)</value>
   </data>
   <data name="filterOffsetsWarning.Text" xml:space="preserve">
-    <value>Make sure that these remain in sync with the values used by the client application. For example, N.I.N.A. stores the autofocus filter settings in the application profile, and does not necessarily update them if the filter wheel driver all of a sudden reports different values...</value>
+    <value>Make sure that the following filters and offsets remain in sync with the values used by the client application. For example, N.I.N.A. stores the autofocus filter settings in the application profile, and does not necessarily update them if the filter wheel driver all of a sudden starts reporting different values...</value>
   </data>
   <metadata name="FilterPositionColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>

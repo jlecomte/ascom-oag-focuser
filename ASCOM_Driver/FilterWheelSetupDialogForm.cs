@@ -31,8 +31,9 @@ namespace ASCOM.DarkSkyGeek
 
         private void FilterWheelSetupDialogForm_Load(object sender, EventArgs e)
         {
-            // Populate device list...
             Profile profile = new Profile();
+
+            // Populate filter wheel device list...
             ArrayList filterWheelDevices = profile.RegisteredDevices("FilterWheel");
             foreach (KeyValuePair kv in filterWheelDevices)
             {
@@ -42,11 +43,11 @@ namespace ASCOM.DarkSkyGeek
                     ComboboxItem item = new ComboboxItem();
                     item.Text = kv.Value;
                     item.Value = kv.Key;
-                    int index = devicesComboBox.Items.Add(item);
+                    int index = filterWheelSelectorComboBox.Items.Add(item);
                     // Select newly added item if it matches the value stored in the profile.
                     if (kv.Key == FilterWheelProxy.filterWheelId)
                     {
-                        devicesComboBox.SelectedIndex = index;
+                        filterWheelSelectorComboBox.SelectedIndex = index;
                     }
                 }
             }
@@ -66,6 +67,21 @@ namespace ASCOM.DarkSkyGeek
                 }
             }
 
+            // Populate focuser device list...
+            ArrayList focuserDevices = profile.RegisteredDevices("Focuser");
+            foreach (KeyValuePair kv in focuserDevices)
+            {
+                ComboboxItem item = new ComboboxItem();
+                item.Text = kv.Value;
+                item.Value = kv.Key;
+                int index = focuserSelectorComboBox.Items.Add(item);
+                // Select newly added item if it matches the value stored in the profile.
+                if (kv.Key == FilterWheelProxy.focuserId)
+                {
+                    focuserSelectorComboBox.SelectedIndex = index;
+                }
+            }
+
             backlashCompTextBox.Text = FilterWheelProxy.backlashCompSteps.ToString();
             stepRatioTextBox.Text = FilterWheelProxy.stepRatio.ToString();
 
@@ -76,9 +92,9 @@ namespace ASCOM.DarkSkyGeek
         {
             if (Validate())
             {
-                if (devicesComboBox.SelectedItem != null)
+                if (filterWheelSelectorComboBox.SelectedItem != null)
                 {
-                    FilterWheelProxy.filterWheelId = (devicesComboBox.SelectedItem as ComboboxItem).Value;
+                    FilterWheelProxy.filterWheelId = (filterWheelSelectorComboBox.SelectedItem as ComboboxItem).Value;
                 }
 
                 for (int i = 0; i < FilterWheelProxy.MAX_FILTER_COUNT; i++)

@@ -55,6 +55,9 @@ namespace ASCOM.DarkSkyGeek
         internal static string filterOffsetsProfileName = "Filter Offsets";
         internal static int[] filterOffsetsDefault = Enumerable.Repeat(0, MAX_FILTER_COUNT).ToArray();
 
+        internal static string focuserIdProfileName = "OAG Focuser ID";
+        internal static string focuserIdDefault = Focuser.driverID;
+
         internal static string backlashCompStepsProfileName = "Backlash Compensation Steps";
         internal static string backlashCompStepsDefault = "0";
 
@@ -68,6 +71,7 @@ namespace ASCOM.DarkSkyGeek
         internal static string filterWheelId = string.Empty;
         internal static string[] filterNames = filterNamesDefault;
         internal static int[] filterOffsets = filterOffsetsDefault;
+        internal static string focuserId = Focuser.driverID;
         internal static int backlashCompSteps = Convert.ToInt32(backlashCompStepsDefault);
         internal static decimal stepRatio = Convert.ToDecimal(stepRatioDefault);
 
@@ -196,7 +200,7 @@ namespace ASCOM.DarkSkyGeek
                     filterWheel = new ASCOM.DriverAccess.FilterWheel(filterWheelId);
                     filterWheel.Connected = true;
 
-                    focuser = new ASCOM.DriverAccess.Focuser(Focuser.driverID);
+                    focuser = new ASCOM.DriverAccess.Focuser(focuserId);
                     focuser.Connected = true;
 
                     connectedState = true;
@@ -463,7 +467,9 @@ namespace ASCOM.DarkSkyGeek
             using (Profile driverProfile = new Profile())
             {
                 driverProfile.DeviceType = "FilterWheel";
+
                 tl.Enabled = Convert.ToBoolean(driverProfile.GetValue(driverID, traceStateProfileName, string.Empty, traceStateDefault));
+
                 filterWheelId = driverProfile.GetValue(driverID, filterWheelIdProfileName, string.Empty, filterWheelIdDefault);
 
                 string filterNamesProfileValue = driverProfile.GetValue(driverID, filterNamesProfileName, string.Empty, string.Empty);
@@ -478,6 +484,7 @@ namespace ASCOM.DarkSkyGeek
                     filterOffsets = Array.ConvertAll(filterOffsetsProfileValue.Split(','), int.Parse);
                 }
 
+                focuserId = driverProfile.GetValue(driverID, focuserIdProfileName, string.Empty, focuserIdDefault);
                 backlashCompSteps = Convert.ToInt32(driverProfile.GetValue(driverID, backlashCompStepsProfileName, string.Empty, backlashCompStepsDefault));
                 stepRatio = Convert.ToDecimal(driverProfile.GetValue(driverID, stepRatioProfileName, string.Empty, stepRatioDefault));
             }
@@ -495,6 +502,7 @@ namespace ASCOM.DarkSkyGeek
                 driverProfile.WriteValue(driverID, filterWheelIdProfileName, filterWheelId);
                 driverProfile.WriteValue(driverID, filterNamesProfileName, String.Join(",", filterNames));
                 driverProfile.WriteValue(driverID, filterOffsetsProfileName, String.Join(",", filterOffsets));
+                driverProfile.WriteValue(driverID, focuserIdProfileName, focuserId);
                 driverProfile.WriteValue(driverID, backlashCompStepsProfileName, backlashCompSteps.ToString());
                 driverProfile.WriteValue(driverID, stepRatioProfileName, stepRatio.ToString());
             }
