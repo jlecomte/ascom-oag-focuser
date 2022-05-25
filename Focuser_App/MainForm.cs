@@ -2,6 +2,7 @@
 
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Focuser_App
@@ -13,14 +14,11 @@ namespace Focuser_App
         internal static int LOW_JUMP = 100;
 
         private Focuser device = null;
-        private Thread pollDeviceStatusThread = null;
 
         public MainForm()
         {
             InitializeComponent();
-            toggleDeviceControls();
-            pollDeviceStatusThread = new Thread(pollDeviceStatus);
-            pollDeviceStatusThread.Start();
+            updateUI();
         }
 
         private void instantiateDevice()
@@ -38,63 +36,34 @@ namespace Focuser_App
             }
         }
 
-        private void toggleDeviceControls()
+        private void updateUI()
         {
             bool connected = device != null && device.Connected;
+            bool moving = connected && device.IsMoving;
+
             btnSettings.Enabled = !connected;
             backlashCompTextBox.Enabled = !connected;
             txtBoxTgtPos.Enabled = connected;
-            btnMove.Enabled = connected;
-            btnMoveLeftHigh.Enabled = connected;
-            btnMoveLeftLow.Enabled = connected;
-            btnMoveRightLow.Enabled = connected;
-            btnMoveRightHigh.Enabled = connected;
-            btnSetZeroPos.Enabled = connected;
-        }
+            btnMove.Enabled = connected && !moving;
+            btnHalt.Enabled = connected && moving;
+            btnMoveLeftHigh.Enabled = connected && !moving;
+            btnMoveLeftLow.Enabled = connected && !moving;
+            btnMoveRightLow.Enabled = connected && !moving;
+            btnMoveRightHigh.Enabled = connected && !moving;
+            btnSetZeroPos.Enabled = connected && !moving;
 
-        private void pollDeviceStatus()
-        {
-            while (true)
+            if (connected)
             {
-                // Polling the device every 100 msec when connected is more frequently
-                // than I would want a real application to poll the driver, but this
-                // gives almost instantaneous feedback on what's happening, which is great!
-                Thread.Sleep(100);
-
-                lock (this)
-                {
-                    if (device != null && device.Connected)
-                    {
-                        try
-                        {
-                            Invoke(new Action(() =>
-                            {
-                                this.lblCurPosVal.Text = device.Position.ToString();
-                                this.picIsMoving.Image = device.IsMoving ? Properties.Resources.yes : Properties.Resources.no;
-                            }));
-                        }
-                        catch (Exception)
-                        {
-                            Invoke(new Action(() =>
-                            {
-                                this.lblCurPosVal.Text = "N/A";
-                                this.picIsMoving.Image = Properties.Resources.no;
-                            }));
-                        }
-                    }
-                    else
-                    {
-                        Invoke(new Action(() =>
-                        {
-                            this.lblCurPosVal.Text = "N/A";
-                            this.picIsMoving.Image = Properties.Resources.no;
-                        }));
-                    }
-                }
+                this.lblCurPosVal.Text = device.Position.ToString();
+            }
+            else
+            {
+                this.lblCurPosVal.Text = "N/A";
+                this.picIsMoving.Image = Properties.Resources.no;
             }
         }
 
-        private void move(int targetPosition)
+        private async void move(int targetPosition)
         {
             if (device != null && device.Connected)
             {
@@ -106,27 +75,60 @@ namespace Focuser_App
                     // If we're moving OUT, we overshoot to deal with backlash...
                     device.Move(device.Position + backlashCompSteps + delta);
 
-                    // Wait for the focuser to reach the desired position...
-                    while (device.IsMoving)
-                    {
-                        Thread.Sleep(100);
-                    }
+                    updateUI();
 
-                    // Once the focuser has stopped moving, we tell it to move to its final position...
+                    await waitForDeviceToStopMoving();
+
+                    // Once the focuser has stopped moving, we tell it to move to
+                    // its final position, thereby clearing the mechanical backlash.
                     device.Move(device.Position - backlashCompSteps);
+
+                    await waitForDeviceToStopMoving();
+
+                    updateUI();
                 }
                 else
                 {
                     device.Move(targetPosition);
+
+                    await waitForDeviceToStopMoving();
+
+                    updateUI();
                 }
             }
         }
 
+        private async Task waitForDeviceToStopMoving()
+        {
+            await Task.Run(() =>
+            {
+                // Wait for the focuser to reach the desired position...
+                while (device.IsMoving)
+                {
+                    Thread.Sleep(100);
+                    Invoke(new Action(() =>
+                    {
+                        try
+                        {
+                            this.lblCurPosVal.Text = device.Position.ToString();
+                            this.picIsMoving.Image = Properties.Resources.yes;
+                        }
+                        catch (Exception) {; }
+                    }));
+                }
+
+                this.picIsMoving.Image = Properties.Resources.no;
+            });
+        }
+
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            pollDeviceStatusThread.Abort();
             if (device != null)
             {
+                if (device.Connected)
+                {
+                    device.Connected = false;
+                }
                 device.Dispose();
                 device = null;
             }
@@ -148,7 +150,7 @@ namespace Focuser_App
                 device.Connected = false;
                 btnConnect.Text = "Connect";
                 btnConnect.Image = Properties.Resources.power_on;
-                toggleDeviceControls();
+                updateUI();
             }
             else
             {
@@ -163,7 +165,7 @@ namespace Focuser_App
                         device.Connected = true;
                         btnConnect.Text = "Disconnect";
                         btnConnect.Image = Properties.Resources.power_off;
-                        toggleDeviceControls();
+                        updateUI();
                     }
                     catch (Exception)
                     {
@@ -177,8 +179,33 @@ namespace Focuser_App
 
         private void btnMove_Click(object sender, EventArgs e)
         {
-            int tgtPos = Convert.ToInt32(txtBoxTgtPos.Text);
+            int tgtPos;
+
+            try
+            {
+                tgtPos = Convert.ToInt32(txtBoxTgtPos.Text);
+                if (tgtPos < 0)
+                {
+                    throw new FormatException("The target position cannot be a negative number");
+                }
+                errorProvider.SetError(txtBoxTgtPos, String.Empty);
+            }
+            catch (Exception)
+            {
+                txtBoxTgtPos.Select(0, txtBoxTgtPos.Text.Length);
+                errorProvider.SetError(txtBoxTgtPos, "Must be an integer (positive or negative)");
+                return;
+            }
+
             move(tgtPos);
+        }
+
+        private void btnHalt_Click(object sender, EventArgs e)
+        {
+            if (device != null && device.Connected)
+            {
+                device.Halt();
+            }
         }
 
         private void btnMoveLeftHigh_Click(object sender, EventArgs e)
@@ -208,13 +235,18 @@ namespace Focuser_App
         private void btnSetZeroPos_Click(object sender, EventArgs e)
         {
             device.Action("SetZeroPosition", "");
+            updateUI();
         }
 
         private void backlashCompTextBox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
             try
             {
-                Convert.ToInt32(backlashCompTextBox.Text);
+                int value = Convert.ToInt32(backlashCompTextBox.Text);
+                if (value < 0)
+                {
+                    throw new FormatException("Backlash compensation cannot be a negative number");
+                }
                 errorProvider.SetError(backlashCompTextBox, String.Empty);
             }
             catch (Exception)
@@ -222,21 +254,6 @@ namespace Focuser_App
                 e.Cancel = true;
                 backlashCompTextBox.Select(0, backlashCompTextBox.Text.Length);
                 errorProvider.SetError(backlashCompTextBox, "Must be an integer (positive or negative)");
-            }
-        }
-
-        private void txtBoxTgtPos_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            try
-            {
-                Convert.ToInt32(txtBoxTgtPos.Text);
-                errorProvider.SetError(txtBoxTgtPos, String.Empty);
-            }
-            catch (Exception)
-            {
-                e.Cancel = true;
-                txtBoxTgtPos.Select(0, txtBoxTgtPos.Text.Length);
-                errorProvider.SetError(txtBoxTgtPos, "Must be an integer (positive or negative)");
             }
         }
     }

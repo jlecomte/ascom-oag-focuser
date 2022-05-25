@@ -69,7 +69,7 @@ namespace ASCOM.DarkSkyGeek
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.cmdOK.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdOK.Image = global::ASCOM.DarkSkyGeek.Properties.Resources.icon_ok_24;
-            this.cmdOK.Location = new System.Drawing.Point(396, 579);
+            this.cmdOK.Location = new System.Drawing.Point(396, 589);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
             this.cmdOK.Size = new System.Drawing.Size(76, 35);
@@ -84,7 +84,7 @@ namespace ASCOM.DarkSkyGeek
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cmdCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdCancel.Image = global::ASCOM.DarkSkyGeek.Properties.Resources.icon_cancel_24;
-            this.cmdCancel.Location = new System.Drawing.Point(478, 579);
+            this.cmdCancel.Location = new System.Drawing.Point(478, 589);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(74, 37);
             this.cmdCancel.TabIndex = 1;
@@ -135,7 +135,7 @@ namespace ASCOM.DarkSkyGeek
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.Location = new System.Drawing.Point(13, 187);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(539, 273);
+            this.groupBox2.Size = new System.Drawing.Size(539, 288);
             this.groupBox2.TabIndex = 10;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Autofocus Filter Settings";
@@ -172,7 +172,7 @@ namespace ASCOM.DarkSkyGeek
             this.filtersDataGridView.RowHeadersVisible = false;
             this.filtersDataGridView.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.filtersDataGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.filtersDataGridView.Size = new System.Drawing.Size(527, 185);
+            this.filtersDataGridView.Size = new System.Drawing.Size(527, 200);
             this.filtersDataGridView.TabIndex = 0;
             this.filtersDataGridView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.filtersDataGridView_CellValidating);
             this.filtersDataGridView.Validating += new System.ComponentModel.CancelEventHandler(this.filtersDataGridView_Validating);
@@ -218,7 +218,7 @@ namespace ASCOM.DarkSkyGeek
             // 
             this.chkTrace.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.chkTrace.AutoSize = true;
-            this.chkTrace.Location = new System.Drawing.Point(13, 595);
+            this.chkTrace.Location = new System.Drawing.Point(13, 605);
             this.chkTrace.Name = "chkTrace";
             this.chkTrace.Size = new System.Drawing.Size(69, 17);
             this.chkTrace.TabIndex = 13;
@@ -234,7 +234,7 @@ namespace ASCOM.DarkSkyGeek
             this.groupBox3.Controls.Add(this.stepRatioLabel);
             this.groupBox3.Controls.Add(this.backlashCompLabel);
             this.groupBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox3.Location = new System.Drawing.Point(13, 469);
+            this.groupBox3.Location = new System.Drawing.Point(13, 481);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(539, 100);
             this.groupBox3.TabIndex = 14;
@@ -289,7 +289,7 @@ namespace ASCOM.DarkSkyGeek
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(564, 624);
+            this.ClientSize = new System.Drawing.Size(564, 634);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.chkTrace);
             this.Controls.Add(this.DSGLogo);

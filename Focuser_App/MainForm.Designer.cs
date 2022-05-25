@@ -47,6 +47,7 @@
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.backlashCompLabel = new System.Windows.Forms.Label();
             this.backlashCompTextBox = new System.Windows.Forms.TextBox();
+            this.btnHalt = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.picIsMoving)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.SuspendLayout();
@@ -76,15 +77,14 @@
             this.txtBoxTgtPos.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtBoxTgtPos.Location = new System.Drawing.Point(155, 235);
             this.txtBoxTgtPos.Name = "txtBoxTgtPos";
-            this.txtBoxTgtPos.Size = new System.Drawing.Size(62, 23);
+            this.txtBoxTgtPos.Size = new System.Drawing.Size(52, 23);
             this.txtBoxTgtPos.TabIndex = 5;
             this.txtBoxTgtPos.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.txtBoxTgtPos.Validating += new System.ComponentModel.CancelEventHandler(this.txtBoxTgtPos_Validating);
             // 
             // btnMove
             // 
             this.btnMove.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnMove.Location = new System.Drawing.Point(223, 233);
+            this.btnMove.Location = new System.Drawing.Point(238, 232);
             this.btnMove.Name = "btnMove";
             this.btnMove.Size = new System.Drawing.Size(56, 26);
             this.btnMove.TabIndex = 6;
@@ -226,11 +226,22 @@
             this.backlashCompTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.backlashCompTextBox.Location = new System.Drawing.Point(311, 142);
             this.backlashCompTextBox.Name = "backlashCompTextBox";
-            this.backlashCompTextBox.Size = new System.Drawing.Size(62, 23);
+            this.backlashCompTextBox.Size = new System.Drawing.Size(47, 23);
             this.backlashCompTextBox.TabIndex = 18;
             this.backlashCompTextBox.Text = "0";
             this.backlashCompTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.backlashCompTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.backlashCompTextBox_Validating);
+            // 
+            // btnHalt
+            // 
+            this.btnHalt.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnHalt.Location = new System.Drawing.Point(318, 231);
+            this.btnHalt.Name = "btnHalt";
+            this.btnHalt.Size = new System.Drawing.Size(55, 27);
+            this.btnHalt.TabIndex = 19;
+            this.btnHalt.Text = "Halt!";
+            this.btnHalt.UseVisualStyleBackColor = true;
+            this.btnHalt.Click += new System.EventHandler(this.btnHalt_Click);
             // 
             // MainForm
             // 
@@ -238,6 +249,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(395, 401);
+            this.Controls.Add(this.btnHalt);
             this.Controls.Add(this.backlashCompTextBox);
             this.Controls.Add(this.backlashCompLabel);
             this.Controls.Add(this.lblCurPosVal);
@@ -283,6 +295,7 @@
         private System.Windows.Forms.ErrorProvider errorProvider;
         private System.Windows.Forms.Label backlashCompLabel;
         private System.Windows.Forms.TextBox backlashCompTextBox;
+        private System.Windows.Forms.Button btnHalt;
     }
 }
 

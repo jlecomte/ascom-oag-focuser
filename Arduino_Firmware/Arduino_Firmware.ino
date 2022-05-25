@@ -199,16 +199,23 @@ void step() {
         }
 
         if (steps_left == 0) {
-            // This was the last step to reach our target position, store the position in EEPROM.
-            EEPROM.put(POSITION_EEPROM_BASE_ADDR, position);
-
-            // And de-energize the stepper by setting all the pins to LOW to prevent heat build up.
-            digitalWrite(MOTOR_PIN_1, LOW);
-            digitalWrite(MOTOR_PIN_2, LOW);
-            digitalWrite(MOTOR_PIN_3, LOW);
-            digitalWrite(MOTOR_PIN_4, LOW);
+            stop();
         }
     }
+}
+
+void stop() {
+    // Make sure we don't take another step.
+    steps_left = 0;
+
+    // Store the final position in EEPROM.
+    EEPROM.put(POSITION_EEPROM_BASE_ADDR, position);
+
+    // And de-energize the stepper by setting all the pins to LOW to prevent heat build up.
+    digitalWrite(MOTOR_PIN_1, LOW);
+    digitalWrite(MOTOR_PIN_2, LOW);
+    digitalWrite(MOTOR_PIN_3, LOW);
+    digitalWrite(MOTOR_PIN_4, LOW);
 }
 
 //-- FOCUSER HANDLING ------------------------------------------------------
@@ -262,13 +269,8 @@ void moveFocuser(int target_position) {
 }
 
 void haltFocuser() {
+    stop();
     Serial.print(RESULT_FOCUSER_HALT);
-
-    if (steps_left > 0) {
-        steps_left = 0;
-        EEPROM.put(POSITION_EEPROM_BASE_ADDR, position);
-    }
-
     Serial.println(OK);
 }
 

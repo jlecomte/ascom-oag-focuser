@@ -13,6 +13,7 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace ASCOM.DarkSkyGeek
 {
@@ -301,6 +302,11 @@ namespace ASCOM.DarkSkyGeek
             {
                 CheckConnected("Position");
 
+                if (focuser.IsMoving)
+                {
+                    throw new ASCOM.DriverException("Cannot switch filters while the OAG focuser is still moving from the previous filter change. Please wait and try again.");
+                }
+
                 short oldPosition = filterWheel.Position;
                 short newPosition = value;
 
@@ -431,6 +437,22 @@ namespace ASCOM.DarkSkyGeek
             {
                 throw new ASCOM.NotConnectedException(message);
             }
+        }
+
+        /// <summary>
+        /// Use this function to wait for the focuser to stop moving before executing the next instruction...
+        /// </summary>
+        /// <param name="message"></param>
+        private async Task waitForFocuserToStopMoving()
+        {
+            await Task.Run(() =>
+            {
+                // Wait for the focuser to reach the desired position...
+                while (focuser.IsMoving)
+                {
+                    Thread.Sleep(100);
+                }
+            });
         }
 
         /// <summary>

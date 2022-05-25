@@ -177,7 +177,11 @@ namespace ASCOM.DarkSkyGeek
         {
             try
             {
-                Convert.ToInt32(backlashCompTextBox.Text);
+                int value = Convert.ToInt32(backlashCompTextBox.Text);
+                if (value < 0)
+                {
+                    throw new FormatException("Backlash compensation cannot be a negative number");
+                }
                 errorProvider.SetError(backlashCompTextBox, String.Empty);
             }
             catch (Exception)
