@@ -154,14 +154,20 @@ namespace Focuser_App
             }
             else
             {
+                btnSettings.Enabled = false;
                 btnConnect.Enabled = false;
+                backlashCompTextBox.Enabled = false;
+
+                // Hack to avoid having to use a thread/background worker.
+                // This allows the previous lines to be immediately reflected in the UI.
+                Application.DoEvents();
 
                 instantiateDevice();
                 if (device != null)
                 {
-                    // This can take a while. It can also throw...
                     try
                     {
+                        // This can take a while. It can also throw...
                         device.Connected = true;
                         btnConnect.Text = "Disconnect";
                         btnConnect.Image = Properties.Resources.power_off;
@@ -170,6 +176,7 @@ namespace Focuser_App
                     catch (Exception)
                     {
                         MessageBox.Show(this, "An error occurred while connecting to the focuser.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        updateUI();
                     }
                 }
 

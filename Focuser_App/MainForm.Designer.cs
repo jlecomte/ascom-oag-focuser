@@ -69,7 +69,7 @@
             this.lblTgtPos.Location = new System.Drawing.Point(36, 238);
             this.lblTgtPos.Name = "lblTgtPos";
             this.lblTgtPos.Size = new System.Drawing.Size(108, 17);
-            this.lblTgtPos.TabIndex = 4;
+            this.lblTgtPos.TabIndex = 1;
             this.lblTgtPos.Text = "Target Position:";
             // 
             // txtBoxTgtPos
@@ -78,7 +78,7 @@
             this.txtBoxTgtPos.Location = new System.Drawing.Point(155, 235);
             this.txtBoxTgtPos.Name = "txtBoxTgtPos";
             this.txtBoxTgtPos.Size = new System.Drawing.Size(52, 23);
-            this.txtBoxTgtPos.TabIndex = 5;
+            this.txtBoxTgtPos.TabIndex = 3;
             this.txtBoxTgtPos.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // btnMove
@@ -87,7 +87,7 @@
             this.btnMove.Location = new System.Drawing.Point(238, 232);
             this.btnMove.Name = "btnMove";
             this.btnMove.Size = new System.Drawing.Size(56, 26);
-            this.btnMove.TabIndex = 6;
+            this.btnMove.TabIndex = 4;
             this.btnMove.Text = "Move";
             this.btnMove.UseVisualStyleBackColor = true;
             this.btnMove.Click += new System.EventHandler(this.btnMove_Click);
@@ -99,7 +99,7 @@
             this.lblIsMoving.Location = new System.Drawing.Point(201, 293);
             this.lblIsMoving.Name = "lblIsMoving";
             this.lblIsMoving.Size = new System.Drawing.Size(71, 17);
-            this.lblIsMoving.TabIndex = 7;
+            this.lblIsMoving.TabIndex = 1;
             this.lblIsMoving.Text = "Is Moving:";
             // 
             // btnMoveLeftHigh
@@ -108,7 +108,7 @@
             this.btnMoveLeftHigh.Location = new System.Drawing.Point(29, 288);
             this.btnMoveLeftHigh.Name = "btnMoveLeftHigh";
             this.btnMoveLeftHigh.Size = new System.Drawing.Size(39, 26);
-            this.btnMoveLeftHigh.TabIndex = 9;
+            this.btnMoveLeftHigh.TabIndex = 6;
             this.btnMoveLeftHigh.Text = "<<";
             this.btnMoveLeftHigh.UseVisualStyleBackColor = true;
             this.btnMoveLeftHigh.Click += new System.EventHandler(this.btnMoveLeftHigh_Click);
@@ -119,7 +119,7 @@
             this.btnMoveLeftLow.Location = new System.Drawing.Point(74, 288);
             this.btnMoveLeftLow.Name = "btnMoveLeftLow";
             this.btnMoveLeftLow.Size = new System.Drawing.Size(29, 26);
-            this.btnMoveLeftLow.TabIndex = 10;
+            this.btnMoveLeftLow.TabIndex = 7;
             this.btnMoveLeftLow.Text = "<";
             this.btnMoveLeftLow.UseVisualStyleBackColor = true;
             this.btnMoveLeftLow.Click += new System.EventHandler(this.btnMoveLeftLow_Click);
@@ -130,7 +130,7 @@
             this.btnMoveRightLow.Location = new System.Drawing.Point(109, 288);
             this.btnMoveRightLow.Name = "btnMoveRightLow";
             this.btnMoveRightLow.Size = new System.Drawing.Size(29, 26);
-            this.btnMoveRightLow.TabIndex = 11;
+            this.btnMoveRightLow.TabIndex = 8;
             this.btnMoveRightLow.Text = ">";
             this.btnMoveRightLow.UseVisualStyleBackColor = true;
             this.btnMoveRightLow.Click += new System.EventHandler(this.btnMoveRightLow_Click);
@@ -141,7 +141,7 @@
             this.btnMoveRightHigh.Location = new System.Drawing.Point(144, 288);
             this.btnMoveRightHigh.Name = "btnMoveRightHigh";
             this.btnMoveRightHigh.Size = new System.Drawing.Size(37, 26);
-            this.btnMoveRightHigh.TabIndex = 12;
+            this.btnMoveRightHigh.TabIndex = 9;
             this.btnMoveRightHigh.Text = ">>";
             this.btnMoveRightHigh.UseVisualStyleBackColor = true;
             this.btnMoveRightHigh.Click += new System.EventHandler(this.btnMoveRightHigh_Click);
@@ -152,7 +152,7 @@
             this.btnSetZeroPos.Location = new System.Drawing.Point(57, 352);
             this.btnSetZeroPos.Name = "btnSetZeroPos";
             this.btnSetZeroPos.Size = new System.Drawing.Size(283, 31);
-            this.btnSetZeroPos.TabIndex = 13;
+            this.btnSetZeroPos.TabIndex = 10;
             this.btnSetZeroPos.Text = "Set Zero position!";
             this.btnSetZeroPos.UseVisualStyleBackColor = true;
             this.btnSetZeroPos.Click += new System.EventHandler(this.btnSetZeroPos_Click);
@@ -166,7 +166,7 @@
             this.btnSettings.Name = "btnSettings";
             this.btnSettings.Padding = new System.Windows.Forms.Padding(10);
             this.btnSettings.Size = new System.Drawing.Size(126, 88);
-            this.btnSettings.TabIndex = 14;
+            this.btnSettings.TabIndex = 0;
             this.btnSettings.Text = "Settings";
             this.btnSettings.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnSettings.UseVisualStyleBackColor = true;
@@ -191,7 +191,7 @@
             this.btnConnect.Name = "btnConnect";
             this.btnConnect.Padding = new System.Windows.Forms.Padding(10);
             this.btnConnect.Size = new System.Drawing.Size(126, 88);
-            this.btnConnect.TabIndex = 15;
+            this.btnConnect.TabIndex = 1;
             this.btnConnect.Text = "Connect";
             this.btnConnect.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnConnect.UseVisualStyleBackColor = true;
@@ -204,7 +204,7 @@
             this.lblCurPosVal.Location = new System.Drawing.Point(152, 192);
             this.lblCurPosVal.Name = "lblCurPosVal";
             this.lblCurPosVal.Size = new System.Drawing.Size(31, 17);
-            this.lblCurPosVal.TabIndex = 16;
+            this.lblCurPosVal.TabIndex = 1;
             this.lblCurPosVal.Text = "N/A";
             // 
             // errorProvider
@@ -218,7 +218,7 @@
             this.backlashCompLabel.Location = new System.Drawing.Point(36, 145);
             this.backlashCompLabel.Name = "backlashCompLabel";
             this.backlashCompLabel.Size = new System.Drawing.Size(266, 17);
-            this.backlashCompLabel.TabIndex = 17;
+            this.backlashCompLabel.TabIndex = 1;
             this.backlashCompLabel.Text = "Backlash compensation overshoot steps:";
             // 
             // backlashCompTextBox
@@ -227,7 +227,7 @@
             this.backlashCompTextBox.Location = new System.Drawing.Point(311, 142);
             this.backlashCompTextBox.Name = "backlashCompTextBox";
             this.backlashCompTextBox.Size = new System.Drawing.Size(47, 23);
-            this.backlashCompTextBox.TabIndex = 18;
+            this.backlashCompTextBox.TabIndex = 2;
             this.backlashCompTextBox.Text = "0";
             this.backlashCompTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.backlashCompTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.backlashCompTextBox_Validating);
@@ -238,7 +238,7 @@
             this.btnHalt.Location = new System.Drawing.Point(318, 231);
             this.btnHalt.Name = "btnHalt";
             this.btnHalt.Size = new System.Drawing.Size(55, 27);
-            this.btnHalt.TabIndex = 19;
+            this.btnHalt.TabIndex = 5;
             this.btnHalt.Text = "Halt!";
             this.btnHalt.UseVisualStyleBackColor = true;
             this.btnHalt.Click += new System.EventHandler(this.btnHalt_Click);
