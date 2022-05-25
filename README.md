@@ -27,7 +27,7 @@ The following are just suggestions... Also, over time, some of the links may no 
 
 * [ZWO OAG](https://astronomy-imaging-camera.com/product/zwo-oag)
 * [ZWO 1.25" helical focuser](https://astronomy-imaging-camera.com/product/zwo-1-25%E2%80%B3-helical-focuser)
-* For the microcontroller, here are two options:
+* For the microcontroller, here are a few options:
   * You can use the [Seeeduino XIAO](https://www.seeedstudio.com/Seeeduino-XIAO-Arduino-Microcontroller-SAMD21-Cortex-M0+-p-4426.html). It costs only $5 US if you purchase it directly from Seeed Studio, but be prepared to wait a long time for it to ship to your house! You can also get it a lot faster from Amazon, but you will pay 2 to 3 times as much! Also, you will need to power the stepper motor using a separate power supply, or some internal battery...
   * Another option is to use a [PD Micro](https://www.crowdsupply.com/ryan-ma/pd-micro). At $30 US, it is a significantly more expensive unit, but it allows powering the stepper motor from the USB cable. I like the idea of reducing the number of cables I have to deal with, and not having to worry about charging an internal battery, so this is the option that I have chosen for myself.
   * And of course, you can use any Arduino-compatible board, so if you have an Arduino Nano laying around, feel free to use that!
