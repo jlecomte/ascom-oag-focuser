@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{CD3DF2A7-4F4D-47A9-A214-D5A0B09EE0E5}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Focuser_App</RootNamespace>
-    <AssemblyName>Focuser_App</AssemblyName>
+    <RootNamespace>ASCOM.DarkSkyGeek.FocuserApp</RootNamespace>
+    <AssemblyName>ASCOM.DarkSkyGeek.FocuserApp</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

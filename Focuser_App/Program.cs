@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Focuser_App
+namespace ASCOM.DarkSkyGeek.FocuserApp
 {
     internal static class Program
     {

@@ -1,4 +1,4 @@
-﻿namespace Focuser_App
+﻿namespace ASCOM.DarkSkyGeek.FocuserApp
 {
     partial class MainForm
     {
@@ -160,7 +160,7 @@
             // btnSettings
             // 
             this.btnSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSettings.Image = global::Focuser_App.Properties.Resources.gears;
+            this.btnSettings.Image = global::ASCOM.DarkSkyGeek.FocuserApp.Properties.Resources.gears;
             this.btnSettings.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnSettings.Location = new System.Drawing.Point(57, 18);
             this.btnSettings.Name = "btnSettings";
@@ -175,7 +175,7 @@
             // picIsMoving
             // 
             this.picIsMoving.BackColor = System.Drawing.Color.Transparent;
-            this.picIsMoving.Image = global::Focuser_App.Properties.Resources.no;
+            this.picIsMoving.Image = global::ASCOM.DarkSkyGeek.FocuserApp.Properties.Resources.no;
             this.picIsMoving.Location = new System.Drawing.Point(278, 286);
             this.picIsMoving.Name = "picIsMoving";
             this.picIsMoving.Size = new System.Drawing.Size(32, 32);
@@ -185,7 +185,7 @@
             // btnConnect
             // 
             this.btnConnect.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnConnect.Image = global::Focuser_App.Properties.Resources.power_on;
+            this.btnConnect.Image = global::ASCOM.DarkSkyGeek.FocuserApp.Properties.Resources.power_on;
             this.btnConnect.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
             this.btnConnect.Location = new System.Drawing.Point(214, 18);
             this.btnConnect.Name = "btnConnect";

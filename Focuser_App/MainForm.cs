@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Focuser_App
+namespace ASCOM.DarkSkyGeek.FocuserApp
 {
     public partial class MainForm : Form
     {

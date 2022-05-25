@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32516.85
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Focuser_App", "Focuser_App.csproj", "{CD3DF2A7-4F4D-47A9-A214-D5A0B09EE0E5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.DarkSkyGeek.FocuserApp", "ASCOM.DarkSkyGeek.FocuserApp.csproj", "{CD3DF2A7-4F4D-47A9-A214-D5A0B09EE0E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
