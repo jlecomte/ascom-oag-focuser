@@ -82,7 +82,7 @@ Open the `Focuser_App\ASCOM.DarkSkyGeek.FocuserApp.sln` solution in Microsoft Vi
 
 The electronics circuit is fairly straightforward. I included a Fritzing file in the `Electronics/` folder. Here are the schematics:
 
-![Breadboard Schematics](images/Breadboard-Schematics.jpg)
+![Breadboard Schematics](images/Breadboard-Schematics.png)
 
 Here is what the prototype circuit looks like:
 
