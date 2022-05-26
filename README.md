@@ -66,11 +66,13 @@ And here is what the focuser settings dialog looks like:
 
 ![Focuser Settings Dialog](images/Focuser-SetupDialog.png)
 
-## Compiling The Standalone Focuser Application
+## Standalone Focuser Application
 
 Open the `Focuser_App\ASCOM.DarkSkyGeek.FocuserApp.sln` solution in Microsoft Visual Studio, change the solution configuration to `Release` (in the toolbar), open the `Build` menu, and click on `Build Solution`. Very simple! The binary file generated will be `Focuser_App\bin\Release\ASCOM.DarkSkyGeek.FocuserApp.exe`. You may also download this file from the [Releases page](https://github.com/jlecomte/ascom-oag-focuser/releases). Here is what that little standalone application looks like:
 
 ![Standalone Focuser Control Application](images/Standalone-Focuser-App.png)
+
+This application allows you to connect to and control DarkSkyGeek’s OAG focuser, and in particular, it enables you to test various backlash compensation values as well as set the zero position. If you use a SCOPS OAG, I can only assume that it came with its own standalone application with similar functionality...
 
 ## Compile And Upload The Firmware
 
