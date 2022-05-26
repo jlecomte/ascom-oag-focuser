@@ -25,7 +25,7 @@ If you have a question or run into a problem, don't hesitate to file a [GitHub i
 
 ## Hardware
 
-The following are just suggestions... Also, over time, some of the links may no longer work... But it should help get you started.
+The following are just suggestions... Also, over time, some of the links may no longer work...
 
 * [ZWO OAG](https://astronomy-imaging-camera.com/product/zwo-oag)
 * [ZWO 1.25" helical focuser](https://astronomy-imaging-camera.com/product/zwo-1-25%E2%80%B3-helical-focuser)
@@ -35,7 +35,7 @@ The following are just suggestions... Also, over time, some of the links may no 
   * And of course, you can use any Arduino-compatible board, so if you have an Arduino Nano laying around, feel free to use that!
 * ULN2003 Darlington transistor array
 * 28BYJ-48 stepper motor
-* [Pulley/timing belt](https://www.amazon.com/dp/B08QYYF6W4)
+* [Pulley/timing belt](https://www.amazon.com/dp/B08QYYF6W4) (you can also get those at McMaster-Carr)
 
 ## ASCOM Driver
 
