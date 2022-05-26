@@ -33,9 +33,11 @@ The following are just suggestions... Also, over time, some of the links may no 
   * You can use the [Seeeduino XIAO](https://www.seeedstudio.com/Seeeduino-XIAO-Arduino-Microcontroller-SAMD21-Cortex-M0+-p-4426.html). It costs only $5 US if you purchase it directly from Seeed Studio, but be prepared to wait a long time for it to ship to your house! You can also get it a lot faster from Amazon, but you will pay 2 to 3 times as much! Also, you will need to power the stepper motor using a separate power supply, or some internal battery...
   * Another option is to use a [PD Micro](https://www.crowdsupply.com/ryan-ma/pd-micro). At $30 US, it is a significantly more expensive unit, but it allows powering the stepper motor from the USB cable. I like the idea of reducing the number of cables I have to deal with, and not having to worry about charging an internal battery, so this is the option that I have chosen for myself.
   * And of course, you can use any Arduino-compatible board, so if you have an Arduino Nano laying around, feel free to use that!
-* ULN2003 Darlington transistor array
-* 28BYJ-48 stepper motor
+* ULN2003 Darlington transistor array to control the stepper motor using the Arduino's digital I/O pins.
+* 28BYJ-48 stepper motor — I picked a model that is rated for 12V, but you can also use the standard 5V model.
 * [Pulley/timing belt](https://www.amazon.com/dp/B08QYYF6W4) (you can also get those at McMaster-Carr)
+* LEDs — These are not required, but they can be useful to debug the firmware.
+* Resistors — Any value between 1KΩ and 5KΩ should work, depending on how bright you want the LEDs.
 
 ## ASCOM Driver
 
@@ -74,11 +76,16 @@ Open the `Focuser_App\ASCOM.DarkSkyGeek.FocuserApp.sln` solution in Microsoft Vi
 
 This application allows you to connect to and control DarkSkyGeek’s OAG focuser, and in particular, it enables you to test various backlash compensation values as well as set the zero position. If you use a SCOPS OAG, I can only assume that it came with its own standalone application with similar functionality...
 
-## Compile And Upload The Firmware
+## Arduino Firmware
 
 * Add support for the board that you are using in your project. For example, for the Seeeduino XIAO, follow [the instructions from the manufacturer](https://wiki.seeedstudio.com/Seeeduino-XIAO/).
 * To customize the name of the device when connected to your computer, open the file `boards.txt`. On my system and for the version of the Seeeduino board I use, it is located at `%LOCALAPPDATA%\Arduino15\packages\Seeeduino\hardware\samd\1.8.2\boards.txt`. It is different for other boards. Then, change the value of the `usb_product` key (e.g., `seeed_XIAO_m0.build.usb_product`) to whatever you'd like.
 * Finally, connect your board to your computer using a USB cable, open the sketch file located at `Arduino_Firmware\Arduino_Firmware.ino`, and click on the `Upload` button in the toolbar.
+
+Some will ask why I decided to "manually" control the stepper motor instead of using the [standard `Stepper` library](https://www.arduino.cc/reference/en/libraries/stepper/) or the [popular `AccelStepper` library](https://www.arduino.cc/reference/en/libraries/accelstepper/). There are two reasons:
+
+1. I need to be able to handle incoming requests while the motor is moving, e.g., `COMMAND:FOCUSER:ISMOVING`. This is not possible with any of the aforementioned libraries.
+2. To save power and to prevent heat buildup (particularly important since the motor will be inside a 3D printed enclosure), I de-energize the stepper motor by setting all the pins to LOW once it has reached the desired position. This is also not supported by any of the aforementioned libraries, and it makes a huge difference! If you don't believe me, try commenting out that part of the code, and play with the firmware for a little while (you don't even need to actively move the motor). Then, feel how hot the motor gets...
 
 ## Electronic Circuit
 
