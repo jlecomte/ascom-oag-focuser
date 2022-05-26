@@ -72,7 +72,7 @@ Open the `Focuser_App\ASCOM.DarkSkyGeek.FocuserApp.sln` solution in Microsoft Vi
 
 ![Standalone Focuser Control Application](images/Standalone-Focuser-App.png)
 
-## Upload The Firmware
+## Compile And Upload The Firmware
 
 * Add support for the board that you are using in your project. For example, for the Seeeduino XIAO, follow [the instructions from the manufacturer](https://wiki.seeedstudio.com/Seeeduino-XIAO/).
 * To customize the name of the device when connected to your computer, open the file `boards.txt`. On my system and for the version of the Seeeduino board I use, it is located at `%LOCALAPPDATA%\Arduino15\packages\Seeeduino\hardware\samd\1.8.2\boards.txt`. It is different for other boards. Then, change the value of the `usb_product` key (e.g., `seeed_XIAO_m0.build.usb_product`) to whatever you'd like.
