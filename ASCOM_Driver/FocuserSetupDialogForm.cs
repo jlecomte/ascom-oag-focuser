@@ -31,7 +31,7 @@ namespace ASCOM.DarkSkyGeek
         private void FocuserSetupDialogForm_Load(object sender, EventArgs e)
         {
             chkAutoDetect.Checked = Focuser.autoDetectComPort;
-            chkTrace.Checked = tl.Enabled;
+
             comboBoxComPort.Enabled = !chkAutoDetect.Checked;
 
             // Set the list of COM ports to those that are currently available
@@ -43,6 +43,11 @@ namespace ASCOM.DarkSkyGeek
             {
                 comboBoxComPort.SelectedItem = Focuser.comPortOverride;
             }
+
+            chkTrace.Checked = tl.Enabled;
+
+            maxPositionTextBox.Text = Focuser.maxPosition.ToString();
+            chkReverseRotation.Checked = Focuser.reverseRotation;
         }
 
         private void cmdOK_Click(object sender, EventArgs e)
@@ -51,9 +56,12 @@ namespace ASCOM.DarkSkyGeek
             {
                 DialogResult = DialogResult.None;
             }
+
             Focuser.autoDetectComPort = chkAutoDetect.Checked;
             Focuser.comPortOverride = (string)comboBoxComPort.SelectedItem;
             tl.Enabled = chkTrace.Checked;
+            Focuser.maxPosition = Convert.ToInt32(maxPositionTextBox.Text);
+            Focuser.reverseRotation = chkReverseRotation.Checked;
         }
 
         private void cmdCancel_Click(object sender, EventArgs e)
@@ -64,6 +72,25 @@ namespace ASCOM.DarkSkyGeek
         private void chkAutoDetect_CheckedChanged(object sender, EventArgs e)
         {
             comboBoxComPort.Enabled = !((CheckBox)sender).Checked;
+        }
+
+        private void maxPositionTextBox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            try
+            {
+                int value = Convert.ToInt32(maxPositionTextBox.Text);
+                if (value <= 0)
+                {
+                    throw new FormatException("Maximum position must be a strictly positive integer");
+                }
+                errorProvider.SetError(maxPositionTextBox, string.Empty);
+            }
+            catch (Exception)
+            {
+                e.Cancel = true;
+                maxPositionTextBox.Select(0, maxPositionTextBox.Text.Length);
+                errorProvider.SetError(maxPositionTextBox, "Must be a strictly positive integer");
+            }
         }
 
         private void BrowseToHomepage(object sender, EventArgs e)

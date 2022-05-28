@@ -51,9 +51,22 @@ namespace ASCOM.DarkSkyGeek
         internal static string traceStateProfileName = "Trace Level";
         internal static string traceStateDefault = "false";
 
+        // 4000 works for the standard configuration of this project
+        // (ZWO OAG, gearing, etc.) The exact value also depends where you set
+        // the zero position... That is why it is made to be configurable!
+        internal static string maxPositionProfileName = "Maximum Position";
+        internal static string maxPositionDefault = "4000";
+
+        // True if using a pinion gear, i.e. the rotation of the focuser is opposite
+        // that of the stepper motor arm. False if using a timing belt...
+        internal static string reverseRotationProfileName = "Reverse Rotation";
+        internal static string reverseRotationDefault = "true";
+
         // Variables to hold the current device configuration
         internal static bool autoDetectComPort = Convert.ToBoolean(autoDetectComPortDefault);
         internal static string comPortOverride = comPortDefault;
+        internal static int maxPosition = Convert.ToInt32(maxPositionDefault);
+        internal static bool reverseRotation = Convert.ToBoolean(reverseRotationDefault);
 
         /// <summary>
         /// Variable to hold the trace logger object (creates a diagnostic log file with information that you specify)
@@ -105,9 +118,6 @@ namespace ASCOM.DarkSkyGeek
 
         private const string COMMAND_FOCUSER_HALT = "COMMAND:FOCUSER:HALT";
         private const string RESULT_FOCUSER_HALT = "RESULT:FOCUSER:HALT:";
-
-        private const int MAX_POSITION = 5000; // See comment in Arduino_Firmware.ino!
-        private const int MAX_INCREMENT = MAX_POSITION;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DarkSkyGeek"/> class.
@@ -401,29 +411,36 @@ namespace ASCOM.DarkSkyGeek
             }
         }
 
-        // Maximum change in one move. Completely arbitrary value.
+        // Maximum change in one move.
         public int MaxIncrement
         {
             get
             {
-                tl.LogMessage("MaxIncrement Get", MAX_INCREMENT.ToString());
-                return MAX_INCREMENT;
+                tl.LogMessage("MaxIncrement Get", maxPosition.ToString());
+                return maxPosition;
             }
         }
 
-        // Maximum extent of the focuser, so position range is 0 to 100,000.
-        // Not sure how useful this is with a relative positioning focuser anyway...
+        // Maximum extent of the focuser.
         public int MaxStep
         {
             get
             {
-                tl.LogMessage("MaxStep Get", MAX_POSITION.ToString());
-                return MAX_POSITION;
+                tl.LogMessage("MaxStep Get", maxPosition.ToString());
+                return maxPosition;
             }
         }
 
         public void Move(int Position)
         {
+            if (Position < 0 || Position > maxPosition)
+            {
+                throw new ASCOM.InvalidValueException("Position", Position.ToString(), "0", maxPosition.ToString());
+            }
+            if (reverseRotation)
+            {
+                Position = -Position;
+            }
             string response = sendCommandToDevice("Move", COMMAND_FOCUSER_MOVE + Position.ToString(), RESULT_FOCUSER_MOVE);
             if (response != OK)
             {
@@ -447,10 +464,9 @@ namespace ASCOM.DarkSkyGeek
                     tl.LogMessage("Position", "Invalid position value received from device: " + response);
                     throw new ASCOM.DriverException("Invalid position value received from device: " + response);
                 }
-                if (value < 0 || value > MAX_POSITION)
+                if (reverseRotation)
                 {
-                    tl.LogMessage("Position", "Invalid position value received from device: " + response);
-                    throw new ASCOM.DriverException("Invalid position value received from device: " + response);
+                    value = -value;
                 }
                 return value;
             }
@@ -609,6 +625,8 @@ namespace ASCOM.DarkSkyGeek
                 tl.Enabled = Convert.ToBoolean(driverProfile.GetValue(driverID, traceStateProfileName, string.Empty, traceStateDefault));
                 autoDetectComPort = Convert.ToBoolean(driverProfile.GetValue(driverID, autoDetectComPortProfileName, string.Empty, autoDetectComPortDefault));
                 comPortOverride = driverProfile.GetValue(driverID, comPortProfileName, string.Empty, comPortDefault);
+                maxPosition = Convert.ToInt32(driverProfile.GetValue(driverID, maxPositionProfileName, string.Empty, maxPositionDefault));
+                reverseRotation = Convert.ToBoolean(driverProfile.GetValue(driverID, reverseRotationProfileName, string.Empty, reverseRotationDefault));
             }
         }
 
@@ -626,6 +644,8 @@ namespace ASCOM.DarkSkyGeek
                 {
                     driverProfile.WriteValue(driverID, comPortProfileName, comPortOverride.ToString());
                 }
+                driverProfile.WriteValue(driverID, maxPositionProfileName, maxPosition.ToString());
+                driverProfile.WriteValue(driverID, reverseRotationProfileName, reverseRotation.ToString());
             }
         }
 

@@ -68,7 +68,9 @@ const unsigned int MOTOR_PIN_2 =  9; // Yellow - 28BYJ48 pin 3
 const unsigned int MOTOR_PIN_3 = 10; // Pink   - 28BYJ48 pin 2
 const unsigned int MOTOR_PIN_4 =  8; // Orange - 28BYJ48 pin 4
 
-const unsigned int POSITION_EEPROM_BASE_ADDR = 0;
+const unsigned int EEPROM_MAGIC_NUMBER = 0x12345678;
+const unsigned int EEPROM_MAGIC_NUMBER_ADDR = 0;
+const unsigned int EEPROM_POSITION_BASE_ADDR = 4;
 
 //-- VARIABLES ----------------------------------------------------------------
 
@@ -108,10 +110,18 @@ void setup() {
     position = 0;
     last_step_time = 0L;
 
-    EEPROM.get(POSITION_EEPROM_BASE_ADDR, position);
-    if (position > MAX_STEPS) {
-        // The position likely had never been stored in EEPROM...
+    int magic_number;
+    EEPROM.get(EEPROM_MAGIC_NUMBER_ADDR, magic_number);
+    if (magic_number == EEPROM_MAGIC_NUMBER) {
+        // The value stored in EEPROM is trustworthy...
+        EEPROM.get(EEPROM_POSITION_BASE_ADDR, position);
+    } else {
+        // The position had never been stored in EEPROM. Initialize it to 0...
         position = 0;
+        // Store it...
+        EEPROM.put(EEPROM_POSITION_BASE_ADDR, position);
+        // And mark the value as trustworthy...
+        EEPROM.put(EEPROM_MAGIC_NUMBER_ADDR, EEPROM_MAGIC_NUMBER);
     }
 }
 
@@ -153,6 +163,11 @@ void loop() {
 
 //-- UTILITY FUNCTIONS -----------------------------------------------------
 
+// See https://forum.arduino.cc/t/modulo-with-negative-int/158317
+int mod(int x, int y){
+    return x < 0 ? ((x+1) % y) + y - 1 : x % y;
+}
+
 void step() {
     if (steps_left > 0) {
         // Make sure we don't prematurely take a step if it's too early...
@@ -160,9 +175,9 @@ void step() {
         if (now - last_step_time < STEP_DELAY_MICROSEC) {
             return;
         }
-    
+
         last_step_time = now;
-    
+
         steps_left--;
 
         if (direction == forward) {
@@ -170,8 +185,8 @@ void step() {
         } else {
             position--;
         }
-    
-        switch (position % 4) {
+
+        switch (mod(position, 4)) {
             case 0: // 1010
                 digitalWrite(MOTOR_PIN_1, HIGH);
                 digitalWrite(MOTOR_PIN_2, LOW);
@@ -209,7 +224,7 @@ void stop() {
     steps_left = 0;
 
     // Store the final position in EEPROM.
-    EEPROM.put(POSITION_EEPROM_BASE_ADDR, position);
+    EEPROM.put(EEPROM_POSITION_BASE_ADDR, position);
 
     // And de-energize the stepper by setting all the pins to LOW to prevent heat build up.
     digitalWrite(MOTOR_PIN_1, LOW);
@@ -234,7 +249,7 @@ void setFocuserZeroPosition() {
     Serial.print(RESULT_FOCUSER_SETZEROPOSITION);
     if (steps_left == 0) {
         position = 0;
-        EEPROM.put(POSITION_EEPROM_BASE_ADDR, position);
+        EEPROM.put(EEPROM_POSITION_BASE_ADDR, position);
         Serial.println(OK);
     } else {
         // Cannot set zero position while focuser is still moving...
@@ -247,12 +262,6 @@ void moveFocuser(int target_position) {
 
     if (steps_left > 0) {
         // Cannot move while focuser is still moving from previous request...
-        Serial.println(NOK);
-        return;
-    }
-
-    if (target_position < 0 || target_position > MAX_STEPS) {
-        // Cannot move to a position that is out of range...
         Serial.println(NOK);
         return;
     }

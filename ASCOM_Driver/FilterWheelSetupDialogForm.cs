@@ -198,7 +198,7 @@ namespace ASCOM.DarkSkyGeek
                 {
                     throw new FormatException("Backlash compensation cannot be a negative number");
                 }
-                errorProvider.SetError(backlashCompTextBox, String.Empty);
+                errorProvider.SetError(backlashCompTextBox, string.Empty);
             }
             catch (Exception)
             {
@@ -217,7 +217,7 @@ namespace ASCOM.DarkSkyGeek
                 {
                     throw new FormatException("The decimal value must be strictly positive");
                 }
-                errorProvider.SetError(stepRatioTextBox, String.Empty);
+                errorProvider.SetError(stepRatioTextBox, string.Empty);
             }
             catch (Exception)
             {

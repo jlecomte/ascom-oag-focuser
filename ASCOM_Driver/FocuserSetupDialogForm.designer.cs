@@ -35,6 +35,7 @@ namespace ASCOM.DarkSkyGeek
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FocuserSetupDialogForm));
             this.cmdOK = new System.Windows.Forms.Button();
             this.cmdCancel = new System.Windows.Forms.Button();
             this.comPortOverrideLabel = new System.Windows.Forms.Label();
@@ -43,6 +44,10 @@ namespace ASCOM.DarkSkyGeek
             this.DSGLogo = new System.Windows.Forms.PictureBox();
             this.chkAutoDetect = new System.Windows.Forms.CheckBox();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
+            this.maxPositionLabel = new System.Windows.Forms.Label();
+            this.maxPositionTextBox = new System.Windows.Forms.TextBox();
+            this.chkReverseRotation = new System.Windows.Forms.CheckBox();
+            this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.DSGLogo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
             this.SuspendLayout();
@@ -53,7 +58,7 @@ namespace ASCOM.DarkSkyGeek
             this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.cmdOK.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdOK.Image = global::ASCOM.DarkSkyGeek.Properties.Resources.icon_ok_24;
-            this.cmdOK.Location = new System.Drawing.Point(137, 106);
+            this.cmdOK.Location = new System.Drawing.Point(137, 182);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
             this.cmdOK.Size = new System.Drawing.Size(76, 35);
@@ -68,7 +73,7 @@ namespace ASCOM.DarkSkyGeek
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cmdCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdCancel.Image = global::ASCOM.DarkSkyGeek.Properties.Resources.icon_cancel_24;
-            this.cmdCancel.Location = new System.Drawing.Point(219, 106);
+            this.cmdCancel.Location = new System.Drawing.Point(219, 182);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(74, 37);
             this.cmdCancel.TabIndex = 1;
@@ -79,7 +84,7 @@ namespace ASCOM.DarkSkyGeek
             // 
             this.comPortOverrideLabel.AutoSize = true;
             this.comPortOverrideLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.comPortOverrideLabel.Location = new System.Drawing.Point(112, 41);
+            this.comPortOverrideLabel.Location = new System.Drawing.Point(112, 51);
             this.comPortOverrideLabel.Name = "comPortOverrideLabel";
             this.comPortOverrideLabel.Size = new System.Drawing.Size(99, 13);
             this.comPortOverrideLabel.TabIndex = 5;
@@ -88,7 +93,7 @@ namespace ASCOM.DarkSkyGeek
             // chkTrace
             // 
             this.chkTrace.AutoSize = true;
-            this.chkTrace.Location = new System.Drawing.Point(115, 66);
+            this.chkTrace.Location = new System.Drawing.Point(115, 81);
             this.chkTrace.Name = "chkTrace";
             this.chkTrace.Size = new System.Drawing.Size(69, 17);
             this.chkTrace.TabIndex = 6;
@@ -98,7 +103,7 @@ namespace ASCOM.DarkSkyGeek
             // comboBoxComPort
             // 
             this.comboBoxComPort.FormattingEnabled = true;
-            this.comboBoxComPort.Location = new System.Drawing.Point(217, 38);
+            this.comboBoxComPort.Location = new System.Drawing.Point(217, 48);
             this.comboBoxComPort.Name = "comboBoxComPort";
             this.comboBoxComPort.Size = new System.Drawing.Size(71, 21);
             this.comboBoxComPort.TabIndex = 7;
@@ -122,7 +127,7 @@ namespace ASCOM.DarkSkyGeek
             this.chkAutoDetect.Checked = true;
             this.chkAutoDetect.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkAutoDetect.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkAutoDetect.Location = new System.Drawing.Point(115, 12);
+            this.chkAutoDetect.Location = new System.Drawing.Point(115, 17);
             this.chkAutoDetect.Name = "chkAutoDetect";
             this.chkAutoDetect.Size = new System.Drawing.Size(131, 17);
             this.chkAutoDetect.TabIndex = 8;
@@ -134,11 +139,44 @@ namespace ASCOM.DarkSkyGeek
             // 
             this.errorProvider.ContainerControl = this;
             // 
+            // maxPositionLabel
+            // 
+            this.maxPositionLabel.AutoSize = true;
+            this.maxPositionLabel.Location = new System.Drawing.Point(10, 123);
+            this.maxPositionLabel.Name = "maxPositionLabel";
+            this.maxPositionLabel.Size = new System.Drawing.Size(94, 13);
+            this.maxPositionLabel.TabIndex = 9;
+            this.maxPositionLabel.Text = "Maximum Position:";
+            // 
+            // maxPositionTextBox
+            // 
+            this.maxPositionTextBox.Location = new System.Drawing.Point(109, 120);
+            this.maxPositionTextBox.Name = "maxPositionTextBox";
+            this.maxPositionTextBox.Size = new System.Drawing.Size(56, 20);
+            this.maxPositionTextBox.TabIndex = 10;
+            this.maxPositionTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.maxPositionTextBox_Validating);
+            // 
+            // chkReverseRotation
+            // 
+            this.chkReverseRotation.AutoSize = true;
+            this.chkReverseRotation.Checked = true;
+            this.chkReverseRotation.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkReverseRotation.Location = new System.Drawing.Point(12, 156);
+            this.chkReverseRotation.Name = "chkReverseRotation";
+            this.chkReverseRotation.Size = new System.Drawing.Size(109, 17);
+            this.chkReverseRotation.TabIndex = 11;
+            this.chkReverseRotation.Text = "Reverse Rotation";
+            this.toolTip.SetToolTip(this.chkReverseRotation, resources.GetString("chkReverseRotation.ToolTip"));
+            this.chkReverseRotation.UseVisualStyleBackColor = true;
+            // 
             // FocuserSetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(305, 151);
+            this.ClientSize = new System.Drawing.Size(305, 227);
+            this.Controls.Add(this.chkReverseRotation);
+            this.Controls.Add(this.maxPositionTextBox);
+            this.Controls.Add(this.maxPositionLabel);
             this.Controls.Add(this.chkAutoDetect);
             this.Controls.Add(this.comboBoxComPort);
             this.Controls.Add(this.chkTrace);
@@ -171,5 +209,9 @@ namespace ASCOM.DarkSkyGeek
         private System.Windows.Forms.PictureBox DSGLogo;
         private System.Windows.Forms.CheckBox chkAutoDetect;
         private System.Windows.Forms.ErrorProvider errorProvider;
+        private System.Windows.Forms.CheckBox chkReverseRotation;
+        private System.Windows.Forms.TextBox maxPositionTextBox;
+        private System.Windows.Forms.Label maxPositionLabel;
+        private System.Windows.Forms.ToolTip toolTip;
     }
 }

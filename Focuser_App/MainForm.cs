@@ -195,7 +195,7 @@ namespace ASCOM.DarkSkyGeek.FocuserApp
                 {
                     throw new FormatException("The target position cannot be a negative number");
                 }
-                errorProvider.SetError(txtBoxTgtPos, String.Empty);
+                errorProvider.SetError(txtBoxTgtPos, string.Empty);
             }
             catch (Exception)
             {
@@ -254,7 +254,7 @@ namespace ASCOM.DarkSkyGeek.FocuserApp
                 {
                     throw new FormatException("Backlash compensation cannot be a negative number");
                 }
-                errorProvider.SetError(backlashCompTextBox, String.Empty);
+                errorProvider.SetError(backlashCompTextBox, string.Empty);
             }
             catch (Exception)
             {
