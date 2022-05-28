@@ -1,5 +1,23 @@
 # ASCOM-Compatible OAG Focuser
 
+<!-- toc -->
+
+- [Introduction](#introduction)
+- [Pre-Requisites](#pre-requisites)
+- [Hardware](#hardware)
+- [ASCOM Driver](#ascom-driver)
+  - [Compiling The Driver](#compiling-the-driver)
+  - [Installing The Driver](#installing-the-driver)
+  - [Screenshots](#screenshots)
+- [Standalone Focuser Application](#standalone-focuser-application)
+- [Arduino Firmware](#arduino-firmware)
+- [Electronic Circuit](#electronic-circuit)
+- [Mechanical Components](#mechanical-components)
+  - [Gear Drive vs Belt Drive](#gear-drive-vs-belt-drive)
+  - [Backlash Measurement And Compensation](#backlash-measurement-and-compensation)
+
+<!-- tocstop -->
+
 ## Introduction
 
 Shortly after I got started in astrophotography, I noticed that the stars in my images were slightly elongated due to some differential flexure somewhere in my imaging system (see [Cloudy Nights thread](https://www.cloudynights.com/topic/775260-good-guiding-but-elongated-stars-along-e-w-direction/) — I strongly suspect that it is sag in my focuser...) The permanent solution was to switch from using a guide scope to using an off-axis guider (OAG) and that immediately resolved my issue. Now, my stars are perfectly round, which is great! For reference, I purchased the [ZWO OAG](https://astronomy-imaging-camera.com/product/zwo-oag) and the accompanying [ZWO 1.25" helical focuser](https://astronomy-imaging-camera.com/product/zwo-1-25%E2%80%B3-helical-focuser).
@@ -96,7 +114,9 @@ Here is what the prototype circuit looks like:
 
 ![Breadboard Prototype](images/Breadboard-Prototype.jpg)
 
-## Mechanical Gearing
+## Mechanical Components
+
+### Gear Drive vs Belt Drive
 
 My first attempt to move the focuser with a stepper motor was done using a belt:
 
@@ -109,3 +129,11 @@ Unfortunately, the belt occasionally slipped, so I gave helical gears a try:
 It turned out that helical gears, which are very easy to make on a 3D printer, worked absolutely flawlessly! Another thing that also helped get great results was to slightly loosen the focuser (there are 4 tiny set screws on the ZWO focuser you can loosen ever so slightly to make it easier to rotate the knurled knob) because these small stepper motors don't have that much torque...
 
 I included both the belt and gear models in the `3D_Files/` directory so you can give them both a try and decide which one you want to use.
+
+### Backlash Measurement And Compensation
+
+There are many sources of backlash in this system. The stepper motor itself, due to its internal gearbox, already has some amount of backlash. The 3D printed gear and pinion also have some backlash. And finally, the helical focuser has some backlash as well. All of those sources combine. Thankfully, compensating for backlash is easy and supported by the software in this repository. The trick is to first measure the amount of backlash in your system. Here is how I do it using a dial indicator:
+
+![Backlash Measurement](images/Backlash-Measurement.jpg)
+
+Using the standalone focuser control application, setting a backlash compensation of 0, move in one direction by a large amount. Then, move in the opposite direction by a small amount, repeptitively, until the dial indicator starts moving. In my setup, I have about 60 steps of backlash, so I set the backlash compensation amount to 100 (the software uses the so-called "overshoot" backlash compensation method) and it works absolutely flawlessly!
