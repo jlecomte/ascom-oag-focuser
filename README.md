@@ -136,4 +136,4 @@ There are many sources of backlash in this system. The stepper motor itself, due
 
 ![Backlash Measurement](images/Backlash-Measurement.jpg)
 
-Using the standalone focuser control application, setting a backlash compensation of 0, move in one direction by a large amount. Then, move in the opposite direction by a small amount, repeptitively, until the dial indicator starts moving. In my setup, I have about 60 steps of backlash, so I set the backlash compensation amount to 100 (the software uses the so-called "overshoot" backlash compensation method) and it works absolutely flawlessly!
+Using the standalone focuser control application, setting a backlash compensation of 0, move in one direction by a large amount. Then, repetitively move in small increments in the opposite direction until the dial indicator starts moving. In my setup, I have a total of about 60 steps of backlash, so I set the backlash compensation amount to 100 (the software uses the so-called "overshoot" backlash compensation method) and it works absolutely flawlessly!
