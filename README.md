@@ -15,6 +15,7 @@
 - [Mechanical Components](#mechanical-components)
   - [Gear Drive vs Belt Drive](#gear-drive-vs-belt-drive)
   - [Backlash Measurement And Compensation](#backlash-measurement-and-compensation)
+- [Frequently Asked Questions](#frequently-asked-questions)
 
 <!-- tocstop -->
 
@@ -99,11 +100,6 @@ This application allows you to connect to and control DarkSkyGeek’s OAG focuse
 * To customize the name of the device when connected to your computer, open the file `boards.txt`. On my system and for the version of the Seeeduino board I use, it is located at `%LOCALAPPDATA%\Arduino15\packages\Seeeduino\hardware\samd\1.8.2\boards.txt`. It is different for other boards. Then, change the value of the `usb_product` key (e.g., `seeed_XIAO_m0.build.usb_product`) to whatever you'd like.
 * Finally, connect your board to your computer using a USB cable, open the sketch file located at `Arduino_Firmware\Arduino_Firmware.ino`, and click on the `Upload` button in the toolbar.
 
-Some will ask why I decided to "manually" control the stepper motor instead of using the [standard `Stepper` library](https://www.arduino.cc/reference/en/libraries/stepper/) or the [popular `AccelStepper` library](https://www.arduino.cc/reference/en/libraries/accelstepper/). There are two reasons:
-
-1. I need to be able to handle incoming requests while the motor is moving, e.g., `COMMAND:FOCUSER:ISMOVING`. This is not possible with any of the aforementioned libraries.
-2. To save power and to prevent heat buildup (particularly important since the motor will be inside a 3D printed enclosure), I de-energize the stepper motor by setting all the pins to LOW once it has reached the desired position. This is also not supported by any of the aforementioned libraries, and it makes a huge difference! If you don't believe me, try commenting out that part of the code, and play with the firmware for a little while (you don't even need to actively move the motor). Then, feel how hot the motor gets...
-
 ## Electronic Circuit
 
 The electronics circuit is fairly straightforward. I included a Fritzing file in the `Electronics/` folder. Here are the schematics:
@@ -137,3 +133,24 @@ There are many sources of backlash in this system. The stepper motor itself, due
 ![Backlash Measurement](images/Backlash-Measurement.jpg)
 
 Using the standalone focuser control application, setting a backlash compensation of 0, move in one direction by a large amount. Then, repetitively move in small increments in the opposite direction until the dial indicator starts moving. In my setup, I have a total of about 60 steps of backlash, so I set the backlash compensation amount to 100 (the software uses the so-called "overshoot" backlash compensation method) and it works absolutely flawlessly!
+
+## Frequently Asked Questions
+
+**I built this project and it does not work, can you help?**
+
+_Maybe. As indicated in the `LICENSE` file, I do not provide any official guarantee or support. That being said, if you open a GitHub issue in this repository and ask nicely, I will likely respond. Just make sure that you provide all the necessary details so that I understand what the issue might be. While on that note, keep in mind that troubleshooting an issue on your own is by far the best way to learn new things._
+
+**Why did you not use the `Stepper` or `AccelStepper` library in the Arduino firmware?**
+
+_It might seem strange that I decided to "manually" control the stepper motor instead of using the standard [`Stepper` library](https://www.arduino.cc/reference/en/libraries/stepper/) or the popular [`AccelStepper` library](https://www.arduino.cc/reference/en/libraries/accelstepper/). There are two reasons for that:_
+
+1. _I need to be able to handle incoming requests while the motor is moving, e.g., `COMMAND:FOCUSER:ISMOVING`. This is not possible with any of the aforementioned libraries._
+2. _To save power and to prevent heat buildup (particularly important since the motor will be inside a 3D printed enclosure), I de-energize the stepper motor by setting all the pins to LOW once it has reached the desired position. This is also not supported by any of the aforementioned libraries, and it makes a huge difference! If you don't believe me, try commenting out that part of the code, and play with the firmware for a little while (you don't even need to actively move the motor). Then, feel how hot the motor gets..._
+
+**Gear drive or belt drive? Which one do you recommend?**
+
+_I recommend the gear drive. The enclosure is designed for that. A belt driven system would require minor tweaks to the enclosure, which are not hard to do in Freecad if you know a little about that software._
+
+**Why is backlash compensation not implemented in the focuser driver?**
+
+_The software included in this repository (specifically the `FilterWheelProxy` ASCOM component) was designed and implemented so that it may be used with other OAG focuser, including commercial units such as the SCOPS OAG, and I have no idea whether the focuser driver for those other units handle backlash compensation. This way, no matter which focuser you use to adjust the focus of your guide camera, as long as its driver implements the standard `IFocuserV3` ASCOM interface, this will work and you will enjoy the benefits of backlash compensation!_
