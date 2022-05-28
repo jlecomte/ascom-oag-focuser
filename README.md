@@ -35,7 +35,6 @@ The following are just suggestions... Also, over time, some of the links may no 
   * And of course, you can use any Arduino-compatible board, so if you have an Arduino Nano laying around, feel free to use that!
 * ULN2003 Darlington transistor array to control the stepper motor using the Arduino's digital I/O pins.
 * 28BYJ-48 stepper motor — I picked a model that is rated for 12V, but you can also use the standard 5V model.
-* [Pulley/timing belt](https://www.amazon.com/dp/B08QYYF6W4) (you can also get those at McMaster-Carr)
 * LEDs — These are not required, but they can be useful to debug the firmware.
 * Resistors — Any value between 1KΩ and 5KΩ should work, depending on how bright you want the LEDs.
 
@@ -96,3 +95,17 @@ The electronics circuit is fairly straightforward. I included a Fritzing file in
 Here is what the prototype circuit looks like:
 
 ![Breadboard Prototype](images/Breadboard-Prototype.jpg)
+
+## Mechanical Gearing
+
+My first attempt to move the focuser with a stepper motor was done using a belt:
+
+![Focuser Belt](images/Focuser-Belt.jpg)
+
+Unfortunately, the belt occasionally slipped, so I gave helical gears a try:
+
+![Focuser Gear](images/Focuser-Gear.jpg)
+
+It turned out that helical gears, which are very easy to make on a 3D printer, worked absolutely flawlessly! Another thing that also helped get great results was to slightly loosen the focuser (there are 4 tiny set screws on the ZWO focuser you can loosen ever so slightly to make it easier to rotate the knurled knob) because these small stepper motors don't have that much torque...
+
+I included both the belt and gear models in the `3D_Files/` directory so you can give them both a try and decide which one you want to use.
