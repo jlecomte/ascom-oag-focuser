@@ -127,6 +127,8 @@ It turned out that helical gears, which are very easy to make on a 3D printer, w
 
 I included both the belt and gear models in the `3D_Files/` directory so you can give them both a try and decide which one you want to use.
 
+The "reverse rotation" checkbox in the focuser driver setup dialog window allows you to specify the direction of rotation when the number of steps increases. Check that option (default) if you chose a gear drive, and uncheck it if you chose the belt drive.
+
 ### Backlash Measurement And Compensation
 
 There are many sources of backlash in this system. The stepper motor itself, due to its internal gearbox, already has some amount of backlash. The 3D printed gear and pinion also have some backlash. And finally, the helical focuser has some backlash as well. All of those sources combine. Thankfully, compensating for backlash is easy and supported by the software in this repository. The trick is to first measure the amount of backlash in your system. Here is how I do it using a dial indicator:
