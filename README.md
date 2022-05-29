@@ -11,6 +11,8 @@
   - [Screenshots](#screenshots)
 - [Standalone Focuser Application](#standalone-focuser-application)
 - [Arduino Firmware](#arduino-firmware)
+  - [Microcontroller Compatibility](#microcontroller-compatibility)
+  - [Compiling And Uploading The Firmware](#compiling-and-uploading-the-firmware)
 - [Electronic Circuit](#electronic-circuit)
 - [Mechanical Components](#mechanical-components)
   - [Gear Drive vs Belt Drive](#gear-drive-vs-belt-drive)
@@ -48,11 +50,7 @@ The following are just suggestions... Also, over time, some of the links may no 
 
 * [ZWO OAG](https://astronomy-imaging-camera.com/product/zwo-oag)
 * [ZWO 1.25" helical focuser](https://astronomy-imaging-camera.com/product/zwo-1-25%E2%80%B3-helical-focuser)
-* For the microcontroller, here are a few options:
-  * You can use the [Seeeduino XIAO](https://www.seeedstudio.com/Seeeduino-XIAO-Arduino-Microcontroller-SAMD21-Cortex-M0+-p-4426.html). It costs only $5 US if you purchase it directly from Seeed Studio, but be prepared to wait a long time for it to ship to your house! You can also get it a lot faster from Amazon, but you will pay 2 to 3 times as much! Also, you will need to power the stepper motor using a separate power supply, or some internal battery...
-  * Another option is to use a [PD Micro](https://www.crowdsupply.com/ryan-ma/pd-micro). At $30 US, it is a significantly more expensive unit, but it allows powering the stepper motor from the USB cable. I like the idea of reducing the number of cables I have to deal with, and not having to worry about charging an internal battery, so this is the option that I have chosen for myself.
-  * Yet another option is Digispark's ATTiny85 board (get a clone since Digispark no longer sells it). They usually cost around $4 US each.
-  * And of course, you can use any Arduino-compatible board, so if you have an Arduino Nano laying around, feel free to use that!
+* Arduino-compatible microcontroller board with built-in EEPROM
 * ULN2003 Darlington transistor array to control the stepper motor using the Arduino's digital I/O pins.
 * 28BYJ-48 stepper motor — I picked a model that is rated for 12V, but you can also use the standard 5V model.
 * LEDs — These are not required, but they can be useful to debug the firmware.
@@ -97,8 +95,14 @@ This application allows you to connect to and control DarkSkyGeek’s OAG focuse
 
 ## Arduino Firmware
 
-* Add support for the board that you are using in your project. For example, for the Seeeduino XIAO, follow [the instructions from the manufacturer](https://wiki.seeedstudio.com/Seeeduino-XIAO/).
-* To customize the name of the device when connected to your computer, open the file `boards.txt`. On my system and for the version of the Seeeduino board I use, it is located at `%LOCALAPPDATA%\Arduino15\packages\Seeeduino\hardware\samd\1.8.2\boards.txt`. It is different for other boards. Then, change the value of the `usb_product` key (e.g., `seeed_XIAO_m0.build.usb_product`) to whatever you'd like.
+### Microcontroller Compatibility
+
+All Arduino-compatible microcontrollers that have a **built-in EEPROM** should work. Unfortunately, this excludes the popular [Seeeduino XIAO](https://www.seeedstudio.com/Seeeduino-XIAO-Arduino-Microcontroller-SAMD21-Cortex-M0+-p-4426.html) (one of my favorite microcontroller boards for hobby projects...) If you insist on using a unit that does not have a built-in EEPROM, you will have to customize the firmware to fit your needs. You could technically use a separate EEPROM chip, or you could use the [`FlashStorage` library](https://github.com/cmaglie/FlashStorage) or the [`FlashStorage_SAMD` library](https://github.com/khoih-prog/FlashStorage_SAMD), or you could simply disable the EEPROM code (in which case the device will not remember its last position after a power cycle...)
+
+### Compiling And Uploading The Firmware
+
+* If needed, add support for the board that you are using in your project.
+* You may want to customize the name of the device when connected to your computer. To do that, you will have to update the appropriate `usb_product` key in the appropriate `boards.txt` file... I cannot give you specific instructions for that because they depend on the exact board you are using.
 * Finally, connect your board to your computer using a USB cable, open the sketch file located at `Arduino_Firmware\Arduino_Firmware.ino`, and click on the `Upload` button in the toolbar.
 
 ## Electronic Circuit
@@ -127,7 +131,7 @@ It turned out that helical gears, which are very easy to make on a 3D printer, w
 
 I included both the belt and gear models in the `3D_Files/` directory so you can give them both a try and decide which one you want to use.
 
-The "reverse rotation" checkbox in the focuser driver setup dialog window allows you to specify the direction of rotation when the number of steps increases. Check that option (default) if you chose a gear drive, and uncheck it if you chose the belt drive.
+The "reverse rotation" checkbox in the focuser driver setup dialog window allows you to specify the direction of rotation when the number of steps increases. Check that option (default) if you chose a gear drive, and uncheck it if you chose a belt drive.
 
 ### Backlash Measurement And Compensation
 
@@ -143,16 +147,16 @@ Using the standalone focuser control application, setting a backlash compensatio
 
 _Maybe. As indicated in the `LICENSE` file, I do not provide any official guarantee or support. That being said, if you open a GitHub issue in this repository and ask nicely, I will likely respond. Just make sure that you provide all the necessary details so that I understand what the issue might be. While on that note, keep in mind that troubleshooting an issue on your own is by far the best way to learn new things._
 
+**Gear drive or belt drive? Which one do you recommend?**
+
+_Because of the possibility of belt slippage, I recommend the gear drive. The enclosure is designed for that. A belt driven system would require minor tweaks to the enclosure, which are not hard to do in Freecad if you know a little about that software._
+
 **Why did you not use the `Stepper` or `AccelStepper` library in the Arduino firmware?**
 
 _It might seem strange that I decided to "manually" control the stepper motor instead of using the standard [`Stepper` library](https://www.arduino.cc/reference/en/libraries/stepper/) or the popular [`AccelStepper` library](https://www.arduino.cc/reference/en/libraries/accelstepper/). There are two reasons for that:_
 
 1. _I need to be able to handle incoming requests while the motor is moving, e.g., `COMMAND:FOCUSER:ISMOVING`. This is not possible with any of the aforementioned libraries._
 2. _To save power and to prevent heat buildup (particularly important since the motor will be inside a 3D printed enclosure), I de-energize the stepper motor by setting all the pins to LOW once it has reached the desired position. This is also not supported by any of the aforementioned libraries, and it makes a huge difference! If you don't believe me, try commenting out that part of the code, and play with the firmware for a little while (you don't even need to actively move the motor). Then, feel how hot the motor gets..._
-
-**Gear drive or belt drive? Which one do you recommend?**
-
-_I recommend the gear drive. The enclosure is designed for that. A belt driven system would require minor tweaks to the enclosure, which are not hard to do in Freecad if you know a little about that software._
 
 **Why is backlash compensation not implemented in the focuser driver?**
 
