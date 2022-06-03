@@ -226,7 +226,8 @@ void stop() {
     // Store the final position in EEPROM.
     EEPROM.put(EEPROM_POSITION_BASE_ADDR, position);
 
-    // And de-energize the stepper by setting all the pins to LOW to prevent heat build up.
+    // And de-energize the stepper by setting all the pins to LOW to save power,
+    // prevent heat build up, and eliminate vibrations.
     digitalWrite(MOTOR_PIN_1, LOW);
     digitalWrite(MOTOR_PIN_2, LOW);
     digitalWrite(MOTOR_PIN_3, LOW);
