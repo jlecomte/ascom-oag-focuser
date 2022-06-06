@@ -66,6 +66,7 @@ The following are just suggestions... Also, over time, some of the links may no 
 * ULN2003 Darlington transistor array to control the stepper motor using the Arduino's digital I/O pins.
 * 24BYJ-48 stepper motor — That is the 12V version of the popular 28BYJ48, but you can also use the standard 5V model instead, depending on how you power your imaging rig (12V is pretty standard in astrophotography, so I went with that)
 * LEDs and resistors — These are not required, but they can be useful to debug the firmware while prototyping.
+* Connectors — I used JST connectors, only because I already had a bunch of them, along with a crimping tool.
 
 ## ASCOM Driver
 
@@ -125,6 +126,16 @@ The electronics circuit is fairly straightforward. I included a Fritzing file in
 Here is what the prototype circuit looks like:
 
 ![Breadboard Prototype](images/Breadboard-Prototype.jpg)
+
+Here are the top and bottom of the final circuit board:
+
+![Final Circuit Board Top](images/Circuit-Board-Top.jpg)
+
+![Final Circuit Board Bottom](images/Circuit-Board-Bottom.jpg)
+
+And here is the circuit board inside the 3D printed enclosure:
+
+![Circuit Board Inside Enclosure](images/Circuit-Board-Inside-Enclosure.jpg)
 
 ## Mechanical Components
 
