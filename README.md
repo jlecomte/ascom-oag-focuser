@@ -20,6 +20,7 @@
   - [Backlash Measurement And Compensation](#backlash-measurement-and-compensation)
 - [Frequently Asked Questions](#frequently-asked-questions)
 - [Ideas For Future Improvements](#ideas-for-future-improvements)
+- [Credits](#credits)
 
 <!-- tocstop -->
 
@@ -191,3 +192,9 @@ _The software included in this repository (specifically the `FilterWheelProxy` A
 ## Ideas For Future Improvements
 
 * Remove the need for a separate 12V power connector, i.e. use the USB cable for both data and power. This change would prevent us from using an Arduino-compatible board because the maximum current that can be delivered by an Arduino-compatible board is usually around 200mA @ 5V (although I have seen some that boast up to 500mA @ 5V), which is not quite enough, even for our small stepper motor, and you'd run the risk of tripping the internal fuse on the microcontroller board. In order to do this, you'd have to basically build your own Arduino board using a microcontroller chipd, an FTDI module, and a few other components. It's quite a project on its own... Another option is to use an onboard battery, and use a buck or boost converter to get the right voltage for your specific motor. This adds weight and complexity to the system, and if you forget to replace or recharge the battery, you find yourself with a dead unit... This is why I applied the [KISS principle](https://en.wikipedia.org/wiki/KISS_principle) to this project, even if the final product is not quite as optimal as it could possibly be, but hey, this is a hobbyist project!
+
+## Credits
+
+I would like to thank _Christophe de la Chapelle_ of the popular French-language YouTube channel [La Chaîne Astro](https://www.youtube.com/c/cdlc48) because he gave me the idea to build a focuser for my OAG after he demonstrated how he had built one for his telescope.
+
+I would like to also thank _Stefan Berg_, creator of [N.I.N.A.](https://nighttime-imaging.eu/), and _Linwood_ (see his [profile](https://www.cloudynights.com/user/335761-linwood/) on CloudyNights) for giving me the idea to create a "proxy" filter wheel component while discussing the design of this system on the [N.I.N.A. Discord server](https://discord.gg/fwpmHU4).
