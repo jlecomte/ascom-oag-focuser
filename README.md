@@ -3,6 +3,7 @@
 <!-- toc -->
 
 - [Introduction](#introduction)
+- [Finished Product](#finished-product)
 - [Pre-Requisites](#pre-requisites)
 - [Hardware](#hardware)
 - [ASCOM Driver](#ascom-driver)
@@ -34,6 +35,16 @@ All of this has led me to design and build my own solution to this problem. In t
 
 If you have a question or run into a problem, don't hesitate to file a [GitHub issue](https://github.com/jlecomte/ascom-oag-focuser/issues). And of course, Pull Requests are always welcome!
 
+## Finished Product
+
+Here is what the finished product looks like:
+
+![Finished Product](images/Finished-Product-1.jpg)
+
+![Finished Product](images/Finished-Product-2.jpg)
+
+![Finished Product](images/Finished-Product-3.jpg)
+
 ## Pre-Requisites
 
 * A Windows computer (Windows 10 or newer)
@@ -51,7 +62,7 @@ The following are just suggestions... Also, over time, some of the links may no 
 
 * [ZWO OAG](https://astronomy-imaging-camera.com/product/zwo-oag)
 * [ZWO 1.25" helical focuser](https://astronomy-imaging-camera.com/product/zwo-1-25%E2%80%B3-helical-focuser)
-* Arduino-compatible microcontroller board with built-in EEPROM support. I used an Arduino Nano clone with a USB-C connector (~$10)
+* Arduino-compatible microcontroller board with built-in EEPROM support. I used an Arduino Nano clone with a USB-C connector (~$10 on Amazon)
 * ULN2003 Darlington transistor array to control the stepper motor using the Arduino's digital I/O pins.
 * 24BYJ-48 stepper motor — That is the 12V version of the popular 28BYJ48, but you can also use the standard 5V model instead, depending on how you power your imaging rig (12V is pretty standard in astrophotography, so I went with that)
 * LEDs and resistors — These are not required, but they can be useful to debug the firmware while prototyping.
