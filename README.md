@@ -45,6 +45,10 @@ Here is what the finished product looks like:
 
 ![Finished Product](images/Finished-Product-3.jpg)
 
+And here is a demo of the system when attached to my telescope:
+
+[![YouTube video showing the focuser in action](images/Demo-Video-Thumbnail.jpg)](https://youtu.be/FXXxpH1uZQA)
+
 ## Pre-Requisites
 
 * A Windows computer (Windows 10 or newer)
