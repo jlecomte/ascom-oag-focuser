@@ -176,7 +176,7 @@ Using the standalone focuser control application, setting a backlash compensatio
 
 ## Positional Accuracy
 
-Using a precision dial indicator (see "Backlash Measurement" section), I was able to measure that the positional accuracy of this device (move 1,000 steps in one direction, move 1,000 steps in the opposite direction, and measure the difference between the starting and ending positions) Astoundingly, it is of the order of about 1μm!
+Using a precision dial indicator (see "Backlash Measurement" section), I was able to measure the positional accuracy of this device (move 1,000 steps in one direction, move 1,000 steps in the opposite direction, and measure the difference between the starting and ending positions). Astoundingly, it is of the order of about 1μm!
 
 ## Frequently Asked Questions
 
