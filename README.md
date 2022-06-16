@@ -19,7 +19,7 @@
 - [Mechanical Components](#mechanical-components)
   - [Gear Drive vs Belt Drive](#gear-drive-vs-belt-drive)
   - [Backlash Measurement And Compensation](#backlash-measurement-and-compensation)
-- [Positional Accuracy](#positional-accuracy)
+- [Calibration Procedure](#calibration-procedure)
 - [Frequently Asked Questions](#frequently-asked-questions)
 - [Ideas For Future Improvements](#ideas-for-future-improvements)
 - [Credits](#credits)
@@ -174,9 +174,34 @@ There are many sources of backlash in this system. The stepper motor itself, due
 
 Using the standalone focuser control application, setting a backlash compensation of 0, move in one direction by a large amount. Then, repetitively move in small increments in the opposite direction until the dial indicator starts moving. In my setup, I have a total of about 60 steps of backlash, so I set the backlash compensation amount to 100 (the software uses the so-called "overshoot" backlash compensation method) and it works absolutely flawlessly!
 
-## Positional Accuracy
+## Calibration Procedure
 
-Using a precision dial indicator (see "Backlash Measurement" section), I was able to measure the positional accuracy of this device (move 1,000 steps in one direction, move 1,000 steps in the opposite direction, and measure the difference between the starting and ending positions). Astoundingly, it is of the order of about 1μm!
+Before you can use this device, you have to calibrate it. Here is the procedure:
+
+1. **Filter Offsets Measurement**
+
+   Measuring filter offsets is something you have probably already done because it allows you to run an autofocus routine using your luminance (L) filter, which can be done with very short exposures, thereby saving a lot of time (it is also more accurate). Enter the filter offsets in your imaging application, e.g., N.I.N.A., as well as in the settings dialog of the `DarkSkyGeek’s Filter Wheel Proxy For OAG Focuser` ASCOM device (see screenshot above)
+
+2. **Backlash Measurement**
+
+   See "Backlash Measurement" section. Enter the value of the backlash, in number of steps, in the settings dialog of the `DarkSkyGeek’s Filter Wheel Proxy For OAG Focuser` ASCOM device (see screenshot above)
+
+3. **Zero Position**
+
+   Manually rotate the OAG focuser until it hits its mechanical zero position. Connect the OAG focuser to a computer (assuming you had previously installed the OAG focuser ASCOM driver on that computer), open the standalone focuser app, connect to the device, and click on the "Set Zero position!" button.
+
+4. **Steps Ratio Measurement**
+
+   The "steps ratio" allows the Filter Wheel Proxy ASCOM driver to answer the following question: Upon filter change, the main focuser has to move n steps in this direction. How many steps does the OAG focuser need to move, and in which direction?
+
+   The best way to measure the steps ratio is to use 2 instances of N.I.N.A. The first instance is connected to the telescope focuser and the main imaging camera. The second instance is connected to the OAG focuser and the guide camera. Then, follow these steps:
+
+   * Run an autofocus routine in both N.I.N.A. instances (start with the one that controls the telescope focuser and the main imaging camera)
+   * Take note of the position of the OAG focuser.
+   * Move the telescope focuser by, for example, 300 steps outward.
+   * Run another autofocus routine on the second N.I.N.A. instance (the one that controls the OAG focuser and the guide camera)
+   * Subtract the new position of the OAG focuser with the initial position, and divide that number by the number of steps you moved the main telescope focuser (300 in our example). That will give you the steps ratio.
+   * Enter the steps ratio in the settings dialog of the `DarkSkyGeek’s Filter Wheel Proxy For OAG Focuser` ASCOM device (see screenshot above)
 
 ## Frequently Asked Questions
 
@@ -198,6 +223,10 @@ _It might seem strange that I decided to "manually" control the stepper motor in
 **Why is backlash compensation not implemented in the focuser driver?**
 
 _The software included in this repository (specifically the `FilterWheelProxy` ASCOM component) was designed and implemented so that it may be used with other OAG focusers, including commercial units such as the SCOPS OAG, and I have no idea whether their driver handles backlash compensation. This way, no matter which focuser you use to adjust the focus of your guide camera, as long as its driver implements the standard `IFocuserV3` ASCOM interface, this will work and you will enjoy the benefits of backlash compensation!_
+
+**What is the positional accuracy of this focuser"**
+
+Using a precision dial indicator (see "Backlash Measurement" section), I was able to measure the positional accuracy of this device (move 1,000 steps in one direction, move 1,000 steps in the opposite direction, and measure the difference between the starting and ending positions). Astoundingly, it is of the order of about 1μm!
 
 ## Ideas For Future Improvements
 
