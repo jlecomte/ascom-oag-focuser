@@ -213,17 +213,13 @@ namespace ASCOM.DarkSkyGeek
             try
             {
                 decimal value = Convert.ToDecimal(stepRatioTextBox.Text);
-                if (value <= 0)
-                {
-                    throw new FormatException("The decimal value must be strictly positive");
-                }
                 errorProvider.SetError(stepRatioTextBox, string.Empty);
             }
             catch (Exception)
             {
                 e.Cancel = true;
                 stepRatioTextBox.Select(0, stepRatioTextBox.Text.Length);
-                errorProvider.SetError(stepRatioTextBox, "Must be a strictly positive decimal value");
+                errorProvider.SetError(stepRatioTextBox, "Must be a decimal value");
             }
         }
 

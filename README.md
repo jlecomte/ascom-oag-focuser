@@ -90,7 +90,7 @@ Open Microsoft Visual Studio as an administrator (right-click on the Microsoft V
 If you are planning to use the ASCOM driver on a separate computer, you can install it manually, using `RegAsm.exe`. Just don't forget to use the 64 bit version, and to pass the `/tlb /codebase` flags. Here is what it looked like on my imaging mini computer:
 
 ```
-> C:\Windows\Microsoft.NET\Framework64\v4.0.30319\RegAsm.exe /tlb /codebase ASCOM.DarkSkyGeek.OAGFocuser.dll
+> C:\Windows\Microsoft.NET\Framework64\v4.0.30319\RegAsm.exe /tlb /codebase ASCOM.DarkSkyGeek.OAGFocusDriver.dll
 Microsoft .NET Framework Assembly Registration Utility version 4.8.4161.0
 for Microsoft .NET Framework version 4.8.4161.0
 Copyright (C) Microsoft Corporation.  All rights reserved.
