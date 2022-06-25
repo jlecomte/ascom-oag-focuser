@@ -182,6 +182,8 @@ Before you can use this device, you have to calibrate it. Here is the procedure:
 
    Measuring filter offsets is something you have probably already done because it allows you to run an autofocus routine using your luminance (L) filter, which can be done with very short exposures, thereby saving a lot of time (it is also more accurate). Enter the filter offsets in your imaging application, e.g., N.I.N.A., as well as in the settings dialog of the `DarkSkyGeek’s Filter Wheel Proxy For OAG Focuser` ASCOM device (see screenshot above)
 
+   **Note:** Remember that if you occasionally use a reducer, the filter offsets will be different with or without the reducer!
+
 2. **Backlash Measurement**
 
    See "Backlash Measurement" section. Enter the value of the backlash, in number of steps, in the settings dialog of the `DarkSkyGeek’s Filter Wheel Proxy For OAG Focuser` ASCOM device (see screenshot above)
@@ -200,8 +202,13 @@ Before you can use this device, you have to calibrate it. Here is the procedure:
    * Take note of the position of the OAG focuser.
    * Move the telescope focuser by, for example, 300 steps outward.
    * Run another autofocus routine on the second N.I.N.A. instance (the one that controls the OAG focuser and the guide camera)
-   * Subtract the new position of the OAG focuser with the initial position, and divide that number by the number of steps you moved the main telescope focuser (300 in our example). That will give you the steps ratio.
+   * Subtract the new position of the OAG focuser with the initial position, and divide that number by the number of steps you moved the main telescope focuser (300 in our example). That will give you the steps ratio. Note that this will be a negative number. In my case, the steps ratio is -2.64.
+   * You can run the autofocus routine several times, and average the positions obtained to increase accuracy.
    * Enter the steps ratio in the settings dialog of the `DarkSkyGeek’s Filter Wheel Proxy For OAG Focuser` ASCOM device (see screenshot above)
+
+5. **Test**
+
+   Once you have calibrated the OAG Focuser, you can close the second instance of N.I.N.A. and open PHD2. Use the first instance of N.I.N.A. as you normally would, although instead of connecting your filter wheel directly, you will connect to the `DarkSkyGeek’s Filter Wheel Proxy For OAG Focuser` device. Looking at the PHD2 live view, change the filter in the filter wheel and watch the PHD2 live view becoming blurry and then sharp again, automatically! Isn't technology beautiful?!
 
 ## Frequently Asked Questions
 
