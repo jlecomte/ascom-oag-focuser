@@ -148,6 +148,8 @@ And here is the circuit board inside the 3D printed enclosure:
 
 ![Circuit Board Inside Enclosure](images/Circuit-Board-Inside-Enclosure.jpg)
 
+Please note that it is advisable to place a small piece of opaque black duct tape on top of the LEDs located on the Arduino board because they can be quite bright (the photograph above was taken before I implemented this small improvement).
+
 ## Mechanical Components
 
 ### Gear Drive vs Belt Drive
