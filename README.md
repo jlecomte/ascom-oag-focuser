@@ -47,7 +47,7 @@ Not necessarily! It really depends on a lot of factors. For example, if you are 
 
 The following video shows what the guide camera sees with and without the OAG focuser upon switching to a different filter:
 
-[![YouTube video showing what the guide camera sees with and without an OAG focuser](images/Demo-Video-Thumbnail.jpg)](https://youtu.be/gUapuzT75Z0)
+[![YouTube video showing what the guide camera sees with and without an OAG focuser](images/Demo-Video-Thumbnail-1.jpg)](https://youtu.be/gUapuzT75Z0)
 
 ## Finished Product
 
@@ -61,7 +61,7 @@ Here is what the finished product looks like:
 
 And here is a demo of the system when attached to my telescope:
 
-[![YouTube video showing the focuser in action](images/Demo-Video-Thumbnail.jpg)](https://youtu.be/FXXxpH1uZQA)
+[![YouTube video showing the focuser in action](images/Demo-Video-Thumbnail-2.jpg)](https://youtu.be/FXXxpH1uZQA)
 
 ## Pre-Requisites
 
