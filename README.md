@@ -4,6 +4,7 @@
 
 - [Introduction](#introduction)
   - [Is This For You?](#is-this-for-you)
+  - [Use As A Standalone Focuser](#use-as-a-standalone-focuser)
 - [Demo](#demo)
 - [Finished Product](#finished-product)
 - [Pre-Requisites](#pre-requisites)
@@ -42,6 +43,10 @@ All of this has led me to design and build my own solution to this problem. In t
 ### Is This For You?
 
 Not necessarily! It really depends on a lot of factors. For example, if you are using a mirrored telescope, i.e. not a refractor, and if all of your filters come from the same set, e.g., Antlia LRGB filter set, and the filter manufacturer claims they are parfocal, then you may not need this at all because the difference in focus between filters will be so minuscule, you probably won't need to worry about it. However, if you are using a refractor (even an APO triplet), or if you use filters that are not parfocal, you _may_ need this. The only way to find out is to focus your main imaging camera, and then, assuming that you've already defined your filter offsets, go through every single filter in your filter wheel. After every filter change, your imaging application will adjust the focus of your imaging train slightly depending on the filter offset you have defined for the selected filter, and you should look at the image coming out of your guide camera in PHD2. In my case, the stars in my guide camera can be pinpoint when I am using my Luminance filter, but they are large disks when I am on some other filter. That is how you know that this device can be useful for you. This definitely is not for everybody, but the people who have the problem I just described did not really have a good solution until now.
+
+### Use As A Standalone Focuser
+
+Please note that you can use this device, and the accompanying software, to motorize any helical focuser, regardless of how you use that focuser. For example, you could use it for your imaging train. Just remember that if you have a helical focuser that is not from ZWO, you may need to make a few adjustments to the 3D model...
 
 ## Demo
 
