@@ -46,7 +46,7 @@ Not necessarily! It really depends on a lot of factors. For example, if you are 
 
 ### Use As A Standalone Focuser
 
-Please note that you can use this device, and the accompanying software, to motorize any helical focuser, regardless of how you use that focuser. For example, you could use it for your imaging train. Just remember that if you have a helical focuser that is not from ZWO, you may need to make a few adjustments to the 3D model...
+Please note that you can use this device, and the accompanying software, to motorize any helical focuser, regardless of how you use that focuser. For example, you could use it to control the focus of your entire imaging train! Just remember that if you have a helical focuser that is not from ZWO, you may need to make a few adjustments to the 3D model...
 
 ## Demo
 
