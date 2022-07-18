@@ -119,6 +119,11 @@ namespace ASCOM.DarkSkyGeek
                     }
                 }
 
+                if (focuserSelectorComboBox.SelectedItem != null)
+                {
+                    FilterWheelProxy.focuserId = (focuserSelectorComboBox.SelectedItem as ComboboxItem).Value;
+                }
+
                 FilterWheelProxy.backlashCompSteps = Convert.ToInt32(backlashCompTextBox.Text);
                 FilterWheelProxy.stepRatio = Convert.ToDecimal(stepRatioTextBox.Text);
 
