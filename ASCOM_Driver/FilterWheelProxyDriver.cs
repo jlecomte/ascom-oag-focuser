@@ -72,8 +72,8 @@ namespace ASCOM.DarkSkyGeek
         internal static string[] filterNames = filterNamesDefault;
         internal static int[] filterOffsets = filterOffsetsDefault;
         internal static string focuserId = Focuser.driverID;
-        internal static int backlashCompSteps = Convert.ToInt32(backlashCompStepsDefault);
-        internal static decimal stepRatio = Convert.ToDecimal(stepRatioDefault);
+        internal static int backlashCompSteps = 0;
+        internal static decimal stepRatio = 1.0m;
 
         /// <summary>
         /// Private variable to hold the connected state
