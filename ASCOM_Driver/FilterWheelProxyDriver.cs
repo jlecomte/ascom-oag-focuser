@@ -468,25 +468,32 @@ namespace ASCOM.DarkSkyGeek
             {
                 driverProfile.DeviceType = "FilterWheel";
 
-                tl.Enabled = Convert.ToBoolean(driverProfile.GetValue(driverID, traceStateProfileName, string.Empty, traceStateDefault));
-
-                filterWheelId = driverProfile.GetValue(driverID, filterWheelIdProfileName, string.Empty, filterWheelIdDefault);
-
-                string filterNamesProfileValue = driverProfile.GetValue(driverID, filterNamesProfileName, string.Empty, string.Empty);
-                if (filterNamesProfileValue != string.Empty)
+                try
                 {
-                    filterNames = filterNamesProfileValue.Split(',');
-                }
+                    tl.Enabled = Convert.ToBoolean(driverProfile.GetValue(driverID, traceStateProfileName, string.Empty, traceStateDefault));
 
-                string filterOffsetsProfileValue = driverProfile.GetValue(driverID, filterOffsetsProfileName, string.Empty, string.Empty);
-                if (filterOffsetsProfileValue != string.Empty)
+                    filterWheelId = driverProfile.GetValue(driverID, filterWheelIdProfileName, string.Empty, filterWheelIdDefault);
+
+                    string filterNamesProfileValue = driverProfile.GetValue(driverID, filterNamesProfileName, string.Empty, string.Empty);
+                    if (filterNamesProfileValue != string.Empty)
+                    {
+                        filterNames = filterNamesProfileValue.Split(',');
+                    }
+
+                    string filterOffsetsProfileValue = driverProfile.GetValue(driverID, filterOffsetsProfileName, string.Empty, string.Empty);
+                    if (filterOffsetsProfileValue != string.Empty)
+                    {
+                        filterOffsets = Array.ConvertAll(filterOffsetsProfileValue.Split(','), int.Parse);
+                    }
+
+                    focuserId = driverProfile.GetValue(driverID, focuserIdProfileName, string.Empty, focuserIdDefault);
+                    backlashCompSteps = Convert.ToInt32(driverProfile.GetValue(driverID, backlashCompStepsProfileName, string.Empty, backlashCompStepsDefault));
+                    stepRatio = Convert.ToDecimal(driverProfile.GetValue(driverID, stepRatioProfileName, string.Empty, stepRatioDefault));
+                }
+                catch (Exception e)
                 {
-                    filterOffsets = Array.ConvertAll(filterOffsetsProfileValue.Split(','), int.Parse);
+                    tl.LogMessage("FilterWheel", "ReadProfile: Exception handled: " + e.Message);
                 }
-
-                focuserId = driverProfile.GetValue(driverID, focuserIdProfileName, string.Empty, focuserIdDefault);
-                backlashCompSteps = Convert.ToInt32(driverProfile.GetValue(driverID, backlashCompStepsProfileName, string.Empty, backlashCompStepsDefault));
-                stepRatio = Convert.ToDecimal(driverProfile.GetValue(driverID, stepRatioProfileName, string.Empty, stepRatioDefault));
             }
         }
 
