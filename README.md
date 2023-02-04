@@ -207,7 +207,7 @@ Before you can use this device, you have to calibrate it. Here is the procedure:
 
    Measuring filter offsets is something you have probably already done because it allows you to run an autofocus routine using your luminance (L) filter, which can be done with very short exposures, thereby saving a lot of time (it is also more accurate). Enter the filter offsets in your imaging application, e.g., N.I.N.A., as well as in the settings dialog of the `DarkSkyGeek’s Filter Wheel Proxy For OAG Focuser` ASCOM device (see screenshot above). Remember that it is critical that your imaging application and the driver have the same filter offset values!
 
-   **Note:** Remember that if you occasionally use a reducer, the filter offsets will be different with or without the reducer!
+   **Note:** If you measure your filter offsets with a reducer, they will be different. Don't worry about that. Do the entire calibration procedure with your standard astrophotography setup. Once properly set up, the OAG focuser configuration will not need to change whether or not you add a reducer to your imaging train.
 
 2. **Backlash Measurement**
 
