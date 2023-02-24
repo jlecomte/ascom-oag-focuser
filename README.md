@@ -113,6 +113,8 @@ Types registered successfully
 
 **Note:** The output may be more verbose than the above. As long as it says `Types registered successfully`, you are good to go!
 
+**Note:** During registration, you will see a warning that the assembly is unsigned. This is normal as I did not bother going through the pain of signing the assembly, so you will just have to trust that you are registering the DLL that I built and uploaded to GitHub. And if you don't trust me / GitHub, you can build the DLL yourself using Visual Studio.
+
 **Note:** Once the driver has been installed, make sure you do _not_ delete or move the `ASCOM.DarkSkyGeek.OAGFocusDriver.dll` file, or things will not work! (if you do move it, you will need to register it again in its new location)
 
 **Step 4:** Start (or restart, if it was already running) N.I.N.A. (or whatever application you use to control your equipment).
