@@ -95,29 +95,7 @@ The following are just suggestions... Also, over time, some of the links may no 
 
 ### Downloading And Installing The Driver
 
-**Step 1:** Download the driver from the [releases page](https://github.com/jlecomte/ascom-oag-focuser/releases), and place the file `ASCOM.DarkSkyGeek.OAGFocusDriver.dll` somewhere on your system (example: `C:\Users\julien\ascom-oag-focuser\`).
-
-**Step 2:** Open a command prompt, but make sure you run it **as an administrator**!
-
-**Step 3:** Then, proceed with the installation of the driver using `RegAsm.exe`, a utility that should already be present on your system (it comes with the .NET framework). Just don't forget to use the 64 bit version, and to pass the `/tlb /codebase` flags. Here is what it looked like on my imaging mini computer:
-
-```
-> cd C:\Users\julien\ascom-oag-focuser\
-> C:\Windows\Microsoft.NET\Framework64\v4.0.30319\RegAsm.exe /tlb /codebase ASCOM.DarkSkyGeek.OAGFocusDriver.dll
-Microsoft .NET Framework Assembly Registration Utility version 4.8.4161.0
-for Microsoft .NET Framework version 4.8.4161.0
-Copyright (C) Microsoft Corporation.  All rights reserved.
-
-Types registered successfully
-```
-
-**Note:** The output may be more verbose than the above. As long as it says `Types registered successfully`, you are good to go!
-
-**Note:** During registration, you will see a warning that the assembly is unsigned. This is normal as I did not bother going through the pain of signing the assembly, so you will just have to trust that you are registering the DLL that I built and uploaded to GitHub. And if you don't trust me / GitHub, you can build the DLL yourself using Visual Studio.
-
-**Note:** Once the driver has been installed, make sure you do _not_ delete or move the `ASCOM.DarkSkyGeek.OAGFocusDriver.dll` file, or things will not work! (if you do move it, you will need to register it again in its new location)
-
-**Step 4:** Start (or restart, if it was already running) N.I.N.A. (or whatever application you use to control your equipment).
+Starting with version `1.0.5`, you can install the ASCOM driver, as well as the standalone focuser control application, by running the executable setup file that you will find in the [releases page](https://github.com/jlecomte/ascom-oag-focuser/releases). By default, it places files under `C:\Program Files (x86)\Dark Sky Geek\OAG Focuser ASCOM Driver`.
 
 ### Compiling The Driver (For Developers Only)
 
