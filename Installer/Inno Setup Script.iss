@@ -5,7 +5,7 @@
 
 [Setup]
 AppId={{2760CB5C-EDA1-41F8-BCD1-CE6E1A8B673B}
-AppName={#MyAppPublisher}’s {#MyAppName}
+AppName={#MyAppPublisher}â€™s {#MyAppName}
 AppVersion={#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
@@ -18,7 +18,7 @@ SolidCompression=yes
 UninstallFilesDir="{app}\Uninstall"
 SourceDir="C:\Users\Julien\source\repos\ascom-oag-focuser"
 OutputDir="Installer"
-OutputBaseFilename={#MyAppName} Setup
+OutputBaseFilename={#MyAppPublisher} {#MyAppName} Setup-{#MyAppVersion}
 WizardImageFile="Installer\WizardImageFile.bmp"
 
 [Languages]
