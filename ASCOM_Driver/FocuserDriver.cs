@@ -9,6 +9,8 @@ using ASCOM.Utilities;
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -48,6 +50,9 @@ namespace ASCOM.DarkSkyGeek
         internal static string comPortProfileName = "COM Port";
         internal static string comPortDefault = "COM1";
 
+        internal static string lastComPortProfileName = "Last COM Port";
+        internal static string lastComPortDefault = string.Empty;
+
         internal static string traceStateProfileName = "Trace Level";
         internal static string traceStateDefault = "false";
 
@@ -77,11 +82,6 @@ namespace ASCOM.DarkSkyGeek
         /// Private variable to hold the connected state
         /// </summary>
         private bool connectedState;
-
-        /// <summary>
-        /// Private variable to hold the COM port we are actually connected to
-        /// </summary>
-        private string comPort;
 
         /// <summary>
         // The object used to communicate with the device using serial port communication.
@@ -178,7 +178,7 @@ namespace ASCOM.DarkSkyGeek
             switch (actionName.ToUpper())
             {
                 case "SETZEROPOSITION":
-                    string response = sendCommandToDevice("SetZeroPosition", COMMAND_FOCUSER_SETZEROPOSITION, RESULT_FOCUSER_SETZEROPOSITION);
+                    string response = SendCommandToDevice("SetZeroPosition", COMMAND_FOCUSER_SETZEROPOSITION, RESULT_FOCUSER_SETZEROPOSITION);
                     if (response != OK)
                     {
                         tl.LogMessage("SetZeroPosition", "Device responded with an error");
@@ -231,82 +231,85 @@ namespace ASCOM.DarkSkyGeek
 
                 if (value)
                 {
-                    if (autoDetectComPort)
+                    LogMessage("Connected Set", "Connecting");
+
+                    Debug.Assert(objSerial == null);
+
+                    using (Profile driverProfile = new Profile())
                     {
-                        comPort = DetectCOMPort();
-                    }
+                        Serial serial = null;
 
-                    // Fallback, in case of detection error...
-                    if (comPort == null)
-                    {
-                        comPort = comPortOverride;
-                    }
+                        var comPorts = new List<string>(System.IO.Ports.SerialPort.GetPortNames());
 
-                    if (!System.IO.Ports.SerialPort.GetPortNames().Contains(comPort))
-                    {
-                        throw new InvalidValueException("Invalid COM port", comPort.ToString(), String.Join(", ", System.IO.Ports.SerialPort.GetPortNames()));
-                    }
-
-                    LogMessage("Connected Set", "Connecting to port {0}", comPort);
-
-                    objSerial = new Serial
-                    {
-                        Speed = SerialSpeed.ps57600,
-                        PortName = comPort,
-                        Connected = true
-                    };
-
-                    // Wait a second for the serial connection to establish
-                    System.Threading.Thread.Sleep(1000);
-
-                    objSerial.ClearBuffers();
-
-                    // Poll the device (with a short timeout value) until successful,
-                    // or until we've reached the retry count limit of 3...
-                    objSerial.ReceiveTimeout = 1;
-                    bool success = false;
-                    for (int retries = 3; retries >= 0; retries--)
-                    {
-                        string response = "";
-                        try
+                        if (autoDetectComPort)
                         {
-                            objSerial.Transmit(COMMAND_PING + SEPARATOR);
-                            response = objSerial.ReceiveTerminated(SEPARATOR).Trim();
+                            driverProfile.DeviceType = "Focuser";
+
+                            // See if the last successfully connected COM port can be used first...
+                            // This is a performance optimization that significantly reduces the time it takes to connect!
+                            string lastComPort = driverProfile.GetValue(driverID, lastComPortProfileName, string.Empty, string.Empty);
+                            if (!string.IsNullOrEmpty(lastComPort))
+                            {
+                                var i = comPorts.IndexOf(lastComPort);
+                                if (i >= 0)
+                                {
+                                    // Move the last successfully connected COM port to the top of the list of available COM ports
+                                    // (if it was found in that list to begin with...) so that we try that first.
+                                    comPorts.RemoveAt(i);
+                                    comPorts.Insert(0, lastComPort);
+                                }
+                            }
+
+                            foreach (string comPortName in comPorts)
+                            {
+                                serial = ConnectToDevice(comPortName);
+                                if (serial != null)
+                                {
+                                    break;
+                                }
+                            }
                         }
-                        catch (Exception)
+                        else if (comPorts.Contains(comPortOverride))
                         {
-                            // PortInUse or Timeout exceptions may happen here!
-                            // We ignore them.
+                            serial = ConnectToDevice(comPortOverride);
                         }
-                        if (response == RESULT_PING + DEVICE_GUID)
+                        else
                         {
-                            success = true;
-                            break;
+                            throw new InvalidValueException("Invalid COM port", comPortOverride, String.Join(", ", System.IO.Ports.SerialPort.GetPortNames()));
+                        }
+
+                        if (serial != null)
+                        {
+                            objSerial = serial;
+
+                            // Persist the COM port name so that we try that first the next time
+                            // we attempt to connect (see code above in this method)
+                            driverProfile.WriteValue(driverID, lastComPortProfileName, serial.PortName);
+
+                            LogMessage("Connected Set", "Connected to port {0}", serial.PortName);
+
+                            connectedState = true;
+                        }
+                        else
+                        {
+                            throw new ASCOM.NotConnectedException("Failed to connect");
                         }
                     }
-
-                    if (!success)
-                    {
-                        objSerial.Connected = false;
-                        objSerial.Dispose();
-                        objSerial = null;
-                        throw new ASCOM.NotConnectedException("Failed to connect");
-                    }
-
-                    // Restore default timeout value...
-                    objSerial.ReceiveTimeout = 10;
-
-                    connectedState = true;
                 }
                 else
                 {
                     connectedState = false;
 
-                    LogMessage("Connected Set", "Disconnecting from port {0}", comPort);
+                    LogMessage("Connected Set", "Disconnecting");
 
                     objSerial.Connected = false;
                     objSerial.Dispose();
                     objSerial = null;
+
+                    // Wait for the serial connection to be fully closed...
+                    // See https://stackoverflow.com/questions/6434297/why-thread-sleep-before-serialport-open-and-close
+                    // TODO: Is there a better way?
+                    System.Threading.Thread.Sleep(1000);
                 }
             }
         }
@@ -376,7 +379,7 @@ namespace ASCOM.DarkSkyGeek
 
         public void Halt()
         {
-            sendCommandToDevice("Halt", COMMAND_FOCUSER_HALT, RESULT_FOCUSER_HALT);
+            SendCommandToDevice("Halt", COMMAND_FOCUSER_HALT, RESULT_FOCUSER_HALT);
             // Ignore whether the firmware responded with OK or NOK.
             // If the firmware responded with NOK, it's likely because
             // the focuser was not moving when the command was sent...
@@ -386,7 +389,7 @@ namespace ASCOM.DarkSkyGeek
         {
             get
             {
-                string response = sendCommandToDevice("IsMoving", COMMAND_FOCUSER_ISMOVING, RESULT_FOCUSER_ISMOVING);
+                string response = SendCommandToDevice("IsMoving", COMMAND_FOCUSER_ISMOVING, RESULT_FOCUSER_ISMOVING);
                 if (response != TRUE && response != FALSE)
                 {
                     tl.LogMessage("IsMoving", "Invalid response from device: " + response);
@@ -441,7 +444,7 @@ namespace ASCOM.DarkSkyGeek
             {
                 Position = -Position;
             }
-            string response = sendCommandToDevice("Move", COMMAND_FOCUSER_MOVE + Position.ToString(), RESULT_FOCUSER_MOVE);
+            string response = SendCommandToDevice("Move", COMMAND_FOCUSER_MOVE + Position.ToString(), RESULT_FOCUSER_MOVE);
             if (response != OK)
             {
                 tl.LogMessage("Move", "Device responded with an error");
@@ -453,7 +456,7 @@ namespace ASCOM.DarkSkyGeek
         {
             get
             {
-                string response = sendCommandToDevice("Position", COMMAND_FOCUSER_GETPOSITION, RESULT_FOCUSER_POSITION);
+                string response = SendCommandToDevice("Position", COMMAND_FOCUSER_GETPOSITION, RESULT_FOCUSER_POSITION);
                 int value;
                 try
                 {
@@ -650,66 +653,69 @@ namespace ASCOM.DarkSkyGeek
         }
 
         /// <summary>
-        /// Detect which COM port the device is connected to
+        /// Attempts to connect to the specified COM port.
+        /// Returns a Serial object if successful, null otherwise.
         /// </summary>
-        internal string DetectCOMPort()
+        /// <param name="comPortName"></param>
+        internal Serial ConnectToDevice(string comPortName)
         {
-            foreach (string portName in System.IO.Ports.SerialPort.GetPortNames())
+            if (!System.IO.Ports.SerialPort.GetPortNames().Contains(comPortName))
             {
-                Serial serial = null;
+                throw new InvalidValueException("Invalid COM port", comPortName, String.Join(", ", System.IO.Ports.SerialPort.GetPortNames()));
+            }
 
+            Serial serial;
+
+            LogMessage("ConnectToDevice", "Connecting to port {0}", comPortName);
+
+            try
+            {
+                serial = new Serial
+                {
+                    Speed = SerialSpeed.ps57600,
+                    PortName = comPortName,
+                    Connected = true,
+                    // Use a short timeout value to make polling fail fast in case this is the wrong port...
+                    ReceiveTimeout = 1
+                };
+            }
+            catch (Exception)
+            {
+                // If trying to connect to a port that is already in use, an exception will be thrown.
+                return null;
+            }
+
+            // Wait for the serial connection to establish...
+            // TODO: Is there a better way?
+            System.Threading.Thread.Sleep(1000);
+
+            serial.ClearBuffers();
+
+            // Poll the device (with the short timeout value set above) until successful,
+            // or until we've reached the retry count limit of 3...
+            for (int retries = 3; retries >= 0; retries--)
+            {
+                string response = "";
                 try
                 {
-                    serial = new Serial
-                    {
-                        Speed = SerialSpeed.ps57600,
-                        PortName = portName,
-                        Connected = true,
-                        ReceiveTimeout = 1
-                    };
+                    serial.Transmit(COMMAND_PING + SEPARATOR);
+                    response = serial.ReceiveTerminated(SEPARATOR).Trim();
                 }
                 catch (Exception)
                 {
-                    // If trying to connect to a port that is already in use, an exception will be thrown.
-                    continue;
+                    // PortInUse or Timeout exceptions may happen here!
+                    // We ignore them.
                 }
-
-                // Wait a second for the serial connection to establish
-                System.Threading.Thread.Sleep(1000);
-
-                serial.ClearBuffers();
-
-                // Poll the device (with a short timeout value) until successful,
-                // or until we've reached the retry count limit of 3...
-                bool success = false;
-                for (int retries = 3; retries >= 0; retries--)
+                if (response == RESULT_PING + DEVICE_GUID)
                 {
-                    string response = "";
-                    try
-                    {
-                        serial.Transmit(COMMAND_PING + SEPARATOR);
-                        response = serial.ReceiveTerminated(SEPARATOR).Trim();
-                    }
-                    catch (Exception)
-                    {
-                        // PortInUse or Timeout exceptions may happen here!
-                        // We ignore them.
-                    }
-                    if (response == RESULT_PING + DEVICE_GUID)
-                    {
-                        success = true;
-                        break;
-                    }
-                }
-
-                serial.Connected = false;
-                serial.Dispose();
-
-                if (success)
-                {
-                    return portName;
+                    // Restore default timeout value...
+                    serial.ReceiveTimeout = 5;
+                    return serial;
                 }
             }
+
+            serial.Connected = false;
+            serial.Dispose();
 
             return null;
         }
@@ -720,7 +726,7 @@ namespace ASCOM.DarkSkyGeek
         /// <param name="identifier"></param>
         /// <param name="command"></param>
         /// <param name="resultPrefix"></param>
-        internal string sendCommandToDevice(string identifier, string command, string resultPrefix)
+        internal string SendCommandToDevice(string identifier, string command, string resultPrefix)
         {
             CheckConnected(identifier);
             tl.LogMessage(identifier, "Sending command " + command + " to device...");
