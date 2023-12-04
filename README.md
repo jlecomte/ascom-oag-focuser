@@ -249,3 +249,9 @@ Using a precision dial indicator (see "Backlash Measurement" section), I was abl
 I would like to thank _Christophe de la Chapelle_ of the popular French-language YouTube channel [La Chaîne Astro](https://www.youtube.com/c/cdlc48) because he gave me the idea to build a focuser for my OAG after he demonstrated how he had built a simple focuser using 3D printed parts and a stepper motor for his telescope.
 
 I would like to also thank _Stefan Berg_, creator of [N.I.N.A.](https://nighttime-imaging.eu/), and _Linwood Ferguson_ (see [his web site](https://www.captivephotons.com/Photography/Astrophotography/)) for giving me the idea to create a "proxy" filter wheel component while discussing the design of this system on the [N.I.N.A. Discord server](https://discord.gg/fwpmHU4).
+
+## Frequently Asked Questions (FAQ)
+
+**Question:** My antivirus identifies your setup executable file as a malware (some kind of Trojan)
+
+**Answer:** This is a false detection, extremely common with installers created with [Inno Setup](https://jrsoftware.org/isinfo.php) because virus and malware authors also use Inno Setup to distribute their malicious payload... Anyway, there isn't much I can do about this, short of signing the executable. Unfortunately, that would require a code signing certificate, which costs money. So, even though the executable I uploaded to GitHub is perfectly safe, use at your own risk!
