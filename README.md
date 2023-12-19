@@ -3,27 +3,26 @@
 <!-- toc -->
 
 - [Introduction](#introduction)
-  - [Is This For You?](#is-this-for-you)
-  - [Use As A Standalone Focuser](#use-as-a-standalone-focuser)
+  * [Is This For You?](#is-this-for-you)
+  * [Use As A Standalone Focuser](#use-as-a-standalone-focuser)
 - [Demo](#demo)
 - [Finished Product](#finished-product)
 - [Pre-Requisites](#pre-requisites)
 - [Hardware](#hardware)
 - [ASCOM Driver](#ascom-driver)
-  - [Downloading And Installing The Driver](#downloading-and-installing-the-driver)
-  - [Compiling The Driver (For Developers Only)](#compiling-the-driver-for-developers-only)
-  - [Screenshots](#screenshots)
+  * [Downloading And Installing The Driver](#downloading-and-installing-the-driver)
+  * [Compiling The Driver (For Developers Only)](#compiling-the-driver-for-developers-only)
+  * [Screenshots](#screenshots)
 - [Standalone Focuser Application](#standalone-focuser-application)
 - [Arduino Firmware](#arduino-firmware)
-  - [Microcontroller Compatibility](#microcontroller-compatibility)
-  - [Compiling And Uploading The Firmware](#compiling-and-uploading-the-firmware)
+  * [Microcontroller Compatibility](#microcontroller-compatibility)
+  * [Compiling And Uploading The Firmware](#compiling-and-uploading-the-firmware)
 - [Electronic Circuit](#electronic-circuit)
 - [Mechanical Components](#mechanical-components)
-  - [Gear Drive vs Belt Drive](#gear-drive-vs-belt-drive)
-  - [Backlash Measurement And Compensation](#backlash-measurement-and-compensation)
+  * [Gear And Pinion](#gear-and-pinion)
+  * [Backlash Measurement And Compensation](#backlash-measurement-and-compensation)
 - [Calibration Procedure](#calibration-procedure)
-- [Frequently Asked Questions](#frequently-asked-questions)
-- [Ideas For Future Improvements](#ideas-for-future-improvements)
+- [Frequently Asked Questions (FAQ)](#frequently-asked-questions-faq)
 - [Credits](#credits)
 
 <!-- tocstop -->
@@ -81,13 +80,11 @@ And here is a demo of the system when attached to my telescope:
 
 ## Hardware
 
-The following are just suggestions... Also, over time, some of the links may no longer work...
-
 * [ZWO OAG](https://astronomy-imaging-camera.com/product/zwo-oag)
 * [ZWO 1.25" helical focuser](https://astronomy-imaging-camera.com/product/zwo-1-25%E2%80%B3-helical-focuser)
-* Arduino-compatible microcontroller board with built-in EEPROM support. I used an Arduino Nano clone with a USB-C connector (~$10 on Amazon)
+* Arduino-compatible microcontroller board with built-in EEPROM support. I used an Arduino Nano clone with a USB-C connector (~$10 USD on Amazon for a pack of 3...)
 * ULN2003 Darlington transistor array to control the stepper motor using the Arduino's digital I/O pins.
-* 24BYJ-48 stepper motor — That is the 12V version of the popular 28BYJ48, but you can also use the standard 5V model instead, depending on how you power your imaging rig (12V is pretty standard in astrophotography, so I went with that)
+* 28BYJ-48 stepper motor (5V)
 * LEDs and resistors — These are not required, but they can be useful to debug the firmware while prototyping.
 * Connectors — I used JST connectors, only because I already had a bunch of them, along with a crimping tool.
 
@@ -155,21 +152,19 @@ Please note that it is advisable to place a small piece of opaque black duct tap
 
 ## Mechanical Components
 
-### Gear Drive vs Belt Drive
+### Gear And Pinion
 
-My first attempt to move the focuser with a stepper motor was done using a belt:
+My first attempt to move the focuser with a stepper motor was done using a belt. Unfortunately, the belt occasionally slipped, so I switched to using gears. In [the first version of this project](https://github.com/jlecomte/ascom-oag-focuser/tree/v1), I was using helical gears. However, this was not a very smart choice because the axial force that results from this design, and the fact that the stepper motor shaft has a bit of longitudinal play caused the backlash to be a bit higher than I would have liked. While it still worked well (thanks to backlash compensation), this new version uses a herringbone pattern for the gear and pinion:
 
-![Focuser Belt](images/Focuser-Belt.jpg)
+![Focuser Gear](images/Printed-Gears.jpg)
 
-Unfortunately, the belt occasionally slipped, so I gave helical gears a try:
+It turns out that gears are easy to make on a 3D printer, and work flawlessly. However, here are a few tips I found useful:
 
-![Focuser Gear](images/Focuser-Gear.jpg)
+* Dry your filament to reduce problems, specifically stringing to a minimum
+* Use the proper Z offset, and (if needed) set the initial layer horizontal expansion value in Cura to a negative number, e.g., -0.2mm. It is critical to prevent the dreaded "elephant's foot" (squishing of the first layer)
+* To ensure that the first layer adheres well, clean your build plate (I use denatured alcohol)
 
-It turned out that helical gears, which are very easy to make on a 3D printer, worked absolutely flawlessly! Another thing that also helped get great results was to slightly loosen the focuser (there are 4 tiny set screws on the ZWO focuser you can loosen ever so slightly to make it easier to rotate the knurled knob) because these small stepper motors don't have that much torque...
-
-I included both the belt and gear models in the `3D_Files/` directory so you can give them both a try and decide which one you want to use.
-
-The "reverse rotation" checkbox in the focuser driver setup dialog window allows you to specify the direction of rotation when the number of steps increases. Check that option (default) if you chose a gear drive, and uncheck it if you chose a belt drive.
+Another trick that also helped get great results was to slightly loosen the focuser (there are 4 tiny set screws on the ZWO focuser that you can loosen _ever so slightly_ to make it easier to rotate the knurled knob) because these small stepper motors don't have that much torque...
 
 ### Backlash Measurement And Compensation
 
@@ -191,7 +186,7 @@ Before you can use this device, you have to calibrate it. Here is the procedure:
 
 2. **Backlash Measurement**
 
-   See "Backlash Measurement" section. Enter the value of the backlash, in number of steps, in the settings dialog of the `DarkSkyGeek’s Filter Wheel Proxy For OAG Focuser` ASCOM device (see screenshot above)
+   See "Backlash Measurement" section above. Enter the value of the backlash, in number of steps, in the settings dialog of the `DarkSkyGeek’s Filter Wheel Proxy For OAG Focuser` ASCOM device (see screenshot above)
 
 3. **Zero Position**
 
@@ -215,7 +210,11 @@ Before you can use this device, you have to calibrate it. Here is the procedure:
 
    Once you have calibrated the OAG Focuser, you can close the second instance of N.I.N.A. and open PHD2. Use the first instance of N.I.N.A. as you normally would, although instead of connecting your filter wheel directly, you will connect to the `DarkSkyGeek’s Filter Wheel Proxy For OAG Focuser` device. Looking at the PHD2 live view, change the filter in the filter wheel and watch the PHD2 live view becoming blurry and then sharp again, automatically! Isn't technology beautiful?!
 
-## Frequently Asked Questions
+This procedure is explained in great detail in the following video:
+
+[![YouTube video talking about this flat panel](images/YouTube-video-part-II-thumbnail.png)](https://www.youtube.com/watch?v=zPPIgVuxk4Y)
+
+## Frequently Asked Questions (FAQ)
 
 **I built this project and it does not work, can you help?**
 
@@ -240,18 +239,12 @@ _The software included in this repository (specifically the `FilterWheelProxy` A
 
 Using a precision dial indicator (see "Backlash Measurement" section), I was able to measure the positional accuracy of this device (move 1,000 steps in one direction, move 1,000 steps in the opposite direction, and measure the difference between the starting and ending positions). Astoundingly, it is of the order of about 1μm!
 
-## Ideas For Future Improvements
+**My antivirus identifies your setup executable file as a malware (some kind of Trojan)**
 
-* Remove the need for a separate 12V power connector, i.e. use the USB cable for both data and power. This change would prevent us from using an Arduino-compatible board because the maximum current that can be delivered by an Arduino-compatible board is usually around 200mA @ 5V (although I have seen some that boast up to 500mA @ 5V), which is not quite enough, even for our small stepper motor, and you'd run the risk of tripping the internal fuse on the microcontroller board. In order to do this, you'd have to basically build your own Arduino board using a microcontroller chipd, an FTDI module, and a few other components. It's quite a project on its own... Another option is to use an onboard battery, and use a buck or boost converter to get the right voltage for your specific motor. This adds weight and complexity to the system, and if you forget to replace or recharge the battery, you find yourself with a dead unit... This is why I applied the [KISS principle](https://en.wikipedia.org/wiki/KISS_principle) to this project, even if the final product is not quite as optimal as it could possibly be, but hey, this is a hobbyist project!
+_This is a false detection, extremely common with installers created with [Inno Setup](https://jrsoftware.org/isinfo.php) because virus and malware authors also use Inno Setup to distribute their malicious payload... Anyway, there isn't much I can do about this, short of signing the executable. Unfortunately, that would require a code signing certificate, which costs money. So, even though the executable I uploaded to GitHub is perfectly safe, use at your own risk!_
 
 ## Credits
 
 I would like to thank _Christophe de la Chapelle_ of the popular French-language YouTube channel [La Chaîne Astro](https://www.youtube.com/c/cdlc48) because he gave me the idea to build a focuser for my OAG after he demonstrated how he had built a simple focuser using 3D printed parts and a stepper motor for his telescope.
 
 I would like to also thank _Stefan Berg_, creator of [N.I.N.A.](https://nighttime-imaging.eu/), and _Linwood Ferguson_ (see [his web site](https://www.captivephotons.com/Photography/Astrophotography/)) for giving me the idea to create a "proxy" filter wheel component while discussing the design of this system on the [N.I.N.A. Discord server](https://discord.gg/fwpmHU4).
-
-## Frequently Asked Questions (FAQ)
-
-**Question:** My antivirus identifies your setup executable file as a malware (some kind of Trojan)
-
-**Answer:** This is a false detection, extremely common with installers created with [Inno Setup](https://jrsoftware.org/isinfo.php) because virus and malware authors also use Inno Setup to distribute their malicious payload... Anyway, there isn't much I can do about this, short of signing the executable. Unfortunately, that would require a code signing certificate, which costs money. So, even though the executable I uploaded to GitHub is perfectly safe, use at your own risk!
