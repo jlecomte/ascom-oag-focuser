@@ -138,17 +138,23 @@ Here is what the prototype circuit looks like:
 
 ![Breadboard Prototype](images/Breadboard-Prototype.jpg)
 
-Here are the top and bottom of the final circuit board:
+Here is what the PCB looks like when rendered in KiCad:
 
-![Final Circuit Board Top](images/Circuit-Board-Top.jpg)
+![Circuit Board Front Rendered in KiCad](images/PCB-front.jpg)
 
-![Final Circuit Board Bottom](images/Circuit-Board-Bottom.jpg)
+![Circuit Board Back Rendered in KiCad](images/PCB-back.jpg)
+
+![Circuit Board 3D Rendered in KiCad](images/PCB-3D.jpg)
+
+Here is what the real PCB looks like:
+
+![Final Circuit Board Top](images/Real-PCB-1.jpg)
+
+![Final Circuit Board Bottom](images/Real-PCB-2.jpg)
 
 And here is the circuit board inside the 3D printed enclosure:
 
 ![Circuit Board Inside Enclosure](images/Circuit-Board-Inside-Enclosure.jpg)
-
-Please note that it is advisable to place a small piece of opaque black duct tape on top of the LEDs located on the Arduino board because they can be quite bright (the photograph above was taken before I implemented this small improvement).
 
 ## Mechanical Components
 
