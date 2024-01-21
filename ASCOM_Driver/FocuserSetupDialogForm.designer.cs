@@ -159,8 +159,6 @@ namespace ASCOM.DarkSkyGeek
             // chkReverseRotation
             // 
             this.chkReverseRotation.AutoSize = true;
-            this.chkReverseRotation.Checked = true;
-            this.chkReverseRotation.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkReverseRotation.Location = new System.Drawing.Point(12, 156);
             this.chkReverseRotation.Name = "chkReverseRotation";
             this.chkReverseRotation.Size = new System.Drawing.Size(109, 17);

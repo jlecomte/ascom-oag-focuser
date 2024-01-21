@@ -56,16 +56,16 @@ namespace ASCOM.DarkSkyGeek
         internal static string traceStateProfileName = "Trace Level";
         internal static string traceStateDefault = "false";
 
-        // 4000 works for the standard configuration of this project
+        // 4600 works for the standard configuration of this project
         // (ZWO OAG, gearing, etc.) The exact value also depends where you set
         // the zero position... That is why it is made to be configurable!
         internal static string maxPositionProfileName = "Maximum Position";
-        internal static string maxPositionDefault = "4000";
+        internal static string maxPositionDefault = "4600";
 
         // True if using a pinion gear, i.e. the rotation of the focuser is opposite
         // that of the stepper motor arm. False if using a timing belt...
         internal static string reverseRotationProfileName = "Reverse Rotation";
-        internal static string reverseRotationDefault = "true";
+        internal static string reverseRotationDefault = "false";
 
         // Variables to hold the current device configuration
         internal static bool autoDetectComPort = Convert.ToBoolean(autoDetectComPortDefault);
