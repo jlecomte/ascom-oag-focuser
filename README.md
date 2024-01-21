@@ -24,7 +24,6 @@ I do not charge anything to create and maintain these open-source projects. But 
 - [Electronic Circuit](#electronic-circuit)
 - [Mechanical Components](#mechanical-components)
   * [Gear And Pinion](#gear-and-pinion)
-  * [Backlash Measurement And Compensation](#backlash-measurement-and-compensation)
 - [Calibration Procedure](#calibration-procedure)
 - [Frequently Asked Questions (FAQ)](#frequently-asked-questions-faq)
 - [Credits](#credits)
@@ -49,7 +48,7 @@ Not necessarily! It really depends on a lot of factors. For example, if you are 
 
 ### Use As A Standalone Focuser
 
-Please note that you can use this device, and the accompanying software, to motorize any helical focuser, regardless of how you use that focuser. For example, you could use it to control the focus of your entire imaging train! Just remember that if you have a helical focuser that is not from ZWO, you may need to make a few adjustments to the 3D model...
+Please note that you can use this device, and the accompanying software, to motorize any helical focuser, regardless of how you use that focuser. For example, you could use it to control the focus of a guide scope or even an entire imaging train! Some people have used this project to motorize the focus of a spectrograph. Just remember that if you have a helical focuser that is not from ZWO, you may need to make a few adjustments to the 3D model...
 
 ## Demo
 
@@ -63,11 +62,11 @@ Here is what the finished product looks like:
 
 ![Finished Product](images/Finished-Product-1.jpg)
 
+And here it is, attached to the ZWO OAG, and fitted with a guide camera:
+
 ![Finished Product](images/Finished-Product-2.jpg)
 
-![Finished Product](images/Finished-Product-3.jpg)
-
-And here is a demo of the system when attached to my telescope:
+Here is a demo of the system when attached to my telescope (Note: this was recorded using the v1 of this product, which looks slightly different, but you get the idea...)
 
 [![YouTube video showing the focuser in action](images/Demo-Video-Thumbnail-2.jpg)](https://youtu.be/FXXxpH1uZQA)
 
@@ -84,13 +83,12 @@ And here is a demo of the system when attached to my telescope:
 
 ## Hardware
 
-* [ZWO OAG](https://astronomy-imaging-camera.com/product/zwo-oag)
-* [ZWO 1.25" helical focuser](https://astronomy-imaging-camera.com/product/zwo-1-25%E2%80%B3-helical-focuser)
+* [ZWO 1.25" helical focuser](https://bit.ly/47JOTRL) or equivalent.
 * Arduino-compatible microcontroller board with built-in EEPROM support. I used an Arduino Nano clone with a USB-C connector (~$10 USD on Amazon for a pack of 3...)
 * ULN2003 Darlington transistor array to control the stepper motor using the Arduino's digital I/O pins.
 * 28BYJ-48 stepper motor (5V)
 * LEDs and resistors — These are not required, but they can be useful to debug the firmware while prototyping.
-* Connectors — I used JST connectors, only because I already had a bunch of them, along with a crimping tool.
+* Connectors — I used JST-XH connectors, only because I already had a bunch of them, along with a crimping tool.
 
 ## ASCOM Driver
 
@@ -164,7 +162,7 @@ And here is the circuit board inside the 3D printed enclosure:
 
 ### Gear And Pinion
 
-My first attempt to move the focuser with a stepper motor was done using a belt. Unfortunately, the belt occasionally slipped, so I switched to using gears. In [the first version of this project](https://github.com/jlecomte/ascom-oag-focuser/tree/v1), I was using helical gears. However, this was not a very smart choice because the axial force that results from this design, and the fact that the stepper motor shaft has a bit of longitudinal play caused the backlash to be a bit higher than I would have liked. While it still worked well (thanks to backlash compensation), this new version uses a herringbone pattern for the gear and pinion:
+In [the first version of this project](https://github.com/jlecomte/ascom-oag-focuser/tree/v1), I was using helical gears. However, this was not a very smart choice because the axial force that results from this design, and the fact that the stepper motor shaft has a bit of longitudinal play caused the backlash to be a bit higher than I would have liked. While it still worked well (thanks to backlash compensation), this new version uses a herringbone pattern for the gear and pinion:
 
 ![Focuser Gear](images/Printed-Gears.jpg)
 
@@ -176,13 +174,7 @@ It turns out that gears are easy to make on a 3D printer, and work flawlessly. H
 
 Another trick that also helped get great results was to slightly loosen the focuser (there are 4 tiny set screws on the ZWO focuser that you can loosen _ever so slightly_ to make it easier to rotate the knurled knob) because these small stepper motors don't have that much torque...
 
-### Backlash Measurement And Compensation
-
-There are many sources of backlash in this system. The stepper motor itself, due to its internal gearbox, already has some amount of backlash. The 3D printed gear and pinion also have some backlash. And finally, the helical focuser has some backlash as well. All of those sources combine. Thankfully, compensating for backlash is easy and supported by the software in this repository. The trick is to first measure the amount of backlash in your system. Here is how I do it using a dial indicator:
-
-![Backlash Measurement](images/Backlash-Measurement.jpg)
-
-Using the standalone focuser control application, setting a backlash compensation of 0, move in one direction by a large amount. Then, repetitively move in small increments in the opposite direction until the dial indicator starts moving. In my setup, I have a total of about 60 steps of backlash, so I set the backlash compensation amount to 100 (the software uses the so-called "overshoot" backlash compensation method) and it works absolutely flawlessly!
+The focuser gear slips onto the knurled knob of the helical focuser. The pinion slips onto the motor shaft, although it might require a light hammer blow to get it fully seated. It is not necessary to use any glue to keep the gears in place.
 
 ## Calibration Procedure
 
@@ -196,7 +188,9 @@ Before you can use this device, you have to calibrate it. Here is the procedure:
 
 2. **Backlash Measurement**
 
-   See "Backlash Measurement" section above. Enter the value of the backlash, in number of steps, in the settings dialog of the `DarkSkyGeek’s Filter Wheel Proxy For OAG Focuser` ASCOM device (see screenshot above)
+   There are many sources of backlash in this system. The stepper motor itself, due to its internal gearbox, already has some amount of backlash. The 3D printed gear and pinion also have some backlash. And finally, the helical focuser has some backlash as well. All of those sources combine. Thankfully, compensating for backlash is easy and supported by the software in this repository. The trick is to first measure the amount of backlash in your system. That is done using a dial gauge. Please refer to the video below for more details.
+
+   Using the standalone focuser control application, setting a backlash compensation of 0, move in one direction by a large amount. Then, repetitively move in small increments in the opposite direction until the dial indicator starts moving. In my setup, I have a total of about 60 steps of backlash, so I set the backlash compensation amount to 150 (the software uses the so-called "overshoot" backlash compensation method) and it works absolutely flawlessly! Enter the value of the backlash, in number of steps (150 in my case), in the settings dialog of the `DarkSkyGeek’s Filter Wheel Proxy For OAG Focuser` ASCOM device (see screenshot above)
 
 3. **Zero Position**
 
@@ -229,10 +223,6 @@ This procedure is explained in great detail in the following video:
 **I built this project and it does not work, can you help?**
 
 _Maybe. As indicated in the `LICENSE` file, I do not provide any official guarantee or support. That being said, if you open a GitHub issue in this repository and ask nicely, I will likely respond. Just make sure that you provide all the necessary details so that I understand what the issue might be. While on that note, keep in mind that troubleshooting an issue on your own is by far the best way to learn new things._
-
-**Gear drive or belt drive? Which one do you recommend?**
-
-_Because of the possibility of belt slippage, I recommend the gear drive. The enclosure is designed for that. A belt driven system would require minor tweaks to the enclosure, which are not hard to do in Freecad if you know a little about that software._
 
 **Why did you not use the `Stepper` or `AccelStepper` library in the Arduino firmware?**
 
