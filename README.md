@@ -237,7 +237,7 @@ _The software included in this repository (specifically the `FilterWheelProxy` A
 
 **What is the positional accuracy of this focuser**
 
-Using a precision dial indicator (see "Backlash Measurement" section), I was able to measure the positional accuracy of this device (move 1,000 steps in one direction, move 1,000 steps in the opposite direction, and measure the difference between the starting and ending positions). Astoundingly, it is of the order of about 1μm!
+_Using a precision dial indicator (see "Backlash Measurement" section), I was able to measure the positional accuracy of this device (move 1,000 steps in one direction, move 1,000 steps in the opposite direction, and measure the difference between the starting and ending positions). Astoundingly, it is of the order of about 10μm!_
 
 **My antivirus identifies your setup executable file as a malware (some kind of Trojan)**
 
