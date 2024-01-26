@@ -68,7 +68,7 @@ And here it is, attached to the ZWO OAG, and fitted with a guide camera:
 
 Here is a demo of the system when attached to my telescope (Note: this was recorded using the v1 of this product, which looks slightly different, but you get the idea...)
 
-[![YouTube video showing the focuser in action](images/Demo-Video-Thumbnail-2.jpg)](https://youtu.be/FXXxpH1uZQA)
+[![YouTube video showing the focuser in action](images/Demo-Video-Thumbnail-2.jpg)](https://youtu.be/1_InWRwgoRc)
 
 ## Pre-Requisites
 
