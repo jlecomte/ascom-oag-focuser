@@ -9,8 +9,8 @@ I do not charge anything to create and maintain these open-source projects. But 
 - [Introduction](#introduction)
   * [Is This For You?](#is-this-for-you)
   * [Use As A Standalone Focuser](#use-as-a-standalone-focuser)
-- [Demo](#demo)
 - [Finished Product](#finished-product)
+- [Demo](#demo)
 - [Pre-Requisites](#pre-requisites)
 - [Hardware](#hardware)
 - [ASCOM Driver](#ascom-driver)
@@ -50,16 +50,6 @@ Not necessarily! It really depends on a lot of factors. For example, if you are 
 
 Please note that you can use this device, and the accompanying software, to motorize any helical focuser, regardless of how you use that focuser. For example, you could use it to control the focus of a guide scope or even an entire imaging train! Some people have used this project to motorize the focus of a spectrograph. Just remember that if you have a helical focuser that is not from ZWO, you may need to make a few adjustments to the 3D model...
 
-## Demo
-
-Here is a demo of the system when attached to my telescope, and used as an OAG focuser:
-
-[![YouTube video showing the focuser in action](images/Demo-Video-Thumbnail-2.jpg)](https://youtu.be/1_InWRwgoRc)
-
-The following video shows what the guide camera sees with and without the OAG focuser upon switching to a different filter:
-
-[![YouTube video showing what the guide camera sees with and without an OAG focuser](images/Demo-Video-Thumbnail-1.jpg)](https://youtu.be/gUapuzT75Z0)
-
 ## Finished Product
 
 Here is what the finished product looks like:
@@ -69,6 +59,16 @@ Here is what the finished product looks like:
 And here it is, attached to the ZWO OAG, and fitted with a guide camera:
 
 ![Finished Product](images/Finished-Product-2.jpg)
+
+## Demo
+
+Here is a demo of the system when attached to my telescope, and used as an OAG focuser:
+
+[![YouTube video showing the focuser in action](images/Demo-Video-Thumbnail-2.jpg)](https://youtu.be/1_InWRwgoRc)
+
+The following video shows what the guide camera sees with and without the OAG focuser upon switching to a different filter:
+
+[![YouTube video showing what the guide camera sees with and without an OAG focuser](images/Demo-Video-Thumbnail-1.jpg)](https://youtu.be/gUapuzT75Z0)
 
 ## Pre-Requisites
 
