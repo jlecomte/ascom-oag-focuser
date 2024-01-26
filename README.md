@@ -52,6 +52,10 @@ Please note that you can use this device, and the accompanying software, to moto
 
 ## Demo
 
+Here is a demo of the system when attached to my telescope, and used as an OAG focuser:
+
+[![YouTube video showing the focuser in action](images/Demo-Video-Thumbnail-2.jpg)](https://youtu.be/1_InWRwgoRc)
+
 The following video shows what the guide camera sees with and without the OAG focuser upon switching to a different filter:
 
 [![YouTube video showing what the guide camera sees with and without an OAG focuser](images/Demo-Video-Thumbnail-1.jpg)](https://youtu.be/gUapuzT75Z0)
@@ -65,10 +69,6 @@ Here is what the finished product looks like:
 And here it is, attached to the ZWO OAG, and fitted with a guide camera:
 
 ![Finished Product](images/Finished-Product-2.jpg)
-
-Here is a demo of the system when attached to my telescope (Note: this was recorded using the v1 of this product, which looks slightly different, but you get the idea...)
-
-[![YouTube video showing the focuser in action](images/Demo-Video-Thumbnail-2.jpg)](https://youtu.be/1_InWRwgoRc)
 
 ## Pre-Requisites
 
