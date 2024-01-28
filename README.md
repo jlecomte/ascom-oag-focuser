@@ -154,10 +154,6 @@ Here is what the real PCB looks like:
 
 ![Final Circuit Board Bottom](images/Real-PCB-2.jpg)
 
-And here is the circuit board inside the 3D printed enclosure:
-
-![Circuit Board Inside Enclosure](images/Circuit-Board-Inside-Enclosure.jpg)
-
 ## Mechanical Components
 
 ### Gear And Pinion
