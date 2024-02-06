@@ -50,7 +50,7 @@ Not necessarily! It really depends on a lot of factors. For example, if you are 
 ### Important Note About OAG Compatibility
 
 * ZWO OAG (standard version): Will work out of the box. Thankfully, this seems like the most popular unit!
-* ZWO OAG-L (large version): A small change in the design is required, but is is possible to make it work.
+* ZWO OAG-L (large version): Will work out of the box with an extra adapter I am in the process of designing.
 * Player One OAG (MINI or MAX): I am in the process of establishing compatibility. My hunch is that it will work out of the box, but I need to confirm.
 * Celestron OAG: I do not know. It looks like the helical focuser can be detached and there are threads, but I would have to see the unit myself to check it.
 * QHY OAG: Will not work (without a significant change to the design), sorry!
