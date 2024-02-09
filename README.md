@@ -13,7 +13,7 @@ I do not charge anything to create and maintain these open-source projects. But 
 - [Finished Product](#finished-product)
 - [Demo](#demo)
 - [Pre-Requisites](#pre-requisites)
-- [Hardware](#hardware)
+- [Hardware / BOM](#hardware--bom)
 - [ASCOM Driver](#ascom-driver)
   * [Downloading And Installing The Driver](#downloading-and-installing-the-driver)
   * [Compiling The Driver (For Developers Only)](#compiling-the-driver-for-developers-only)
@@ -90,14 +90,16 @@ The following video shows what the guide camera sees with and without the OAG fo
 * A 3D printer able to print PETG, and a slicer (I use a heavily upgraded Creality Ender 3 v2, and Ultimaker Cura)
 * A few basic tools that any tinkerer must own, such as a breadboard, a soldering iron, etc.
 
-## Hardware
+## Hardware / BOM
 
 * [ZWO 1.25" helical focuser](https://bit.ly/47JOTRL) or equivalent.
-* Arduino-compatible microcontroller board with built-in EEPROM support. I used an Arduino Nano clone with a USB-C connector (~$10 USD on Amazon for a pack of 3...)
-* ULN2003 Darlington transistor array to control the stepper motor using the Arduino's digital I/O pins.
-* 28BYJ-48 stepper motor (5V)
-* LEDs and resistors — These are not required, but they can be useful to debug the firmware while prototyping.
-* Connectors — I used JST-XH connectors, only because I already had a bunch of them, along with a crimping tool.
+* Arduino-compatible microcontroller board with built-in EEPROM support. I used an [Arduino Nano clone with a USB-C connector (~$10 USD on Amazon for a pack of 3...)](https://www.amazon.com/dp/B09DKHWSY9?tag=darkskygeek-20)
+* [ULN2003 Darlington transistor array](https://www.amazon.com/dp/B0CBM23ZJ3?tag=darkskygeek-20) to control the stepper motor using the Arduino's digital I/O pins.
+* [28BYJ-48 stepper motor (5V)](https://www.amazon.com/dp/B01CP18J4A?tag=darkskygeek-20)
+* [LEDs](https://www.amazon.com/dp/B09XDMJ6KY?tag=darkskygeek-20) and [resistors](https://www.amazon.com/dp/B08FD1XVL6?tag=darkskygeek-20) — These are not required, but they can be useful to debug the firmware while prototyping.
+* Connectors — I used [JST-XH connectors](https://www.amazon.com/dp/B01MCZE2HM?tag=darkskygeek-20), only because I already had a bunch of them, along with [a crimping tool](https://www.amazon.com/dp/B078WNZ9FW?tag=darkskygeek-20).
+* [M2 Threaded Inserts](https://www.amazon.com/dp/B0B8GN63S2?tag=darkskygeek-20)
+* [M3 Threaded Inserts](https://www.amazon.com/dp/B0BQJ6CRNJ?tag=darkskygeek-20)
 
 ## ASCOM Driver
 
