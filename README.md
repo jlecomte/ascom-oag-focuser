@@ -24,6 +24,7 @@ I do not charge anything to create and maintain these open-source projects. But 
   * [Compiling And Uploading The Firmware](#compiling-and-uploading-the-firmware)
 - [Electronic Circuit](#electronic-circuit)
 - [Mechanical Components](#mechanical-components)
+  * [OAG Compatibility](#oag-compatibility)
   * [Gear And Pinion](#gear-and-pinion)
 - [Calibration Procedure](#calibration-procedure)
 - [Frequently Asked Questions (FAQ)](#frequently-asked-questions-faq)
@@ -166,6 +167,19 @@ Here is what the real PCB looks like:
 ![Final Circuit Board Bottom](images/Real-PCB-2.jpg)
 
 ## Mechanical Components
+
+### OAG Compatibility
+
+In case you are planning to use this electronic focuser with an OAG, please note that [the standard version](3D_Files/Standard-Version/) is compatible (out of the box) with the following OAGs:
+
+* ✅ ZWO OAG (standard version)
+* ✅ ZWO OAG-L (large version) via [this adapter](3D_Files/ZWO-OAG-L/Adapter.FCStd).
+* ✅ Askar OAG
+* ✅ Player One OAG (MIN or MAX)
+
+Additionally, since the ZWO OAG-L is so popular, I designed a custom version that does not require an adapter. You can find it [here](3D_Files/ZWO-OAG-L/).
+
+🛑 And finally, please note that the QHY OAG, Celestron OAG, and Touptek OAG are _not_ compatible (at least not without a significant change to the design).
 
 ### Gear And Pinion
 
