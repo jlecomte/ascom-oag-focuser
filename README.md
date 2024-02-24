@@ -172,17 +172,18 @@ Here is what the real PCB looks like:
 
 In case you are planning to use this electronic focuser with an OAG, please note that [the standard version](3D_Files/Standard-Version/) is compatible (out of the box) with the following OAGs:
 
-* ✅ ZWO OAG (standard version)
-* ✅ ZWO OAG-L (large version) via [this adapter](3D_Files/ZWO-OAG-L/Adapter.FCStd).
-* ✅ Askar OAG
-* ✅ Player One OAG (MIN or MAX)
+* ✅ **ZWO OAG** (standard version)
+* ✅ **ZWO OAG-L** (large version) via [this adapter](3D_Files/ZWO-OAG-L/Adapter.FCStd).
+* ✅ **Askar OAG**
+* ✅ **Player One OAG** (MIN or MAX)
 
 And finally, please note that this electronic focuser is NOT compatible with the following OAGs (at least not without a significant design change):
 
-* 🛑 Celestron OAG
-* 🛑 QHY OAG
-* 🛑 Touptek OAG
-* 🛑 OGMA OAG
+* 🛑 **Celestron OAG**
+* 🛑 **QHY OAG**
+* 🛑 **Touptek OAG**
+* 🛑 **OGMA OAG** — The helical focuser cannot be removed, so you would have to slightly tweak the design of this project to make it fit.
+* 🛑 **Antlia OAG** — The helical focuser can be detached from that unit, exposing an M42 male thread, so you would think it might work. However, due to the square OAG body, the stepper motor gets in the way. In my design, the stepper motor sticks out under the body of the electronic focuser to minimize the space the entire unit takes when used with a round OAG. **Note:** Some people have successfully adapted my design to flip the motor around and make it work with this unit.
 
 ### Gear And Pinion
 
