@@ -116,14 +116,18 @@ namespace ASCOM.DarkSkyGeek.FocuserApp
                     {
                         try
                         {
-                            this.lblCurPosVal.Text = device.Position.ToString();
-                            this.picIsMoving.Image = Properties.Resources.yes;
+                            lblCurPosVal.Text = device.Position.ToString();
+                            picIsMoving.Image = Properties.Resources.yes;
+                            btnHalt.Enabled = true;
+                            btnMove.Enabled = false;
                         }
                         catch (Exception) {; }
                     }));
                 }
 
-                this.picIsMoving.Image = Properties.Resources.no;
+                picIsMoving.Image = Properties.Resources.no;
+                btnHalt.Enabled = false;
+                btnMove.Enabled = true;
             });
         }
 
