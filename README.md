@@ -177,9 +177,7 @@ In case you are planning to use this electronic focuser with an OAG, please note
 * ✅ Askar OAG
 * ✅ Player One OAG (MIN or MAX)
 
-Additionally, since the ZWO OAG-L is so popular, I designed a custom version that does not require an adapter. You can find it [here](3D_Files/ZWO-OAG-L/).
-
-🛑 And finally, please note that this electronic focuser is NOT compatible with the following OAGs (at least not without a significant design change):
+And finally, please note that this electronic focuser is NOT compatible with the following OAGs (at least not without a significant design change):
 
 * 🛑 Celestron OAG
 * 🛑 QHY OAG
