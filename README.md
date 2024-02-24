@@ -179,7 +179,12 @@ In case you are planning to use this electronic focuser with an OAG, please note
 
 Additionally, since the ZWO OAG-L is so popular, I designed a custom version that does not require an adapter. You can find it [here](3D_Files/ZWO-OAG-L/).
 
-🛑 And finally, please note that the QHY OAG, Celestron OAG, and Touptek OAG are _not_ compatible (at least not without a significant change to the design).
+🛑 And finally, please note that this electronic focuser is NOT compatible with the following OAGs (at least not without a significant design change):
+
+* 🛑 Celestron OAG
+* 🛑 QHY OAG
+* 🛑 Touptek OAG
+* 🛑 OGMA OAG
 
 ### Gear And Pinion
 
