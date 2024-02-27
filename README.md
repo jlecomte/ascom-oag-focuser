@@ -8,7 +8,6 @@ I do not charge anything to create and maintain these open-source projects. But 
 
 - [Introduction](#introduction)
   * [Is This For You?](#is-this-for-you)
-  * [Important Note About OAG Compatibility](#important-note-about-oag-compatibility)
   * [Use As A Standalone Focuser](#use-as-a-standalone-focuser)
 - [Finished Product](#finished-product)
 - [Demo](#demo)
@@ -47,14 +46,6 @@ All of this has led me to design and build my own solution to this problem. In t
 ### Is This For You?
 
 Not necessarily! It really depends on a lot of factors. For example, if you are using a mirrored telescope, i.e. not a refractor, and if all of your filters come from the same set, e.g., Antlia LRGB filter set, and the filter manufacturer claims they are parfocal, then you may not need this at all because the difference in focus between filters will be so minuscule, you probably won't need to worry about it. However, if you are using a refractor (even an APO triplet), or if you use filters that are not parfocal, you _may_ need this. The only way to find out is to focus your main imaging camera, and then, assuming that you've already defined your filter offsets, go through every single filter in your filter wheel. After every filter change, your imaging application will adjust the focus of your imaging train slightly depending on the filter offset you have defined for the selected filter, and you should look at the image coming out of your guide camera in PHD2. In my case, the stars in my guide camera can be pinpoint when I am using my Luminance filter, but they are large disks when I am on some other filter. That is how you know that this device can be useful for you. This definitely is not for everybody, but the people who have the problem I just described did not really have a good solution until now.
-
-### Important Note About OAG Compatibility
-
-* ZWO OAG (standard version): Will work out of the box. Thankfully, this seems like the most popular unit!
-* ZWO OAG-L (large version): Will work out of the box with an extra adapter I am in the process of designing.
-* Player One OAG (MINI or MAX): I am in the process of establishing compatibility. My hunch is that it will work out of the box, but I need to confirm.
-* Celestron OAG: I do not know. It looks like the helical focuser can be detached and there are threads, but I would have to see the unit myself to check it.
-* QHY OAG: Will not work (without a significant change to the design), sorry!
 
 ### Use As A Standalone Focuser
 
