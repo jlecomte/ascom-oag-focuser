@@ -177,9 +177,10 @@ In case you are planning to use this electronic focuser with an OAG, please note
 * ✅ **Askar OAG**
 * ✅ **Player One OAG** (MIN or MAX)
 
+Additionally, an OpenSCAD model designed for the **Celestron OAG** was generously provided by [Endymion42](https://github.com/Endymion42). For more information and photographs, please refer to [this GitHub issue](https://github.com/jlecomte/ascom-oag-focuser/issues/10). The files can be found [here](3D_Files/Celestron-OAG/). **Important note: I will not provide any support whatsoever for this version, so use at your own risk!**
+
 And finally, please note that this electronic focuser is NOT compatible with the following OAGs (at least not without a significant design change):
 
-* 🛑 **Celestron OAG**
 * 🛑 **QHY OAG**
 * 🛑 **Touptek OAG**
 * 🛑 **OGMA OAG** — The helical focuser cannot be removed, so you would have to slightly tweak the design of this project to make it fit.
