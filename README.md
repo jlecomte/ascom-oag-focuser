@@ -90,6 +90,7 @@ The following video shows what the guide camera sees with and without the OAG fo
 * [28BYJ-48 stepper motor (5V)](https://www.amazon.com/dp/B01CP18J4A?tag=darkskygeek-20)
 * [LEDs](https://www.amazon.com/dp/B09XDMJ6KY?tag=darkskygeek-20) and [resistors](https://www.amazon.com/dp/B08FD1XVL6?tag=darkskygeek-20) — These are not required, but they can be useful to debug the firmware while prototyping.
 * Connectors — I used [JST-XH connectors](https://www.amazon.com/dp/B01MCZE2HM?tag=darkskygeek-20), only because I already had a bunch of them, along with [a crimping tool](https://www.amazon.com/dp/B078WNZ9FW?tag=darkskygeek-20).
+* [Capacitors](https://www.amazon.com/dp/B07PBQXQNQ?tag=darkskygeek-20) — Any 10 to 20µF cpacitor should work (this is just a bulk capacitor, so the exact value does not matter)
 * [M2 Threaded Inserts](https://www.amazon.com/dp/B0B8GN63S2?tag=darkskygeek-20)
 * [M3 Threaded Inserts](https://www.amazon.com/dp/B0BQJ6CRNJ?tag=darkskygeek-20)
 
@@ -126,6 +127,8 @@ This application allows you to connect to and control DarkSkyGeek’s OAG focuse
 ### Microcontroller Compatibility
 
 All Arduino-compatible microcontrollers that have a **built-in EEPROM** should work. Unfortunately, this excludes the popular [Seeeduino XIAO](https://www.seeedstudio.com/Seeeduino-XIAO-Arduino-Microcontroller-SAMD21-Cortex-M0+-p-4426.html) (one of my favorite microcontroller boards for hobby projects...) If you insist on using a unit that does not have a built-in EEPROM, you will have to customize the firmware to fit your needs. You could technically use a separate EEPROM chip, or you could use the [`FlashStorage` library](https://github.com/cmaglie/FlashStorage) or the [`FlashStorage_SAMD` library](https://github.com/khoih-prog/FlashStorage_SAMD), or you could simply disable the EEPROM code (in which case the device will not remember its last position after a power cycle...) There are quite a few options to choose from, but I recommend using something like an Arduino Nano for example, which is small, affordable, and has everything you need.
+
+**Note:** I tried several Arduino nano clones, and they do not all work. Some of them seem to work, but not reliably. I did not investigate too deeply, but I think it is because their BOD (Brown Out Detection) levels are set too low. When the motor turns, the voltage used to power the microcontroller will drop slightly, and if it drop below a certain level, some units will simply reset themselves in an act of self-protection. So, I strongly recommend the unit linked above, in the BOM list.
 
 ### Compiling And Uploading The Firmware
 
