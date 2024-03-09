@@ -125,9 +125,12 @@ namespace ASCOM.DarkSkyGeek.FocuserApp
                     }));
                 }
 
-                picIsMoving.Image = Properties.Resources.no;
-                btnHalt.Enabled = false;
-                btnMove.Enabled = true;
+                Invoke(new Action(() =>
+                {
+                    picIsMoving.Image = Properties.Resources.no;
+                    btnHalt.Enabled = false;
+                    btnMove.Enabled = true;
+                }
             });
         }
 
