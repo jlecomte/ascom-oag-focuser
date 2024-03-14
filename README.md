@@ -247,9 +247,11 @@ This procedure is explained in great detail in the following video:
 
 **Step 1:** On Windows, open the Device Manager, and expand the `Ports (COM & LPT)` section. Connect the Arduino. You should see a new COM port appear. If you don't, there is a problem with Windows, the Arduino, or the USB cable.
 
-**Step 2:** Assuming that a new COM port appeared in step 1, open the driver settings dialog from the standalone focuser application, and ensure that you have the `Auto-Detect COM port` option enabled, because if you are connecting the wrong COM port.
+**Step 2:** Assuming that a new COM port appeared in step 1, open the driver settings dialog from the standalone focuser application, and ensure that you have the `Auto-Detect COM port` option enabled.
 
 **Step 3:** Make sure that no other application is currently using the COM port assigned to the device. On Windows, a single process can be connected to a COM port at any given time, so if you happen to be running the Arduino IDE (for example) at the same time, it will have likely automatically connected to the Arduino via the COM port, and the standalone focuser application will not be able to connect.
+
+**Step 4:** If all else fails, look for the driver logs under `<DOCUMENTS FOLDER>\ASCOM\Logs <DATE>\` and open the most recent file. Feel free to open an issue, and paste the content of the log file.
 
 ## Frequently Asked Questions (FAQ)
 
