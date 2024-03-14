@@ -26,6 +26,7 @@ I do not charge anything to create and maintain these open-source projects. But 
   * [OAG Compatibility](#oag-compatibility)
   * [Gear And Pinion](#gear-and-pinion)
 - [Calibration Procedure](#calibration-procedure)
+- [Troubleshooting](#troubleshooting)
 - [Frequently Asked Questions (FAQ)](#frequently-asked-questions-faq)
 - [Credits](#credits)
 
@@ -42,6 +43,8 @@ While guiding software like PHD2 can accommodate slightly out-of-focus guide sta
 Manually refocusing the guide camera throughout the night is not exactly one of the most enjoyable parts of the hobby, so I looked for ways to automate that. Pegasus Astro sells a motorized OAG named [SCOPS OAG](https://pegasusastro.com/products/scops-oag/). However, it is a little expensive for me ($750 US — although it is a really great looking unit!) Furthermore, I discussed with the [N.I.N.A.](https://nighttime-imaging.eu/) developers on their [Discord server](https://discord.gg/fwpmHU4). Since N.I.N.A. can only connect to a single focuser at a time, there is no good solution yet to deal with SCOPS OAG. It is certainly possible to run a second instance of N.I.N.A. that connects to both SCOPS OAG and the guide camera, but there is no way to have those two N.I.N.A. instances communicate to do something upon filter change.
 
 All of this has led me to design and build my own solution to this problem. In this repository, you will find everything you need to motorize and automatically control the ZWO OAG (list of parts, 3D model, electronic schematics, Arduino firmware, ASCOM driver, standalone ASCOM client application, instructions, etc.) I hope you consider building this project if you find yourself in a similar situation. Please note that the ASCOM driver can be used with SCOPS OAG, there is nothing in the Filter Wheel Proxy implementation that is specific to my device.
+
+[![YouTube Intro Video](images/YouTube-video-intro-thumbnail.png)](https://www.youtube.com/watch?v=GP4CpIjJSqA)
 
 ### Is This For You?
 
@@ -236,7 +239,17 @@ Before you can use this device, you have to calibrate it. Here is the procedure:
 
 This procedure is explained in great detail in the following video:
 
-[![YouTube video talking about this flat panel](images/YouTube-video-part-II-thumbnail.png)](https://www.youtube.com/watch?v=zPPIgVuxk4Y)
+[![YouTube video explaining how to properly calibrate this device](images/YouTube-video-part-II-thumbnail.png)](https://www.youtube.com/watch?v=zPPIgVuxk4Y)
+
+## Troubleshooting
+
+**The standalone focuser application is not able to connect to the device**
+
+**Step 1:** On Windows, open the Device Manager, and expand the `Ports (COM & LPT)` section. Connect the Arduino. You should see a new COM port appear. If you don't, there is a problem with Windows, the Arduino, or the USB cable.
+
+**Step 2:** Assuming that a new COM port appeared in step 1, open the driver settings dialog from the standalone focuser application, and ensure that you have the `Auto-Detect COM port` option enabled, because if you are connecting the wrong COM port.
+
+**Step 3:** Make sure that no other application is currently using the COM port assigned to the device. On Windows, a single process can be connected to a COM port at any given time, so if you happen to be running the Arduino IDE (for example) at the same time, it will have likely automatically connected to the Arduino via the COM port, and the standalone focuser application will not be able to connect.
 
 ## Frequently Asked Questions (FAQ)
 
@@ -255,7 +268,7 @@ _It might seem strange that I decided to "manually" control the stepper motor in
 
 _The software included in this repository (specifically the `FilterWheelProxy` ASCOM component) was designed and implemented so that it may be used with other OAG focusers, including commercial units such as the SCOPS OAG, and I have no idea whether their driver handles backlash compensation. This way, no matter which focuser you use to adjust the focus of your guide camera, as long as its driver implements the standard `IFocuserV3` ASCOM interface, this will work and you will enjoy the benefits of backlash compensation!_
 
-**What is the positional accuracy of this focuser**
+**What is the positional accuracy of this focuser?**
 
 _Using a precision dial indicator (see "Backlash Measurement" section), I was able to measure the positional accuracy of this device (move 1,000 steps in one direction, move 1,000 steps in the opposite direction, and measure the difference between the starting and ending positions). Astoundingly, it is of the order of about 10μm!_
 
