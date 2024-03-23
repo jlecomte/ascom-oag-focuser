@@ -9,11 +9,12 @@ using ASCOM.Utilities;
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
-using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace ASCOM.DarkSkyGeek
 {
@@ -41,39 +42,18 @@ namespace ASCOM.DarkSkyGeek
         /// <summary>
         /// Driver description that displays in the ASCOM Chooser.
         /// </summary>
-        private static string deviceName = "DarkSkyGeek’s Filter Wheel Proxy For OAG Focuser";
+        private static readonly string deviceName = "DarkSkyGeek’s Filter Wheel Proxy For OAG Focuser";
 
         // Constants used for Profile persistence
         internal static int MAX_FILTER_COUNT = 8;
 
-        internal static string filterWheelIdProfileName = "Filter Wheel ID";
-        internal static string filterWheelIdDefault = string.Empty;
+        internal FilterWheelProxyProfiles profiles = null;
 
-        internal static string filterNamesProfileName = "Filter Names";
-        internal static string[] filterNamesDefault = Enumerable.Repeat(string.Empty, MAX_FILTER_COUNT).ToArray();
-
-        internal static string filterOffsetsProfileName = "Filter Offsets";
-        internal static int[] filterOffsetsDefault = Enumerable.Repeat(0, MAX_FILTER_COUNT).ToArray();
-
-        internal static string focuserIdProfileName = "OAG Focuser ID";
-        internal static string focuserIdDefault = Focuser.driverID;
-
-        internal static string backlashCompStepsProfileName = "Backlash Compensation Steps";
-        internal static string backlashCompStepsDefault = "0";
-
-        internal static string stepRatioProfileName = "Telescope And OAG Focusers Step Ratio";
-        internal static string stepRatioDefault = "1.0";
-
-        internal static string traceStateProfileName = "Trace Level";
+        internal static string traceStateKeyName = "Trace Level";
         internal static string traceStateDefault = "false";
 
-        // Variables to hold the current device configuration
-        internal static string filterWheelId = string.Empty;
-        internal static string[] filterNames = filterNamesDefault;
-        internal static int[] filterOffsets = filterOffsetsDefault;
-        internal static string focuserId = Focuser.driverID;
-        internal static int backlashCompSteps = 0;
-        internal static decimal stepRatio = 1.0m;
+        internal static string profileValuesKeyName = "Profiles";
+        internal static string profileValuesDefault = "";
 
         /// <summary>
         /// Private variable to hold the connected state
@@ -88,12 +68,12 @@ namespace ASCOM.DarkSkyGeek
         /// <summary>
         /// Private variable to hold a reference to the real filter wheel we're controlling
         /// </summary>
-        private ASCOM.DriverAccess.FilterWheel filterWheel;
+        private DriverAccess.FilterWheel filterWheel;
 
         /// <summary>
         /// Private variable to hold a reference to the real focuser we're controlling
         /// </summary>
-        private ASCOM.DriverAccess.Focuser focuser;
+        private DriverAccess.Focuser focuser;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DarkSkyGeek"/> class.
@@ -102,9 +82,25 @@ namespace ASCOM.DarkSkyGeek
         public FilterWheelProxy()
         {
             tl = new TraceLogger("", "DarkSkyGeek");
-            ReadProfile();
+
             tl.LogMessage("FilterWheel", "Starting initialization");
+
+            ReadProfile();
+
+            if (profiles == null)
+            {
+                profiles = new FilterWheelProxyProfiles();
+            }
+
+            if (profiles.profiles.Count == 0)
+            {
+                var defaultProfile = CreateDefaultProfile();
+                profiles.currentlySelectedProfileName = defaultProfile.name;
+                profiles.profiles.Add(defaultProfile);
+            }
+
             connectedState = false;
+
             tl.LogMessage("FilterWheel", "Completed initialization");
         }
 
@@ -122,12 +118,13 @@ namespace ASCOM.DarkSkyGeek
         /// </summary>
         public void SetupDialog()
         {
-            // consider only showing the setup dialog if not connected
-            // or call a different dialog if connected
             if (IsConnected)
-                System.Windows.Forms.MessageBox.Show("Already connected, just press OK");
+            {
+                System.Windows.Forms.MessageBox.Show("Settings cannot be updated once the device has been connected. Disconnect the device first, so you can update its settings.");
+                return;
+            }
 
-            using (FilterWheelSetupDialogForm F = new FilterWheelSetupDialogForm(tl))
+            using (FilterWheelSetupDialogForm F = new FilterWheelSetupDialogForm(this))
             {
                 var result = F.ShowDialog();
                 if (result == System.Windows.Forms.DialogResult.OK)
@@ -149,25 +146,25 @@ namespace ASCOM.DarkSkyGeek
         public string Action(string actionName, string actionParameters)
         {
             LogMessage("", "Action {0} not implemented", actionName);
-            throw new ASCOM.ActionNotImplementedException("Action " + actionName + " is not implemented by this driver");
+            throw new ActionNotImplementedException("Action " + actionName + " is not implemented by this driver");
         }
 
         public void CommandBlind(string command, bool raw)
         {
             CheckConnected("CommandBlind");
-            throw new ASCOM.MethodNotImplementedException("CommandBlind");
+            throw new MethodNotImplementedException("CommandBlind");
         }
 
         public bool CommandBool(string command, bool raw)
         {
             CheckConnected("CommandBool");
-            throw new ASCOM.MethodNotImplementedException("CommandBool");
+            throw new MethodNotImplementedException("CommandBool");
         }
 
         public string CommandString(string command, bool raw)
         {
             CheckConnected("CommandString");
-            throw new ASCOM.MethodNotImplementedException("CommandString");
+            throw new MethodNotImplementedException("CommandString");
         }
 
         public void Dispose()
@@ -192,16 +189,27 @@ namespace ASCOM.DarkSkyGeek
 
                 if (value)
                 {
-                    if (string.IsNullOrEmpty(filterWheelId))
+                    var profile = GetSelectedProfile();
+
+                    if (string.IsNullOrEmpty(profile.filterWheelId))
                     {
-                        throw new ASCOM.InvalidValueException("You have not specified which filter wheel to connect to");
+                        throw new InvalidValueException("You have not specified which filter wheel to connect to");
                     }
 
-                    filterWheel = new ASCOM.DriverAccess.FilterWheel(filterWheelId);
-                    filterWheel.Connected = true;
+                    if (string.IsNullOrEmpty(profile.focuserId))
+                    {
+                        throw new InvalidValueException("You have not specified which focuser to connect to");
+                    }
 
-                    focuser = new ASCOM.DriverAccess.Focuser(focuserId);
-                    focuser.Connected = true;
+                    filterWheel = new DriverAccess.FilterWheel(profile.filterWheelId)
+                    {
+                        Connected = true
+                    };
+
+                    focuser = new DriverAccess.Focuser(profile.focuserId)
+                    {
+                        Connected = true
+                    };
 
                     connectedState = true;
                 }
@@ -277,8 +285,9 @@ namespace ASCOM.DarkSkyGeek
         {
             get
             {
-                tl.LogMessage("FocusOffsets Get", "[ " + String.Join(", ", filterOffsets) + " ]");
-                return filterOffsets;
+                var profile = GetSelectedProfile();
+                tl.LogMessage("FocusOffsets Get", "[ " + String.Join(", ", profile.filterOffsets) + " ]");
+                return profile.filterOffsets.ToArray();
             }
         }
 
@@ -286,8 +295,9 @@ namespace ASCOM.DarkSkyGeek
         {
             get
             {
-                tl.LogMessage("Names Get", "[ " + String.Join(", ", filterNames) + " ]");
-                return filterNames;
+                var profile = GetSelectedProfile();
+                tl.LogMessage("Names Get", "[ " + String.Join(", ", profile.filterNames) + " ]");
+                return profile.filterNames.ToArray();
             }
         }
 
@@ -308,22 +318,24 @@ namespace ASCOM.DarkSkyGeek
 
                 if (focuser.IsMoving)
                 {
-                    throw new ASCOM.DriverException("Cannot switch filters while the OAG focuser is still moving from the previous filter change. Please wait and try again.");
+                    throw new DriverException("Cannot switch filters while the OAG focuser is still moving from the previous filter change. Please wait and try again.");
                 }
 
+                var profile = GetSelectedProfile();
+                tl.LogMessage("FilterWheel", $"Using profile {profile.name}");
                 short oldPosition = filterWheel.Position;
                 short newPosition = value;
 
                 filterWheel.Position = newPosition;
 
-                int oldFilterOffset = filterOffsets[oldPosition];
-                int newFilterOffset = filterOffsets[newPosition];
-                int delta = (int) ((newFilterOffset - oldFilterOffset) * stepRatio);
-
+                int oldFilterOffset = profile.filterOffsets[oldPosition];
+                int newFilterOffset = profile.filterOffsets[newPosition];
+                int delta = (int) ((newFilterOffset - oldFilterOffset) * profile.stepRatio);
+                tl.LogMessage("FilterWheel", $"oldFilterOffset = {oldFilterOffset}, newFilterOffset = {newFilterOffset}, delta = {delta}");
                 if (delta > 0)
                 {
                     // If we're moving OUT, we overshoot to deal with backlash...
-                    focuser.Move(focuser.Position + backlashCompSteps + delta);
+                    focuser.Move(focuser.Position + profile.backlashCompSteps + delta);
 
                     // Wait for the focuser to reach the desired position...
                     while (focuser.IsMoving)
@@ -332,7 +344,7 @@ namespace ASCOM.DarkSkyGeek
                     }
 
                     // Once the focuser has stopped moving, we tell it to move to its final position...
-                    focuser.Move(focuser.Position - backlashCompSteps);
+                    focuser.Move(focuser.Position - profile.backlashCompSteps);
                 }
                 else
                 {
@@ -358,7 +370,7 @@ namespace ASCOM.DarkSkyGeek
         /// <param name="bRegister">If <c>true</c>, registers the driver, otherwise unregisters it.</param>
         private static void RegUnregASCOM(bool bRegister)
         {
-            using (var P = new ASCOM.Utilities.Profile())
+            using (var P = new Profile())
             {
                 P.DeviceType = "FilterWheel";
                 if (bRegister)
@@ -439,24 +451,8 @@ namespace ASCOM.DarkSkyGeek
         {
             if (!IsConnected)
             {
-                throw new ASCOM.NotConnectedException(message);
+                throw new NotConnectedException(message);
             }
-        }
-
-        /// <summary>
-        /// Use this function to wait for the focuser to stop moving before executing the next instruction...
-        /// </summary>
-        /// <param name="message"></param>
-        private async Task waitForFocuserToStopMoving()
-        {
-            await Task.Run(() =>
-            {
-                // Wait for the focuser to reach the desired position...
-                while (focuser.IsMoving)
-                {
-                    Thread.Sleep(100);
-                }
-            });
         }
 
         /// <summary>
@@ -470,25 +466,12 @@ namespace ASCOM.DarkSkyGeek
 
                 try
                 {
-                    tl.Enabled = Convert.ToBoolean(driverProfile.GetValue(driverID, traceStateProfileName, string.Empty, traceStateDefault));
+                    tl.Enabled = Convert.ToBoolean(driverProfile.GetValue(driverID, traceStateKeyName, string.Empty, traceStateDefault));
 
-                    filterWheelId = driverProfile.GetValue(driverID, filterWheelIdProfileName, string.Empty, filterWheelIdDefault);
-
-                    string filterNamesProfileValue = driverProfile.GetValue(driverID, filterNamesProfileName, string.Empty, string.Empty);
-                    if (filterNamesProfileValue != string.Empty)
-                    {
-                        filterNames = filterNamesProfileValue.Split(',');
-                    }
-
-                    string filterOffsetsProfileValue = driverProfile.GetValue(driverID, filterOffsetsProfileName, string.Empty, string.Empty);
-                    if (filterOffsetsProfileValue != string.Empty)
-                    {
-                        filterOffsets = Array.ConvertAll(filterOffsetsProfileValue.Split(','), int.Parse);
-                    }
-
-                    focuserId = driverProfile.GetValue(driverID, focuserIdProfileName, string.Empty, focuserIdDefault);
-                    backlashCompSteps = Convert.ToInt32(driverProfile.GetValue(driverID, backlashCompStepsProfileName, string.Empty, backlashCompStepsDefault));
-                    stepRatio = Convert.ToDecimal(driverProfile.GetValue(driverID, stepRatioProfileName, string.Empty, stepRatioDefault));
+                    var profilesXml = driverProfile.GetValue(driverID, profileValuesKeyName, string.Empty, profileValuesDefault);
+                    XmlSerializer xmlSerializer = new XmlSerializer(typeof(FilterWheelProxyProfiles));
+                    TextReader reader = new StringReader(profilesXml);
+                    profiles = (FilterWheelProxyProfiles) xmlSerializer.Deserialize(reader);
                 }
                 catch (Exception e)
                 {
@@ -505,14 +488,59 @@ namespace ASCOM.DarkSkyGeek
             using (Profile driverProfile = new Profile())
             {
                 driverProfile.DeviceType = "FilterWheel";
-                driverProfile.WriteValue(driverID, traceStateProfileName, tl.Enabled.ToString());
-                driverProfile.WriteValue(driverID, filterWheelIdProfileName, filterWheelId);
-                driverProfile.WriteValue(driverID, filterNamesProfileName, String.Join(",", filterNames));
-                driverProfile.WriteValue(driverID, filterOffsetsProfileName, String.Join(",", filterOffsets));
-                driverProfile.WriteValue(driverID, focuserIdProfileName, focuserId);
-                driverProfile.WriteValue(driverID, backlashCompStepsProfileName, backlashCompSteps.ToString());
-                driverProfile.WriteValue(driverID, stepRatioProfileName, stepRatio.ToString());
+
+                driverProfile.WriteValue(driverID, traceStateKeyName, tl.Enabled.ToString());
+
+                XmlSerializer xmlSerializer = new XmlSerializer(typeof(FilterWheelProxyProfiles));
+                StringWriter textWriter = new StringWriter();
+                xmlSerializer.Serialize(textWriter, profiles);
+                driverProfile.WriteValue(driverID, profileValuesKeyName, textWriter.ToString());
             }
+        }
+
+        /// <summary>
+        /// Creates a default profile
+        /// </summary>
+        internal FilterWheelProxyProfile CreateDefaultProfile()
+        {
+            var profile = new FilterWheelProxyProfile
+            {
+                name = "Default"
+            };
+            return profile;
+        }
+
+        /// <summary>
+        /// Returns the profile with the specified name
+        /// </summary>
+        internal FilterWheelProxyProfile GetProfile(string name)
+        {
+            return profiles.profiles.Find(x => x.name.Trim() == name.Trim());
+        }
+
+        /// <summary>
+        /// Returns the currently selected profile
+        /// </summary>
+        internal FilterWheelProxyProfile GetSelectedProfile()
+        {
+            var profile = GetProfile(profiles.currentlySelectedProfileName);
+
+            if (profile == null)
+            {
+                if (profiles.profiles.Count > 0)
+                {
+                    profile = profiles.profiles[0];
+                }
+                else
+                {
+                    profile = CreateDefaultProfile();
+                    profiles.profiles.Add(profile);
+                }
+
+                profiles.currentlySelectedProfileName = profile.name;
+            }
+
+            return profile;
         }
 
         /// <summary>
@@ -528,5 +556,22 @@ namespace ASCOM.DarkSkyGeek
         }
 
         #endregion
+    }
+
+    public class FilterWheelProxyProfile
+    {
+        public string name = null;
+        public string filterWheelId = null;
+        public string focuserId = null;
+        public List<string> filterNames = new List<string>();
+        public List<int> filterOffsets = new List<int>();
+        public int backlashCompSteps = 0;
+        public decimal stepRatio = 1.0m;
+    }
+
+    public class FilterWheelProxyProfiles
+    {
+        public string currentlySelectedProfileName = null;
+        public List<FilterWheelProxyProfile> profiles = new List<FilterWheelProxyProfile>();
     }
 }

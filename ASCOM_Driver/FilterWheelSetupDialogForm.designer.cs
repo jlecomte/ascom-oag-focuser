@@ -40,43 +40,50 @@ namespace ASCOM.DarkSkyGeek
             this.cmdCancel = new System.Windows.Forms.Button();
             this.descriptionLabel = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.filterWheelSelectorLabel = new System.Windows.Forms.Label();
+            this.filterWheelSelectorComboBox = new System.Windows.Forms.ComboBox();
             this.filterOffsetsWarning = new System.Windows.Forms.Label();
             this.filtersDataGridView = new System.Windows.Forms.DataGridView();
-            this.FilterPositionColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FilterNameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FilterOffsetColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DSGLogo = new System.Windows.Forms.PictureBox();
             this.chkTrace = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.focuserSelectorComboBox = new System.Windows.Forms.ComboBox();
+            this.focuserSelectorLabel = new System.Windows.Forms.Label();
             this.stepRatioTextBox = new System.Windows.Forms.TextBox();
             this.backlashCompTextBox = new System.Windows.Forms.TextBox();
             this.stepRatioLabel = new System.Windows.Forms.Label();
             this.backlashCompLabel = new System.Windows.Forms.Label();
             this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
-            this.filterWheelSelectorComboBox = new System.Windows.Forms.ComboBox();
-            this.filterWheelSelectorLabel = new System.Windows.Forms.Label();
-            this.focuserSelectorLabel = new System.Windows.Forms.Label();
-            this.focuserSelectorComboBox = new System.Windows.Forms.ComboBox();
+            this.equipmentProfilesLabel = new System.Windows.Forms.Label();
+            this.profileChooser = new System.Windows.Forms.ComboBox();
+            this.manageProfilesButton = new System.Windows.Forms.Button();
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.newProfileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.renameProfileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteProfileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.FilterPositionColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FilterNameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FilterOffsetColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.filtersDataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DSGLogo)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
+            this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // cmdOK
             // 
             this.cmdOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.cmdOK.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdOK.Image = global::ASCOM.DarkSkyGeek.Properties.Resources.icon_ok_24;
-            this.cmdOK.Location = new System.Drawing.Point(396, 589);
+            this.cmdOK.Location = new System.Drawing.Point(422, 673);
             this.cmdOK.Name = "cmdOK";
             this.cmdOK.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
             this.cmdOK.Size = new System.Drawing.Size(76, 35);
             this.cmdOK.TabIndex = 0;
             this.cmdOK.UseVisualStyleBackColor = true;
-            this.cmdOK.Click += new System.EventHandler(this.cmdOK_Click);
+            this.cmdOK.Click += new System.EventHandler(this.CmdOK_Click);
             // 
             // cmdCancel
             // 
@@ -85,12 +92,12 @@ namespace ASCOM.DarkSkyGeek
             this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cmdCancel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdCancel.Image = global::ASCOM.DarkSkyGeek.Properties.Resources.icon_cancel_24;
-            this.cmdCancel.Location = new System.Drawing.Point(478, 589);
+            this.cmdCancel.Location = new System.Drawing.Point(504, 673);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(74, 37);
             this.cmdCancel.TabIndex = 1;
             this.cmdCancel.UseVisualStyleBackColor = true;
-            this.cmdCancel.Click += new System.EventHandler(this.cmdCancel_Click);
+            this.cmdCancel.Click += new System.EventHandler(this.CmdCancel_Click);
             // 
             // descriptionLabel
             // 
@@ -99,7 +106,7 @@ namespace ASCOM.DarkSkyGeek
             this.descriptionLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.descriptionLabel.Location = new System.Drawing.Point(107, 12);
             this.descriptionLabel.Name = "descriptionLabel";
-            this.descriptionLabel.Size = new System.Drawing.Size(445, 88);
+            this.descriptionLabel.Size = new System.Drawing.Size(471, 88);
             this.descriptionLabel.TabIndex = 11;
             this.descriptionLabel.Text = resources.GetString("descriptionLabel.Text");
             // 
@@ -112,23 +119,48 @@ namespace ASCOM.DarkSkyGeek
             this.groupBox1.Controls.Add(this.filterOffsetsWarning);
             this.groupBox1.Controls.Add(this.filtersDataGridView);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(13, 116);
+            this.groupBox1.Location = new System.Drawing.Point(13, 181);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(539, 322);
+            this.groupBox1.Size = new System.Drawing.Size(565, 291);
             this.groupBox1.TabIndex = 10;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Filter Wheel / Autofocus Filter Settings";
+            // 
+            // filterWheelSelectorLabel
+            // 
+            this.filterWheelSelectorLabel.AutoSize = true;
+            this.filterWheelSelectorLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.filterWheelSelectorLabel.Location = new System.Drawing.Point(6, 32);
+            this.filterWheelSelectorLabel.Name = "filterWheelSelectorLabel";
+            this.filterWheelSelectorLabel.Size = new System.Drawing.Size(120, 13);
+            this.filterWheelSelectorLabel.TabIndex = 15;
+            this.filterWheelSelectorLabel.Text = "Real filter wheel device:";
+            // 
+            // filterWheelSelectorComboBox
+            // 
+            this.filterWheelSelectorComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.filterWheelSelectorComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.filterWheelSelectorComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.filterWheelSelectorComboBox.FormattingEnabled = true;
+            this.filterWheelSelectorComboBox.Location = new System.Drawing.Point(132, 29);
+            this.filterWheelSelectorComboBox.Name = "filterWheelSelectorComboBox";
+            this.filterWheelSelectorComboBox.Size = new System.Drawing.Size(427, 21);
+            this.filterWheelSelectorComboBox.TabIndex = 14;
+            this.filterWheelSelectorComboBox.SelectedIndexChanged += new System.EventHandler(this.FilterWheelSelectorComboBox_SelectedIndexChanged);
             // 
             // filterOffsetsWarning
             // 
             this.filterOffsetsWarning.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.filterOffsetsWarning.AutoSize = true;
             this.filterOffsetsWarning.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.filterOffsetsWarning.Location = new System.Drawing.Point(6, 63);
             this.filterOffsetsWarning.Name = "filterOffsetsWarning";
-            this.filterOffsetsWarning.Size = new System.Drawing.Size(527, 46);
+            this.filterOffsetsWarning.Size = new System.Drawing.Size(517, 13);
             this.filterOffsetsWarning.TabIndex = 13;
-            this.filterOffsetsWarning.Text = resources.GetString("filterOffsetsWarning.Text");
+            this.filterOffsetsWarning.Text = "Make sure that the following filters and offsets are in sync with the values conf" +
+    "igured in the client application!";
             // 
             // filtersDataGridView
             // 
@@ -146,39 +178,16 @@ namespace ASCOM.DarkSkyGeek
             this.FilterPositionColumn,
             this.FilterNameColumn,
             this.FilterOffsetColumn});
-            this.filtersDataGridView.Location = new System.Drawing.Point(6, 112);
+            this.filtersDataGridView.Location = new System.Drawing.Point(6, 88);
             this.filtersDataGridView.Name = "filtersDataGridView";
             this.filtersDataGridView.RowHeadersVisible = false;
             this.filtersDataGridView.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.filtersDataGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.filtersDataGridView.Size = new System.Drawing.Size(527, 200);
+            this.filtersDataGridView.Size = new System.Drawing.Size(553, 197);
             this.filtersDataGridView.TabIndex = 0;
-            this.filtersDataGridView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.filtersDataGridView_CellValidating);
-            this.filtersDataGridView.Validating += new System.ComponentModel.CancelEventHandler(this.filtersDataGridView_Validating);
-            // 
-            // FilterPositionColumn
-            // 
-            this.FilterPositionColumn.FillWeight = 60F;
-            this.FilterPositionColumn.HeaderText = "Filter Position";
-            this.FilterPositionColumn.Name = "FilterPositionColumn";
-            this.FilterPositionColumn.ReadOnly = true;
-            this.FilterPositionColumn.Width = 140;
-            // 
-            // FilterNameColumn
-            // 
-            this.FilterNameColumn.FillWeight = 104.3147F;
-            this.FilterNameColumn.HeaderText = "Filter Name";
-            this.FilterNameColumn.Name = "FilterNameColumn";
-            this.FilterNameColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.FilterNameColumn.Width = 245;
-            // 
-            // FilterOffsetColumn
-            // 
-            this.FilterOffsetColumn.FillWeight = 60F;
-            this.FilterOffsetColumn.HeaderText = "Filter Offset";
-            this.FilterOffsetColumn.Name = "FilterOffsetColumn";
-            this.FilterOffsetColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.FilterOffsetColumn.Width = 141;
+            this.filtersDataGridView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.FiltersDataGridView_CellValidating);
+            this.filtersDataGridView.Validating += new System.ComponentModel.CancelEventHandler(this.FiltersDataGridView_Validating);
+            this.filtersDataGridView.Validated += new System.EventHandler(this.FiltersDataGridView_Validated);
             // 
             // DSGLogo
             // 
@@ -197,7 +206,7 @@ namespace ASCOM.DarkSkyGeek
             // 
             this.chkTrace.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.chkTrace.AutoSize = true;
-            this.chkTrace.Location = new System.Drawing.Point(13, 605);
+            this.chkTrace.Location = new System.Drawing.Point(13, 689);
             this.chkTrace.Name = "chkTrace";
             this.chkTrace.Size = new System.Drawing.Size(69, 17);
             this.chkTrace.TabIndex = 13;
@@ -215,12 +224,35 @@ namespace ASCOM.DarkSkyGeek
             this.groupBox2.Controls.Add(this.stepRatioLabel);
             this.groupBox2.Controls.Add(this.backlashCompLabel);
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox2.Location = new System.Drawing.Point(13, 444);
+            this.groupBox2.Location = new System.Drawing.Point(13, 503);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(539, 137);
+            this.groupBox2.Size = new System.Drawing.Size(565, 137);
             this.groupBox2.TabIndex = 14;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "OAG Focuser settings";
+            // 
+            // focuserSelectorComboBox
+            // 
+            this.focuserSelectorComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.focuserSelectorComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.focuserSelectorComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.focuserSelectorComboBox.FormattingEnabled = true;
+            this.focuserSelectorComboBox.Location = new System.Drawing.Point(118, 38);
+            this.focuserSelectorComboBox.Name = "focuserSelectorComboBox";
+            this.focuserSelectorComboBox.Size = new System.Drawing.Size(441, 21);
+            this.focuserSelectorComboBox.TabIndex = 24;
+            this.focuserSelectorComboBox.SelectedIndexChanged += new System.EventHandler(this.FocuserSelectorComboBox_SelectedIndexChanged);
+            // 
+            // focuserSelectorLabel
+            // 
+            this.focuserSelectorLabel.AutoSize = true;
+            this.focuserSelectorLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.focuserSelectorLabel.Location = new System.Drawing.Point(6, 41);
+            this.focuserSelectorLabel.Name = "focuserSelectorLabel";
+            this.focuserSelectorLabel.Size = new System.Drawing.Size(106, 13);
+            this.focuserSelectorLabel.TabIndex = 23;
+            this.focuserSelectorLabel.Text = "OAG focuser device:";
             // 
             // stepRatioTextBox
             // 
@@ -230,7 +262,8 @@ namespace ASCOM.DarkSkyGeek
             this.stepRatioTextBox.Size = new System.Drawing.Size(56, 20);
             this.stepRatioTextBox.TabIndex = 22;
             this.stepRatioTextBox.Text = "1.0";
-            this.stepRatioTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.stepRatioTextBox_Validating);
+            this.stepRatioTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.StepRatioTextBox_Validating);
+            this.stepRatioTextBox.Validated += new System.EventHandler(this.StepRatioTextBox_Validated);
             // 
             // backlashCompTextBox
             // 
@@ -240,7 +273,8 @@ namespace ASCOM.DarkSkyGeek
             this.backlashCompTextBox.Size = new System.Drawing.Size(56, 20);
             this.backlashCompTextBox.TabIndex = 21;
             this.backlashCompTextBox.Text = "0";
-            this.backlashCompTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.backlashCompTextBox_Validating);
+            this.backlashCompTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.BacklashCompTextBox_Validating);
+            this.backlashCompTextBox.Validated += new System.EventHandler(this.BacklashCompTextBox_Validated);
             // 
             // stepRatioLabel
             // 
@@ -266,53 +300,104 @@ namespace ASCOM.DarkSkyGeek
             // 
             this.errorProvider.ContainerControl = this;
             // 
-            // filterWheelSelectorComboBox
+            // equipmentProfilesLabel
             // 
-            this.filterWheelSelectorComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.equipmentProfilesLabel.AutoSize = true;
+            this.equipmentProfilesLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.equipmentProfilesLabel.Location = new System.Drawing.Point(10, 131);
+            this.equipmentProfilesLabel.Name = "equipmentProfilesLabel";
+            this.equipmentProfilesLabel.Size = new System.Drawing.Size(116, 13);
+            this.equipmentProfilesLabel.TabIndex = 15;
+            this.equipmentProfilesLabel.Text = "Equipment Profiles:";
+            // 
+            // profileChooser
+            // 
+            this.profileChooser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.filterWheelSelectorComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.filterWheelSelectorComboBox.FormattingEnabled = true;
-            this.filterWheelSelectorComboBox.Location = new System.Drawing.Point(132, 29);
-            this.filterWheelSelectorComboBox.Name = "filterWheelSelectorComboBox";
-            this.filterWheelSelectorComboBox.Size = new System.Drawing.Size(401, 21);
-            this.filterWheelSelectorComboBox.TabIndex = 14;
+            this.profileChooser.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.profileChooser.FormattingEnabled = true;
+            this.profileChooser.Location = new System.Drawing.Point(132, 128);
+            this.profileChooser.Name = "profileChooser";
+            this.profileChooser.Size = new System.Drawing.Size(279, 21);
+            this.profileChooser.TabIndex = 16;
+            this.profileChooser.SelectedIndexChanged += new System.EventHandler(this.ProfileChooser_SelectedIndexChanged);
             // 
-            // filterWheelSelectorLabel
+            // manageProfilesButton
             // 
-            this.filterWheelSelectorLabel.AutoSize = true;
-            this.filterWheelSelectorLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.filterWheelSelectorLabel.Location = new System.Drawing.Point(6, 32);
-            this.filterWheelSelectorLabel.Name = "filterWheelSelectorLabel";
-            this.filterWheelSelectorLabel.Size = new System.Drawing.Size(120, 13);
-            this.filterWheelSelectorLabel.TabIndex = 15;
-            this.filterWheelSelectorLabel.Text = "Real filter wheel device:";
+            this.manageProfilesButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.manageProfilesButton.Location = new System.Drawing.Point(429, 125);
+            this.manageProfilesButton.Name = "manageProfilesButton";
+            this.manageProfilesButton.Size = new System.Drawing.Size(149, 28);
+            this.manageProfilesButton.TabIndex = 17;
+            this.manageProfilesButton.Text = "Manage Profiles  ▼";
+            this.manageProfilesButton.UseVisualStyleBackColor = true;
+            this.manageProfilesButton.Click += new System.EventHandler(this.ManageProfilesButton_Click);
             // 
-            // focuserSelectorLabel
+            // contextMenuStrip
             // 
-            this.focuserSelectorLabel.AutoSize = true;
-            this.focuserSelectorLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.focuserSelectorLabel.Location = new System.Drawing.Point(6, 41);
-            this.focuserSelectorLabel.Name = "focuserSelectorLabel";
-            this.focuserSelectorLabel.Size = new System.Drawing.Size(106, 13);
-            this.focuserSelectorLabel.TabIndex = 23;
-            this.focuserSelectorLabel.Text = "OAG focuser device:";
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.newProfileMenuItem,
+            this.renameProfileMenuItem,
+            this.deleteProfileMenuItem});
+            this.contextMenuStrip.Name = "contextMenuStrip";
+            this.contextMenuStrip.Size = new System.Drawing.Size(202, 70);
             // 
-            // focuserSelectorComboBox
+            // newProfileMenuItem
             // 
-            this.focuserSelectorComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.focuserSelectorComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.focuserSelectorComboBox.FormattingEnabled = true;
-            this.focuserSelectorComboBox.Location = new System.Drawing.Point(118, 38);
-            this.focuserSelectorComboBox.Name = "focuserSelectorComboBox";
-            this.focuserSelectorComboBox.Size = new System.Drawing.Size(415, 21);
-            this.focuserSelectorComboBox.TabIndex = 24;
+            this.newProfileMenuItem.Name = "newProfileMenuItem";
+            this.newProfileMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.newProfileMenuItem.Text = "New Profile";
+            this.newProfileMenuItem.Click += new System.EventHandler(this.NewProfileMenuItem_Click);
+            // 
+            // renameProfileMenuItem
+            // 
+            this.renameProfileMenuItem.Name = "renameProfileMenuItem";
+            this.renameProfileMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.renameProfileMenuItem.Text = "Rename Selected Profile";
+            this.renameProfileMenuItem.Click += new System.EventHandler(this.RenameProfileMenuItem_Click);
+            // 
+            // deleteProfileMenuItem
+            // 
+            this.deleteProfileMenuItem.Name = "deleteProfileMenuItem";
+            this.deleteProfileMenuItem.Size = new System.Drawing.Size(201, 22);
+            this.deleteProfileMenuItem.Text = "Delete Selected Profile";
+            this.deleteProfileMenuItem.Click += new System.EventHandler(this.DeleteProfileMenuItem_Click);
+            // 
+            // FilterPositionColumn
+            // 
+            this.FilterPositionColumn.FillWeight = 30F;
+            this.FilterPositionColumn.HeaderText = "Filter Position";
+            this.FilterPositionColumn.MinimumWidth = 120;
+            this.FilterPositionColumn.Name = "FilterPositionColumn";
+            this.FilterPositionColumn.ReadOnly = true;
+            this.FilterPositionColumn.Width = 120;
+            // 
+            // FilterNameColumn
+            // 
+            this.FilterNameColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.FilterNameColumn.FillWeight = 40F;
+            this.FilterNameColumn.HeaderText = "Filter Name";
+            this.FilterNameColumn.MinimumWidth = 250;
+            this.FilterNameColumn.Name = "FilterNameColumn";
+            this.FilterNameColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // FilterOffsetColumn
+            // 
+            this.FilterOffsetColumn.FillWeight = 30F;
+            this.FilterOffsetColumn.HeaderText = "Filter Offset";
+            this.FilterOffsetColumn.MinimumWidth = 120;
+            this.FilterOffsetColumn.Name = "FilterOffsetColumn";
+            this.FilterOffsetColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.FilterOffsetColumn.Width = 120;
             // 
             // FilterWheelSetupDialogForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(564, 634);
+            this.ClientSize = new System.Drawing.Size(590, 718);
+            this.Controls.Add(this.manageProfilesButton);
+            this.Controls.Add(this.profileChooser);
+            this.Controls.Add(this.equipmentProfilesLabel);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.chkTrace);
             this.Controls.Add(this.DSGLogo);
@@ -335,6 +420,7 @@ namespace ASCOM.DarkSkyGeek
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
+            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -349,9 +435,6 @@ namespace ASCOM.DarkSkyGeek
         private System.Windows.Forms.PictureBox DSGLogo;
         private System.Windows.Forms.DataGridView filtersDataGridView;
         private System.Windows.Forms.CheckBox chkTrace;
-        private System.Windows.Forms.DataGridViewTextBoxColumn FilterPositionColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn FilterNameColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn FilterOffsetColumn;
         private System.Windows.Forms.Label filterOffsetsWarning;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label backlashCompLabel;
@@ -363,5 +446,15 @@ namespace ASCOM.DarkSkyGeek
         private System.Windows.Forms.ComboBox filterWheelSelectorComboBox;
         private System.Windows.Forms.ComboBox focuserSelectorComboBox;
         private System.Windows.Forms.Label focuserSelectorLabel;
+        private System.Windows.Forms.Label equipmentProfilesLabel;
+        private System.Windows.Forms.Button manageProfilesButton;
+        private System.Windows.Forms.ComboBox profileChooser;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem newProfileMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem renameProfileMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deleteProfileMenuItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FilterPositionColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FilterNameColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FilterOffsetColumn;
     }
 }

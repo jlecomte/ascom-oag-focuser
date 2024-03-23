@@ -151,17 +151,13 @@ Here is what the prototype circuit looks like:
 
 Here is what the PCB looks like when rendered in KiCad:
 
-![Circuit Board Front Rendered in KiCad](images/PCB-front.jpg)
-
-![Circuit Board Back Rendered in KiCad](images/PCB-back.jpg)
-
 ![Circuit Board 3D Rendered in KiCad](images/PCB-3D.jpg)
+
+![PCB Routing](images/PCB-routing.png)
 
 Here is what the real PCB looks like:
 
-![Final Circuit Board Top](images/Real-PCB-1.jpg)
-
-![Final Circuit Board Bottom](images/Real-PCB-2.jpg)
+![Final Circuit Board Top](images/Real-PCB.jpg)
 
 ## Mechanical Components
 
@@ -252,6 +248,10 @@ This procedure is explained in great detail in the following video:
 **Step 3:** Make sure that no other application is currently using the COM port assigned to the device. On Windows, a single process can be connected to a COM port at any given time, so if you happen to be running the Arduino IDE (for example) at the same time, it will have likely automatically connected to the Arduino via the COM port, and the standalone focuser application will not be able to connect.
 
 **Step 4:** If all else fails, look for the driver logs under `<DOCUMENTS FOLDER>\ASCOM\Logs <DATE>\` and open the most recent file. Feel free to open an issue, and paste the content of the log file.
+
+**The focuser turns in the wrong direction**
+
+Depending on how you wire the stepper motor, it may turn in different directions. This is especially important when you first try the device, because its position is set to 0 by default and the driver will throw an error if the position becomes negative. So if you encounter an error on first try, don't worry! Disconnect the focuser in the application (no need to disconnect the USB cable...), open the focuser settings dialog, toggle the "Reverse Rotation" option (see screenshot above), and click OK. Then, connect to the focuser and try again.
 
 ## Frequently Asked Questions (FAQ)
 
