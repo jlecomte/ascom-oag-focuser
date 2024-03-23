@@ -253,6 +253,10 @@ This procedure is explained in great detail in the following video:
 
 **Step 4:** If all else fails, look for the driver logs under `<DOCUMENTS FOLDER>\ASCOM\Logs <DATE>\` and open the most recent file. Feel free to open an issue, and paste the content of the log file.
 
+**The focuser turns in the wrong direction**
+
+Depending on how you wire the stepper motor, it may turn in different directions. This is especially important when you first try the device, because its position is set to 0 by default and the driver will throw an error if the position becomes negative. So if you encounter an error on first try, don't worry! Disconnect the focuser in the application (no need to disconnect the USB cable...), open the focuser settings dialog, toggle the "Reverse Rotation" option (see screenshot above), and click OK. Then, connect to the focuser and try again.
+
 ## Frequently Asked Questions (FAQ)
 
 **I built this project and it does not work, can you help?**
