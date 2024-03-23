@@ -1,6 +1,6 @@
 #define MyAppPublisher "Dark Sky Geek"
 #define MyAppName "OAG Focuser ASCOM Driver"
-#define MyAppVersion "1.1.0"
+#define MyAppVersion "1.2.0"
 #define MyAppURL "https://github.com/jlecomte/ascom-oag-focuser"
 
 [Setup]

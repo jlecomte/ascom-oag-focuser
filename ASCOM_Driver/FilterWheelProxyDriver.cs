@@ -119,7 +119,10 @@ namespace ASCOM.DarkSkyGeek
         public void SetupDialog()
         {
             if (IsConnected)
+            {
                 System.Windows.Forms.MessageBox.Show("Settings cannot be updated once the device has been connected. Disconnect the device first, so you can update its settings.");
+                return;
+            }
 
             using (FilterWheelSetupDialogForm F = new FilterWheelSetupDialogForm(this))
             {
@@ -191,6 +194,11 @@ namespace ASCOM.DarkSkyGeek
                     if (string.IsNullOrEmpty(profile.filterWheelId))
                     {
                         throw new InvalidValueException("You have not specified which filter wheel to connect to");
+                    }
+
+                    if (string.IsNullOrEmpty(profile.focuserId))
+                    {
+                        throw new InvalidValueException("You have not specified which focuser to connect to");
                     }
 
                     filterWheel = new DriverAccess.FilterWheel(profile.filterWheelId)
@@ -314,7 +322,7 @@ namespace ASCOM.DarkSkyGeek
                 }
 
                 var profile = GetSelectedProfile();
-
+                tl.LogMessage("FilterWheel", $"Using profile {profile.name}");
                 short oldPosition = filterWheel.Position;
                 short newPosition = value;
 
@@ -323,7 +331,7 @@ namespace ASCOM.DarkSkyGeek
                 int oldFilterOffset = profile.filterOffsets[oldPosition];
                 int newFilterOffset = profile.filterOffsets[newPosition];
                 int delta = (int) ((newFilterOffset - oldFilterOffset) * profile.stepRatio);
-
+                tl.LogMessage("FilterWheel", $"oldFilterOffset = {oldFilterOffset}, newFilterOffset = {newFilterOffset}, delta = {delta}");
                 if (delta > 0)
                 {
                     // If we're moving OUT, we overshoot to deal with backlash...

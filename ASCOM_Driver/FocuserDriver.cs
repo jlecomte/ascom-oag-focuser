@@ -65,7 +65,7 @@ namespace ASCOM.DarkSkyGeek
         // True if using a pinion gear, i.e. the rotation of the focuser is opposite
         // that of the stepper motor arm. False if using a timing belt...
         internal static string reverseRotationProfileName = "Reverse Rotation";
-        internal static string reverseRotationDefault = "false";
+        internal static string reverseRotationDefault = "true";
 
         // Variables to hold the current device configuration
         internal static bool autoDetectComPort = Convert.ToBoolean(autoDetectComPortDefault);

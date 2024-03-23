@@ -75,7 +75,6 @@ namespace ASCOM.DarkSkyGeek
             // cmdOK
             // 
             this.cmdOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmdOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.cmdOK.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmdOK.Image = global::ASCOM.DarkSkyGeek.Properties.Resources.icon_ok_24;
             this.cmdOK.Location = new System.Drawing.Point(422, 673);
@@ -84,7 +83,7 @@ namespace ASCOM.DarkSkyGeek
             this.cmdOK.Size = new System.Drawing.Size(76, 35);
             this.cmdOK.TabIndex = 0;
             this.cmdOK.UseVisualStyleBackColor = true;
-            this.cmdOK.Click += new System.EventHandler(this.cmdOK_Click);
+            this.cmdOK.Click += new System.EventHandler(this.CmdOK_Click);
             // 
             // cmdCancel
             // 
@@ -98,7 +97,7 @@ namespace ASCOM.DarkSkyGeek
             this.cmdCancel.Size = new System.Drawing.Size(74, 37);
             this.cmdCancel.TabIndex = 1;
             this.cmdCancel.UseVisualStyleBackColor = true;
-            this.cmdCancel.Click += new System.EventHandler(this.cmdCancel_Click);
+            this.cmdCancel.Click += new System.EventHandler(this.CmdCancel_Click);
             // 
             // descriptionLabel
             // 
@@ -148,7 +147,7 @@ namespace ASCOM.DarkSkyGeek
             this.filterWheelSelectorComboBox.Name = "filterWheelSelectorComboBox";
             this.filterWheelSelectorComboBox.Size = new System.Drawing.Size(427, 21);
             this.filterWheelSelectorComboBox.TabIndex = 14;
-            this.filterWheelSelectorComboBox.SelectedIndexChanged += new System.EventHandler(this.filterWheelSelectorComboBox_SelectedIndexChanged);
+            this.filterWheelSelectorComboBox.SelectedIndexChanged += new System.EventHandler(this.FilterWheelSelectorComboBox_SelectedIndexChanged);
             // 
             // filterOffsetsWarning
             // 
@@ -186,9 +185,9 @@ namespace ASCOM.DarkSkyGeek
             this.filtersDataGridView.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.filtersDataGridView.Size = new System.Drawing.Size(553, 197);
             this.filtersDataGridView.TabIndex = 0;
-            this.filtersDataGridView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.filtersDataGridView_CellValidating);
-            this.filtersDataGridView.Validating += new System.ComponentModel.CancelEventHandler(this.filtersDataGridView_Validating);
-            this.filtersDataGridView.Validated += new System.EventHandler(this.filtersDataGridView_Validated);
+            this.filtersDataGridView.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.FiltersDataGridView_CellValidating);
+            this.filtersDataGridView.Validating += new System.ComponentModel.CancelEventHandler(this.FiltersDataGridView_Validating);
+            this.filtersDataGridView.Validated += new System.EventHandler(this.FiltersDataGridView_Validated);
             // 
             // DSGLogo
             // 
@@ -243,7 +242,7 @@ namespace ASCOM.DarkSkyGeek
             this.focuserSelectorComboBox.Name = "focuserSelectorComboBox";
             this.focuserSelectorComboBox.Size = new System.Drawing.Size(441, 21);
             this.focuserSelectorComboBox.TabIndex = 24;
-            this.focuserSelectorComboBox.SelectedIndexChanged += new System.EventHandler(this.focuserSelectorComboBox_SelectedIndexChanged);
+            this.focuserSelectorComboBox.SelectedIndexChanged += new System.EventHandler(this.FocuserSelectorComboBox_SelectedIndexChanged);
             // 
             // focuserSelectorLabel
             // 
@@ -263,8 +262,8 @@ namespace ASCOM.DarkSkyGeek
             this.stepRatioTextBox.Size = new System.Drawing.Size(56, 20);
             this.stepRatioTextBox.TabIndex = 22;
             this.stepRatioTextBox.Text = "1.0";
-            this.stepRatioTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.stepRatioTextBox_Validating);
-            this.stepRatioTextBox.Validated += new System.EventHandler(this.stepRatioTextBox_Validated);
+            this.stepRatioTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.StepRatioTextBox_Validating);
+            this.stepRatioTextBox.Validated += new System.EventHandler(this.StepRatioTextBox_Validated);
             // 
             // backlashCompTextBox
             // 
@@ -274,8 +273,8 @@ namespace ASCOM.DarkSkyGeek
             this.backlashCompTextBox.Size = new System.Drawing.Size(56, 20);
             this.backlashCompTextBox.TabIndex = 21;
             this.backlashCompTextBox.Text = "0";
-            this.backlashCompTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.backlashCompTextBox_Validating);
-            this.backlashCompTextBox.Validated += new System.EventHandler(this.backlashCompTextBox_Validated);
+            this.backlashCompTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.BacklashCompTextBox_Validating);
+            this.backlashCompTextBox.Validated += new System.EventHandler(this.BacklashCompTextBox_Validated);
             // 
             // stepRatioLabel
             // 
@@ -321,7 +320,7 @@ namespace ASCOM.DarkSkyGeek
             this.profileChooser.Name = "profileChooser";
             this.profileChooser.Size = new System.Drawing.Size(279, 21);
             this.profileChooser.TabIndex = 16;
-            this.profileChooser.SelectedIndexChanged += new System.EventHandler(this.profileChooser_SelectedIndexChanged);
+            this.profileChooser.SelectedIndexChanged += new System.EventHandler(this.ProfileChooser_SelectedIndexChanged);
             // 
             // manageProfilesButton
             // 
@@ -332,7 +331,7 @@ namespace ASCOM.DarkSkyGeek
             this.manageProfilesButton.TabIndex = 17;
             this.manageProfilesButton.Text = "Manage Profiles  ▼";
             this.manageProfilesButton.UseVisualStyleBackColor = true;
-            this.manageProfilesButton.Click += new System.EventHandler(this.manageProfilesButton_Click);
+            this.manageProfilesButton.Click += new System.EventHandler(this.ManageProfilesButton_Click);
             // 
             // contextMenuStrip
             // 
@@ -348,21 +347,21 @@ namespace ASCOM.DarkSkyGeek
             this.newProfileMenuItem.Name = "newProfileMenuItem";
             this.newProfileMenuItem.Size = new System.Drawing.Size(201, 22);
             this.newProfileMenuItem.Text = "New Profile";
-            this.newProfileMenuItem.Click += new System.EventHandler(this.newProfileMenuItem_Click);
+            this.newProfileMenuItem.Click += new System.EventHandler(this.NewProfileMenuItem_Click);
             // 
             // renameProfileMenuItem
             // 
             this.renameProfileMenuItem.Name = "renameProfileMenuItem";
             this.renameProfileMenuItem.Size = new System.Drawing.Size(201, 22);
             this.renameProfileMenuItem.Text = "Rename Selected Profile";
-            this.renameProfileMenuItem.Click += new System.EventHandler(this.renameProfileMenuItem_Click);
+            this.renameProfileMenuItem.Click += new System.EventHandler(this.RenameProfileMenuItem_Click);
             // 
             // deleteProfileMenuItem
             // 
             this.deleteProfileMenuItem.Name = "deleteProfileMenuItem";
             this.deleteProfileMenuItem.Size = new System.Drawing.Size(201, 22);
             this.deleteProfileMenuItem.Text = "Delete Selected Profile";
-            this.deleteProfileMenuItem.Click += new System.EventHandler(this.deleteProfileMenuItem_Click);
+            this.deleteProfileMenuItem.Click += new System.EventHandler(this.DeleteProfileMenuItem_Click);
             // 
             // FilterPositionColumn
             // 

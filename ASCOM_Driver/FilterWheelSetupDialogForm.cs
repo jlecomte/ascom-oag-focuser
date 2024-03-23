@@ -82,9 +82,11 @@ namespace ASCOM.DarkSkyGeek
             ArrayList focuserDevices = AscomProfile.RegisteredDevices("Focuser");
             foreach (KeyValuePair kv in focuserDevices)
             {
-                ComboboxItem item = new ComboboxItem();
-                item.Text = kv.Value;
-                item.Value = kv.Key;
+                ComboboxItem item = new ComboboxItem
+                {
+                    Text = kv.Value,
+                    Value = kv.Key
+                };
                 int index = focuserSelectorComboBox.Items.Add(item);
                 // Select newly added item if it matches the value stored in the profile.
                 if (kv.Key == selectedProfile.focuserId)
@@ -127,56 +129,34 @@ namespace ASCOM.DarkSkyGeek
             UpdateFormFields(true);
         }
 
-        private void cmdOK_Click(object sender, EventArgs e)
+        private void CmdOK_Click(object sender, EventArgs e)
         {
+            foreach (var profile in driver.profiles.profiles)
+            {
+                if (profile.filterWheelId == null)
+                {
+                    MessageBox.Show($"You have not chosen a filter wheel in profile \"{profile.name}\"", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                if (profile.focuserId == null)
+                {
+                    MessageBox.Show($"You have not chosen a focuser in profile \"{profile.name}\"", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+
             if (Validate())
             {
                 driver.tl.Enabled = chkTrace.Checked;
                 // All the profile(s) values will have already been updated by now...
-            }
-            else
-            {
-                DialogResult = DialogResult.None;
+                DialogResult = DialogResult.OK;
             }
         }
 
-        private void cmdCancel_Click(object sender, EventArgs e)
+        private void CmdCancel_Click(object sender, EventArgs e)
         {
             Close();
-        }
-
-        private void backlashCompTextBox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            try
-            {
-                int value = Convert.ToInt32(backlashCompTextBox.Text);
-                if (value < 0)
-                {
-                    throw new FormatException("Backlash compensation cannot be a negative number");
-                }
-                errorProvider.SetError(backlashCompTextBox, string.Empty);
-            }
-            catch (Exception)
-            {
-                e.Cancel = true;
-                backlashCompTextBox.Select(0, backlashCompTextBox.Text.Length);
-                errorProvider.SetError(backlashCompTextBox, "Must be an integer (positive or negative)");
-            }
-        }
-
-        private void stepRatioTextBox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            try
-            {
-                decimal value = Convert.ToDecimal(stepRatioTextBox.Text);
-                errorProvider.SetError(stepRatioTextBox, string.Empty);
-            }
-            catch (Exception)
-            {
-                e.Cancel = true;
-                stepRatioTextBox.Select(0, stepRatioTextBox.Text.Length);
-                errorProvider.SetError(stepRatioTextBox, "Must be a decimal value");
-            }
         }
 
         private void BrowseToHomepage(object sender, EventArgs e)
@@ -188,15 +168,17 @@ namespace ASCOM.DarkSkyGeek
             catch (System.ComponentModel.Win32Exception noBrowser)
             {
                 if (noBrowser.ErrorCode == -2147467259)
+                {
                     MessageBox.Show(noBrowser.Message);
+                }
             }
-            catch (System.Exception other)
+            catch (Exception other)
             {
                 MessageBox.Show(other.Message);
             }
         }
 
-        private void manageProfilesButton_Click(object sender, EventArgs e)
+        private void ManageProfilesButton_Click(object sender, EventArgs e)
         {
             Button btnSender = (Button)sender;
             Point ptLowerLeft = new Point(0, btnSender.Height);
@@ -204,7 +186,7 @@ namespace ASCOM.DarkSkyGeek
             contextMenuStrip.Show(ptLowerLeft);
         }
 
-        private void profileChooser_SelectedIndexChanged(object sender, EventArgs e)
+        private void ProfileChooser_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (Validate())
             {
@@ -221,26 +203,32 @@ namespace ASCOM.DarkSkyGeek
             }
         }
 
-        private void newProfileMenuItem_Click(object sender, EventArgs e)
+        private void NewProfileMenuItem_Click(object sender, EventArgs e)
         {
-            var profileNameEditor = new ProfileNameEditor("<New Profile Name>", driver);
-            profileNameEditor.StartPosition = FormStartPosition.CenterParent;
+            var profileNameEditor = new ProfileNameEditor("<New Profile Name>", driver)
+            {
+                StartPosition = FormStartPosition.CenterParent
+            };
             var result = profileNameEditor.ShowDialog();
             if (result == DialogResult.OK)
             {
-                var newProfile = new FilterWheelProxyProfile();
-                newProfile.name = profileNameEditor.ReturnValue;
+                var newProfile = new FilterWheelProxyProfile
+                {
+                    name = profileNameEditor.ReturnValue
+                };
                 driver.profiles.profiles.Add(newProfile);
                 driver.profiles.currentlySelectedProfileName = newProfile.name;
                 UpdateFormFields(true);
             }
         }
 
-        private void renameProfileMenuItem_Click(object sender, EventArgs e)
+        private void RenameProfileMenuItem_Click(object sender, EventArgs e)
         {
             var selectedProfile = driver.GetSelectedProfile();
-            var profileNameEditor = new ProfileNameEditor(selectedProfile.name, driver);
-            profileNameEditor.StartPosition = FormStartPosition.CenterParent;
+            var profileNameEditor = new ProfileNameEditor(selectedProfile.name, driver)
+            {
+                StartPosition = FormStartPosition.CenterParent
+            };
             var result = profileNameEditor.ShowDialog();
             if (result == DialogResult.OK)
             {
@@ -249,7 +237,7 @@ namespace ASCOM.DarkSkyGeek
             }
         }
 
-        private void deleteProfileMenuItem_Click(object sender, EventArgs e)
+        private void DeleteProfileMenuItem_Click(object sender, EventArgs e)
         {
             var selectedProfile = driver.GetSelectedProfile();
             driver.profiles.profiles.Remove(selectedProfile);
@@ -270,13 +258,13 @@ namespace ASCOM.DarkSkyGeek
             UpdateFormFields(true);
         }
 
-        private void filterWheelSelectorComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void FilterWheelSelectorComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             var selectedProfile = driver.GetSelectedProfile();
             selectedProfile.filterWheelId = (filterWheelSelectorComboBox.SelectedItem as ComboboxItem).Value;
         }
 
-        private void filtersDataGridView_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        private void FiltersDataGridView_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
             switch (e.ColumnIndex)
             {
@@ -290,7 +278,7 @@ namespace ASCOM.DarkSkyGeek
             }
         }
 
-        private void filtersDataGridView_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        private void FiltersDataGridView_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
             for (int i = 0; i < FilterWheelProxy.MAX_FILTER_COUNT; i++)
             {
@@ -330,7 +318,7 @@ namespace ASCOM.DarkSkyGeek
             }
         }
 
-        private void filtersDataGridView_Validated(object sender, EventArgs e)
+        private void FiltersDataGridView_Validated(object sender, EventArgs e)
         {
             var selectedProfile = driver.GetSelectedProfile();
             selectedProfile.filterNames.Clear();
@@ -359,19 +347,53 @@ namespace ASCOM.DarkSkyGeek
             }
         }
 
-        private void focuserSelectorComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void FocuserSelectorComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             var selectedProfile = driver.GetSelectedProfile();
             selectedProfile.focuserId = (focuserSelectorComboBox.SelectedItem as ComboboxItem).Value;
         }
 
-        private void backlashCompTextBox_Validated(object sender, EventArgs e)
+        private void BacklashCompTextBox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            try
+            {
+                int value = Convert.ToInt32(backlashCompTextBox.Text);
+                if (value < 0)
+                {
+                    throw new FormatException("Backlash compensation cannot be a negative number");
+                }
+                errorProvider.SetError(backlashCompTextBox, string.Empty);
+            }
+            catch (Exception)
+            {
+                e.Cancel = true;
+                backlashCompTextBox.Select(0, backlashCompTextBox.Text.Length);
+                errorProvider.SetError(backlashCompTextBox, "Must be an integer (positive or negative)");
+            }
+        }
+
+        private void BacklashCompTextBox_Validated(object sender, EventArgs e)
         {
             var selectedProfile = driver.GetSelectedProfile();
             selectedProfile.backlashCompSteps = Convert.ToInt32(backlashCompTextBox.Text);
         }
 
-        private void stepRatioTextBox_Validated(object sender, EventArgs e)
+        private void StepRatioTextBox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            try
+            {
+                decimal value = Convert.ToDecimal(stepRatioTextBox.Text);
+                errorProvider.SetError(stepRatioTextBox, string.Empty);
+            }
+            catch (Exception)
+            {
+                e.Cancel = true;
+                stepRatioTextBox.Select(0, stepRatioTextBox.Text.Length);
+                errorProvider.SetError(stepRatioTextBox, "Must be a decimal value");
+            }
+        }
+
+        private void StepRatioTextBox_Validated(object sender, EventArgs e)
         {
             var selectedProfile = driver.GetSelectedProfile();
             selectedProfile.stepRatio = Convert.ToDecimal(stepRatioTextBox.Text);

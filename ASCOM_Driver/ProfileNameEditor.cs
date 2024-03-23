@@ -22,12 +22,7 @@ namespace ASCOM.DarkSkyGeek
             }
         }
 
-        private void cmdCancel_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-
-        private void cmdOK_Click(object sender, EventArgs e)
+        private void CmdOK_Click(object sender, EventArgs e)
         {
             var profileName = profileNameTextBox.Text.Trim();
             if (profileName == "")
@@ -48,6 +43,11 @@ namespace ASCOM.DarkSkyGeek
                     Close();
                 }
             }
+        }
+
+        private void CmdCancel_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }
