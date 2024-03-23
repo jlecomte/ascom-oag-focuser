@@ -151,17 +151,13 @@ Here is what the prototype circuit looks like:
 
 Here is what the PCB looks like when rendered in KiCad:
 
-![Circuit Board Front Rendered in KiCad](images/PCB-front.jpg)
-
-![Circuit Board Back Rendered in KiCad](images/PCB-back.jpg)
-
 ![Circuit Board 3D Rendered in KiCad](images/PCB-3D.jpg)
+
+![PCB Routing](images/PCB-routing.png)
 
 Here is what the real PCB looks like:
 
-![Final Circuit Board Top](images/Real-PCB-1.jpg)
-
-![Final Circuit Board Bottom](images/Real-PCB-2.jpg)
+![Final Circuit Board Top](images/Real-PCB.jpg)
 
 ## Mechanical Components
 
