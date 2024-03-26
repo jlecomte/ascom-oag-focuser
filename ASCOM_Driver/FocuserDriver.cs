@@ -41,7 +41,7 @@ namespace ASCOM.DarkSkyGeek
         /// <summary>
         /// Driver description that displays in the ASCOM Chooser.
         /// </summary>
-        private static string deviceName = "DarkSkyGeek’s OAG Focuser";
+        private static readonly string deviceName = "DarkSkyGeek’s OAG Focuser";
 
         // Constants used for Profile persistence
         internal static string autoDetectComPortProfileName = "Auto-Detect COM Port";
@@ -96,7 +96,6 @@ namespace ASCOM.DarkSkyGeek
         private const string DEVICE_GUID = "6e18ce4b-0d7b-4850-8470-80df623bf0a4";
 
         private const string OK = "OK";
-        private const string NOK = "NOK";
 
         private const string TRUE = "TRUE";
         private const string FALSE = "FALSE";
@@ -151,7 +150,7 @@ namespace ASCOM.DarkSkyGeek
             if (IsConnected)
                 System.Windows.Forms.MessageBox.Show("Already connected, just press OK");
 
-            using (FocuserSetupDialogForm F = new FocuserSetupDialogForm(tl))
+            using (FocuserSetupDialogForm F = new FocuserSetupDialogForm(this))
             {
                 var result = F.ShowDialog();
                 if (result == System.Windows.Forms.DialogResult.OK)
@@ -292,7 +291,7 @@ namespace ASCOM.DarkSkyGeek
                         }
                         else
                         {
-                            throw new ASCOM.NotConnectedException("Failed to connect");
+                            throw new NotConnectedException("Failed to connect");
                         }
                     }
                 }
@@ -339,7 +338,7 @@ namespace ASCOM.DarkSkyGeek
             get
             {
                 Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-                string driverVersion = String.Format(CultureInfo.InvariantCulture, "{0}.{1}", version.Major, version.Minor);
+                string driverVersion = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", version.Major, version.Minor);
                 tl.LogMessage("DriverVersion Get", driverVersion);
                 return driverVersion;
             }
@@ -393,7 +392,7 @@ namespace ASCOM.DarkSkyGeek
                 if (response != TRUE && response != FALSE)
                 {
                     tl.LogMessage("IsMoving", "Invalid response from device: " + response);
-                    throw new ASCOM.DriverException("Invalid response from device: " + response);
+                    throw new DriverException("Invalid response from device: " + response);
                 }
                 return (response == TRUE);
             }
@@ -438,7 +437,7 @@ namespace ASCOM.DarkSkyGeek
         {
             if (Position < 0 || Position > maxPosition)
             {
-                throw new ASCOM.InvalidValueException("Position", Position.ToString(), "0", maxPosition.ToString());
+                throw new InvalidValueException("Position", Position.ToString(), "0", maxPosition.ToString());
             }
             if (reverseRotation)
             {
@@ -448,7 +447,7 @@ namespace ASCOM.DarkSkyGeek
             if (response != OK)
             {
                 tl.LogMessage("Move", "Device responded with an error");
-                throw new ASCOM.DriverException("Device responded with an error");
+                throw new DriverException("Device responded with an error");
             }
         }
 
@@ -460,12 +459,12 @@ namespace ASCOM.DarkSkyGeek
                 int value;
                 try
                 {
-                    value = Int32.Parse(response);
+                    value = int.Parse(response);
                 }
                 catch (FormatException)
                 {
                     tl.LogMessage("Position", "Invalid position value received from device: " + response);
-                    throw new ASCOM.DriverException("Invalid position value received from device: " + response);
+                    throw new DriverException("Invalid position value received from device: " + response);
                 }
                 if (reverseRotation)
                 {
@@ -480,7 +479,7 @@ namespace ASCOM.DarkSkyGeek
             get
             {
                 tl.LogMessage("StepSize Get", "Not implemented");
-                throw new ASCOM.PropertyNotImplementedException("StepSize", false);
+                throw new PropertyNotImplementedException("StepSize", false);
             }
         }
 
@@ -494,7 +493,7 @@ namespace ASCOM.DarkSkyGeek
             set
             {
                 tl.LogMessage("TempComp Set", "Not implemented");
-                throw new ASCOM.PropertyNotImplementedException("TempComp", false);
+                throw new PropertyNotImplementedException("TempComp", false);
             }
         }
 
@@ -512,7 +511,7 @@ namespace ASCOM.DarkSkyGeek
             get
             {
                 tl.LogMessage("Temperature Get", "Not implemented");
-                throw new ASCOM.PropertyNotImplementedException("Temperature", false);
+                throw new PropertyNotImplementedException("Temperature", false);
             }
         }
 
@@ -532,7 +531,7 @@ namespace ASCOM.DarkSkyGeek
         /// <param name="bRegister">If <c>true</c>, registers the driver, otherwise unregisters it.</param>
         private static void RegUnregASCOM(bool bRegister)
         {
-            using (var P = new ASCOM.Utilities.Profile())
+            using (var P = new Profile())
             {
                 P.DeviceType = "Focuser";
                 if (bRegister)
@@ -613,7 +612,7 @@ namespace ASCOM.DarkSkyGeek
         {
             if (!IsConnected)
             {
-                throw new ASCOM.NotConnectedException(message);
+                throw new NotConnectedException(message);
             }
         }
 
@@ -746,7 +745,7 @@ namespace ASCOM.DarkSkyGeek
             if (!response.StartsWith(resultPrefix))
             {
                 tl.LogMessage(identifier, "Invalid response from device: " + response);
-                throw new ASCOM.DriverException("Invalid response from device: " + response);
+                throw new DriverException("Invalid response from device: " + response);
             }
             string arg = response.Substring(resultPrefix.Length);
             return arg;

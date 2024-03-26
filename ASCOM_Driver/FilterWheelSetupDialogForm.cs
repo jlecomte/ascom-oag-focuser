@@ -4,7 +4,6 @@
  * Licensed under the MIT License. See the accompanying LICENSE file for terms.
  */
 
-using ASCOM.DriverAccess;
 using ASCOM.Utilities;
 
 using System;
@@ -21,7 +20,7 @@ namespace ASCOM.DarkSkyGeek
     public partial class FilterWheelSetupDialogForm : Form
     {
         // Holder for a reference to the driver instance
-        readonly FilterWheelProxy driver;
+        private readonly FilterWheelProxy driver;
 
         public FilterWheelSetupDialogForm(FilterWheelProxy driver)
         {

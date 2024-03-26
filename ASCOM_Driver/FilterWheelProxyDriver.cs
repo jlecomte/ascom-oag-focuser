@@ -14,6 +14,7 @@ using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Windows.Forms;
 using System.Xml.Serialization;
 
 namespace ASCOM.DarkSkyGeek
@@ -50,10 +51,13 @@ namespace ASCOM.DarkSkyGeek
         internal FilterWheelProxyProfiles profiles = null;
 
         internal static string traceStateKeyName = "Trace Level";
-        internal static string traceStateDefault = "false";
+        internal static string traceStateDefault = "true";
 
-        internal static string profileValuesKeyName = "Profiles";
-        internal static string profileValuesDefault = "";
+        internal static string profileXmlPath = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+            "Dark Sky Geek",
+            "Filter Wheel Proxy Configuration Profiles.xml"
+        );
 
         /// <summary>
         /// Private variable to hold the connected state
@@ -466,9 +470,11 @@ namespace ASCOM.DarkSkyGeek
 
                 try
                 {
+                    // Read the "Trace on" config from the ASCOM device profile...
                     tl.Enabled = Convert.ToBoolean(driverProfile.GetValue(driverID, traceStateKeyName, string.Empty, traceStateDefault));
 
-                    var profilesXml = driverProfile.GetValue(driverID, profileValuesKeyName, string.Empty, profileValuesDefault);
+                    // Read the profiles from disk:
+                    var profilesXml = File.ReadAllText(profileXmlPath);
                     XmlSerializer xmlSerializer = new XmlSerializer(typeof(FilterWheelProxyProfiles));
                     TextReader reader = new StringReader(profilesXml);
                     profiles = (FilterWheelProxyProfiles) xmlSerializer.Deserialize(reader);
@@ -489,12 +495,20 @@ namespace ASCOM.DarkSkyGeek
             {
                 driverProfile.DeviceType = "FilterWheel";
 
+                // The "Trace on" config is persisted to the ASCOM device profile...
                 driverProfile.WriteValue(driverID, traceStateKeyName, tl.Enabled.ToString());
 
+                // The profiles are persisted to disk, in an XML file:
                 XmlSerializer xmlSerializer = new XmlSerializer(typeof(FilterWheelProxyProfiles));
                 StringWriter textWriter = new StringWriter();
                 xmlSerializer.Serialize(textWriter, profiles);
-                driverProfile.WriteValue(driverID, profileValuesKeyName, textWriter.ToString());
+
+                // Make sure the directory exists first...
+                var fileInfo = new FileInfo(profileXmlPath);
+                fileInfo.Directory.Create();
+
+                // Then, write the file.
+                File.WriteAllText(profileXmlPath, textWriter.ToString());
             }
         }
 

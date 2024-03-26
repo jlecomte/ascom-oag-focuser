@@ -1,6 +1,6 @@
 #define MyAppPublisher "Dark Sky Geek"
 #define MyAppName "OAG Focuser ASCOM Driver"
-#define MyAppVersion "1.2.0"
+#define MyAppVersion "1.3.0"
 #define MyAppURL "https://github.com/jlecomte/ascom-oag-focuser"
 
 [Setup]
@@ -50,11 +50,11 @@ var
 begin
    Result := 0.0; // Initialize the return value in case we can't read the registry
    try
-      if RegQueryStringValue(HKEY_LOCAL_MACHINE_32, 'Software\ASCOM','PlatformVersion', PlatVerString) then 
+      if RegQueryStringValue(HKEY_LOCAL_MACHINE_32, 'Software\ASCOM','PlatformVersion', PlatVerString) then
       begin // Successfully read the value from the registry
          Result := StrToFloat(PlatVerString); // Create a double from the X.Y Platform version string
       end;
-   except                                                                   
+   except
       ShowExceptionMessage;
       Result:= -1.0; // Indicate in the return value that an exception was generated
    end;
@@ -74,7 +74,7 @@ var
    else
       if PlatformVersionNumber = 0.0 then
          MsgBox('No ASCOM Platform is installed. Please install Platform ' + Format('%3.1f', [REQUIRED_PLATFORM_VERSION]) + ' or later from https://www.ascom-standards.org', mbCriticalError, MB_OK)
-      else 
+      else
          MsgBox('ASCOM Platform ' + Format('%3.1f', [REQUIRED_PLATFORM_VERSION]) + ' or later is required, but Platform '+ Format('%3.1f', [PlatformVersionNumber]) + ' is installed. Please install the latest Platform before continuing; you will find it at https://www.ascom-standards.org', mbCriticalError, MB_OK);
 end;
 

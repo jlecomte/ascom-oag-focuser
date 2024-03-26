@@ -64,7 +64,7 @@ namespace ASCOM.DarkSkyGeek
             this.cmdOK.Size = new System.Drawing.Size(76, 35);
             this.cmdOK.TabIndex = 0;
             this.cmdOK.UseVisualStyleBackColor = true;
-            this.cmdOK.Click += new System.EventHandler(this.cmdOK_Click);
+            this.cmdOK.Click += new System.EventHandler(this.CmdOK_Click);
             // 
             // cmdCancel
             // 
@@ -78,7 +78,7 @@ namespace ASCOM.DarkSkyGeek
             this.cmdCancel.Size = new System.Drawing.Size(74, 37);
             this.cmdCancel.TabIndex = 1;
             this.cmdCancel.UseVisualStyleBackColor = true;
-            this.cmdCancel.Click += new System.EventHandler(this.cmdCancel_Click);
+            this.cmdCancel.Click += new System.EventHandler(this.CmdCancel_Click);
             // 
             // comPortOverrideLabel
             // 
@@ -133,7 +133,7 @@ namespace ASCOM.DarkSkyGeek
             this.chkAutoDetect.TabIndex = 8;
             this.chkAutoDetect.Text = "Auto-Detect COM port";
             this.chkAutoDetect.UseVisualStyleBackColor = true;
-            this.chkAutoDetect.CheckedChanged += new System.EventHandler(this.chkAutoDetect_CheckedChanged);
+            this.chkAutoDetect.CheckedChanged += new System.EventHandler(this.ChkAutoDetect_CheckedChanged);
             // 
             // errorProvider
             // 
@@ -154,7 +154,7 @@ namespace ASCOM.DarkSkyGeek
             this.maxPositionTextBox.Name = "maxPositionTextBox";
             this.maxPositionTextBox.Size = new System.Drawing.Size(56, 20);
             this.maxPositionTextBox.TabIndex = 10;
-            this.maxPositionTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.maxPositionTextBox_Validating);
+            this.maxPositionTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.MaxPositionTextBox_Validating);
             // 
             // chkReverseRotation
             // 

@@ -17,15 +17,15 @@ namespace ASCOM.DarkSkyGeek
 
     public partial class FocuserSetupDialogForm : Form
     {
-        // Holder for a reference to the driver's trace logger
-        TraceLogger tl;
+        // Holder for a reference to the driver instance
+        private readonly Focuser focuser;
 
-        public FocuserSetupDialogForm(TraceLogger tlDriver)
+        public FocuserSetupDialogForm(Focuser focuser)
         {
             InitializeComponent();
 
-            // Save the provided trace logger for use within the setup dialogue
-            tl = tlDriver;
+            // Save the provided driver instance for use within the setup dialog
+            this.focuser = focuser;
         }
 
         private void FocuserSetupDialogForm_Load(object sender, EventArgs e)
@@ -44,13 +44,13 @@ namespace ASCOM.DarkSkyGeek
                 comboBoxComPort.SelectedItem = Focuser.comPortOverride;
             }
 
-            chkTrace.Checked = tl.Enabled;
+            chkTrace.Checked = focuser.tl.Enabled;
 
             maxPositionTextBox.Text = Focuser.maxPosition.ToString();
             chkReverseRotation.Checked = Focuser.reverseRotation;
         }
 
-        private void cmdOK_Click(object sender, EventArgs e)
+        private void CmdOK_Click(object sender, EventArgs e)
         {
             if (!Validate())
             {
@@ -59,22 +59,22 @@ namespace ASCOM.DarkSkyGeek
 
             Focuser.autoDetectComPort = chkAutoDetect.Checked;
             Focuser.comPortOverride = (string)comboBoxComPort.SelectedItem;
-            tl.Enabled = chkTrace.Checked;
+            focuser.tl.Enabled = chkTrace.Checked;
             Focuser.maxPosition = Convert.ToInt32(maxPositionTextBox.Text);
             Focuser.reverseRotation = chkReverseRotation.Checked;
         }
 
-        private void cmdCancel_Click(object sender, EventArgs e)
+        private void CmdCancel_Click(object sender, EventArgs e)
         {
             Close();
         }
 
-        private void chkAutoDetect_CheckedChanged(object sender, EventArgs e)
+        private void ChkAutoDetect_CheckedChanged(object sender, EventArgs e)
         {
             comboBoxComPort.Enabled = !((CheckBox)sender).Checked;
         }
 
-        private void maxPositionTextBox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        private void MaxPositionTextBox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
             try
             {
