@@ -80,6 +80,12 @@ namespace ASCOM.DarkSkyGeek
         /// </summary>
         private DriverAccess.Focuser focuser;
 
+        /// <summary>
+        // Object used to synchronize access to the underlying devices. This is especially important
+        // when used in a multi-threaded application and the `SetCurrentProfile` action is invoked.
+        /// </summary>
+        private readonly object lockObject = new object();
+
         // Various constants...
         private const string OK = "OK";
 
@@ -161,23 +167,14 @@ namespace ASCOM.DarkSkyGeek
             switch (actionName.ToUpper())
             {
                 case "GETPROFILES":
-                    return "[" + string.Join(",", profiles.profiles.Select(profile => "\"" + profile.name.Trim().Replace("\\", "\\\\").Replace("\"", "\\\"") + "\"").ToArray()) + "]";
+                    return GetProfileNamesAsJSON();
 
                 case "GETCURRENTPROFILE":
                     return profiles.currentlySelectedProfileName;
 
                 case "SETCURRENTPROFILE":
-                    if (Connected)
-                    {
-                        throw new DriverException("Cannot select a profile while the device is connected!");
-                    }
                     var profileName = actionParameters;
-                    if (GetProfile(profileName) == null)
-                    {
-                        throw new InvalidValueException("Unknown profile name: " + profileName);
-                    }
-                    profiles.currentlySelectedProfileName = profileName;
-                    WriteProfile();
+                    SelectProfile(profileName);
                     return OK;
 
                 default:
@@ -224,43 +221,67 @@ namespace ASCOM.DarkSkyGeek
                 if (value == IsConnected)
                     return;
 
-                if (value)
+                lock (lockObject)
                 {
-                    var profile = GetSelectedProfile();
-
-                    if (string.IsNullOrEmpty(profile.filterWheelId))
+                    if (value)
                     {
-                        throw new InvalidValueException("You have not specified which filter wheel to connect to");
+                        var profile = GetSelectedProfile();
+
+                        if (string.IsNullOrEmpty(profile.filterWheelId))
+                        {
+                            throw new InvalidValueException("You have not specified which filter wheel to connect to");
+                        }
+
+                        if (string.IsNullOrEmpty(profile.focuserId))
+                        {
+                            throw new InvalidValueException("You have not specified which focuser to connect to");
+                        }
+
+                        try
+                        {
+                            filterWheel = new DriverAccess.FilterWheel(profile.filterWheelId)
+                            {
+                                Connected = true
+                            };
+
+                            focuser = new DriverAccess.Focuser(profile.focuserId)
+                            {
+                                Connected = true
+                            };
+
+                            connectedState = true;
+                        }
+                        catch (Exception e)
+                        {
+                            if (filterWheel != null)
+                            {
+                                filterWheel.Connected = false;
+                                filterWheel.Dispose();
+                                filterWheel = null;
+                            }
+
+                            if (focuser != null)
+                            {
+                                focuser.Connected = false;
+                                focuser.Dispose();
+                                focuser = null;
+                            }
+
+                            throw e;
+                        }
                     }
-
-                    if (string.IsNullOrEmpty(profile.focuserId))
+                    else
                     {
-                        throw new InvalidValueException("You have not specified which focuser to connect to");
+                        connectedState = false;
+
+                        filterWheel.Connected = false;
+                        filterWheel.Dispose();
+                        filterWheel = null;
+
+                        focuser.Connected = false;
+                        focuser.Dispose();
+                        focuser = null;
                     }
-
-                    filterWheel = new DriverAccess.FilterWheel(profile.filterWheelId)
-                    {
-                        Connected = true
-                    };
-
-                    focuser = new DriverAccess.Focuser(profile.focuserId)
-                    {
-                        Connected = true
-                    };
-
-                    connectedState = true;
-                }
-                else
-                {
-                    connectedState = false;
-
-                    filterWheel.Connected = false;
-                    filterWheel.Dispose();
-                    filterWheel = null;
-
-                    focuser.Connected = false;
-                    focuser.Dispose();
-                    focuser = null;
                 }
             }
         }
@@ -346,47 +367,53 @@ namespace ASCOM.DarkSkyGeek
         {
             get
             {
-                CheckConnected("Position");
-                return filterWheel.Position;
+                lock (lockObject)
+                {
+                    CheckConnected("Position");
+                    return filterWheel.Position;
+                }
             }
             set
             {
-                CheckConnected("Position");
-
-                if (focuser.IsMoving)
+                lock (lockObject)
                 {
-                    throw new DriverException("Cannot switch filters while the OAG focuser is still moving from the previous filter change. Please wait and try again.");
-                }
+                    CheckConnected("Position");
 
-                var profile = GetSelectedProfile();
-                LogMessage("FilterWheel", $"Using profile {profile.name}");
-                short oldPosition = filterWheel.Position;
-                short newPosition = value;
-
-                filterWheel.Position = newPosition;
-
-                int oldFilterOffset = profile.filterOffsets[oldPosition];
-                int newFilterOffset = profile.filterOffsets[newPosition];
-                int delta = (int) ((newFilterOffset - oldFilterOffset) * profile.stepRatio);
-                LogMessage("FilterWheel", $"oldFilterOffset = {oldFilterOffset}, newFilterOffset = {newFilterOffset}, delta = {delta}");
-                if (delta > 0)
-                {
-                    // If we're moving OUT, we overshoot to deal with backlash...
-                    focuser.Move(focuser.Position + profile.backlashCompSteps + delta);
-
-                    // Wait for the focuser to reach the desired position...
-                    while (focuser.IsMoving)
+                    if (focuser.IsMoving)
                     {
-                        Thread.Sleep(100);
+                        throw new DriverException("Cannot switch filters while the OAG focuser is still moving from the previous filter change. Please wait and try again.");
                     }
 
-                    // Once the focuser has stopped moving, we tell it to move to its final position...
-                    focuser.Move(focuser.Position - profile.backlashCompSteps);
-                }
-                else
-                {
-                    // If we're moving IN, we don't have any backlash compensation code to apply.
-                    focuser.Move(focuser.Position + delta);
+                    var profile = GetSelectedProfile();
+                    LogMessage("FilterWheel", $"Using profile {profile.name}");
+                    short oldPosition = filterWheel.Position;
+                    short newPosition = value;
+
+                    filterWheel.Position = newPosition;
+
+                    int oldFilterOffset = profile.filterOffsets[oldPosition];
+                    int newFilterOffset = profile.filterOffsets[newPosition];
+                    int delta = (int)((newFilterOffset - oldFilterOffset) * profile.stepRatio);
+                    LogMessage("FilterWheel", $"oldFilterOffset = {oldFilterOffset}, newFilterOffset = {newFilterOffset}, delta = {delta}");
+                    if (delta > 0)
+                    {
+                        // If we're moving OUT, we overshoot to deal with backlash...
+                        focuser.Move(focuser.Position + profile.backlashCompSteps + delta);
+
+                        // Wait for the focuser to reach the desired position...
+                        while (focuser.IsMoving)
+                        {
+                            Thread.Sleep(100);
+                        }
+
+                        // Once the focuser has stopped moving, we tell it to move to its final position...
+                        focuser.Move(focuser.Position - profile.backlashCompSteps);
+                    }
+                    else
+                    {
+                        // If we're moving IN, we don't have any backlash compensation code to apply.
+                        focuser.Move(focuser.Position + delta);
+                    }
                 }
             }
         }
@@ -588,6 +615,84 @@ namespace ASCOM.DarkSkyGeek
             }
 
             return profile;
+        }
+
+        /// <summary>
+        /// Returns the list of known profiles as a JSON array
+        /// </summary>
+        internal string GetProfileNamesAsJSON()
+        {
+            return "[" + string.Join(",", profiles.profiles.Select(profile => "\"" + profile.name.Trim().Replace("\\", "\\\\").Replace("\"", "\\\"") + "\"").ToArray()) + "]";
+        }
+
+        /// <summary>
+        /// Changes the selected profile. If needed, this will cause the driver to connect to different underlying devices
+        /// depending on how the user set up their profiles. In practice, this is unlikely, however, because profiles are
+        /// mostly used to accommodate for different filter offsets (depending, for example, on whether you use a reducer)
+        /// with the same filter wheel and OAG focuser devices...
+        /// </summary>
+        internal void SelectProfile(string profileName)
+        {
+            profileName = profileName.Trim();
+            if (profileName == profiles.currentlySelectedProfileName.Trim())
+            {
+                // Nothing to do, my best kind of work :)
+                return;
+            }
+
+            var newProfile = GetProfile(profileName) ?? throw new InvalidValueException("Unknown profile name: " + profileName);
+
+            if (!Connected)
+            {
+                profiles.currentlySelectedProfileName = profileName;
+                WriteProfile();
+                return;
+            }
+
+            if (string.IsNullOrEmpty(newProfile.filterWheelId))
+            {
+                throw new InvalidValueException("You have not specified a filter wheel in profile " + profileName);
+            }
+
+            if (string.IsNullOrEmpty(newProfile.focuserId))
+            {
+                throw new InvalidValueException("You have not specified a focuser  in profile " + profileName);
+            }
+
+            lock (lockObject)
+            {
+                var oldProfile = GetSelectedProfile();
+
+                if (newProfile.filterWheelId != oldProfile.filterWheelId)
+                {
+                    var oldFilterWheel = filterWheel;
+
+                    filterWheel = new DriverAccess.FilterWheel(newProfile.filterWheelId)
+                    {
+                        Connected = true
+                    };
+
+                    oldFilterWheel.Connected = false;
+                    oldFilterWheel.Dispose();
+                }
+
+                if (newProfile.focuserId != oldProfile.focuserId)
+                {
+                    var oldFocuser = focuser;
+
+                    focuser = new DriverAccess.Focuser(newProfile.focuserId)
+                    {
+                        Connected = true
+                    };
+
+                    oldFocuser.Connected = false;
+                    oldFocuser.Dispose();
+                }
+
+                profiles.currentlySelectedProfileName = profileName;
+            }
+
+            WriteProfile();
         }
 
         /// <summary>
