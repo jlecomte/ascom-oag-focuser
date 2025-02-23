@@ -109,6 +109,10 @@ void setup() {
     direction = forward;
     position = 0;
     last_step_time = 0L;
+    
+    #if PICO_RP2040 == 1
+        EEPROM.begin(256);
+    #endif
 
     int magic_number;
     EEPROM.get(EEPROM_MAGIC_NUMBER_ADDR, magic_number);
