@@ -129,6 +129,7 @@ void setup() {
 void loop() {
     if (Serial.available() > 0) {
         String command = Serial.readStringUntil('\n');
+	command.replace("\r","");
         if (command == COMMAND_PING) {
             handlePing();
         }
