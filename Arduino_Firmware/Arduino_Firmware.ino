@@ -24,7 +24,7 @@ constexpr auto COMMAND_PING = "COMMAND:PING";
 constexpr auto RESULT_PING = "RESULT:PING:OK:";
 
 constexpr auto COMMAND_INFO = "COMMAND:INFO";
-constexpr auto RESULT_INFO = "RESULT:INFO:DarkSkyGeek's OAG Focuser Firmware v1.0";
+constexpr auto RESULT_INFO = "RESULT:INFO:DarkSkyGeek's OAG Focuser Firmware v1.0.2";
 
 constexpr auto COMMAND_FOCUSER_GETPOSITION = "COMMAND:FOCUSER:GETPOSITION";
 constexpr auto RESULT_FOCUSER_POSITION = "RESULT:FOCUSER:POSITION:";
@@ -47,12 +47,12 @@ constexpr auto ERROR_INVALID_COMMAND = "ERROR:INVALID_COMMAND";
 // each step corresponds to a rotation of 11.25°. That means there are 32 steps
 // per revolution. Additionally, the motor is outfitted with a gearbox that has
 // a ratio of 64:1, which means that a full revolution requires 2,048 steps.
-const unsigned int STEPS_PER_REVOLUTION = 2048;
+const unsigned int STEPS_PER_REVOLUTION = 4096;
 
 // The ZWO helical focuser moves only over about a 220° range.
 // The gear ratio between small pulley and the focuser body is roughly 1:4.
 // Therefore, we set MAX_STEPS at 5,000 steps.
-const unsigned int MAX_STEPS = 5000;
+const unsigned int MAX_STEPS = 10000;
 
 // 6RPM = 1 revolution of the motor axle takes 10 seconds.
 // No need to go crazy fast (stepper motors lose torque at higher speeds),
@@ -63,10 +63,33 @@ const unsigned int RPM_SPEED = 6;
 const unsigned long STEP_DELAY_MICROSEC = (60L * 1000L * 1000L) / (STEPS_PER_REVOLUTION * RPM_SPEED);
 
 // Pins controlling the motor. Change this depending on your exact wiring!
-const unsigned int MOTOR_PIN_1 = 11; // Blue   - 28BYJ48 pin 1
-const unsigned int MOTOR_PIN_2 =  9; // Yellow - 28BYJ48 pin 3
-const unsigned int MOTOR_PIN_3 = 10; // Pink   - 28BYJ48 pin 2
-const unsigned int MOTOR_PIN_4 =  8; // Orange - 28BYJ48 pin 4
+//#define ARDUINO_NANO_MINI
+//#define SEEED_XIAO_RP2040
+//#define WAVESHARE_RP2040_ZERO
+
+// Pin config based on https://www.allelcoelec.com/blog/a-complete-guide-to-the-28byj-48-stepper-motor.html
+
+#ifdef ARDUINO_NANO_MINI
+  const unsigned int MOTOR_PIN_1 = 7; // Orange   - 28BYJ48 pin 1 coil4
+  const unsigned int MOTOR_PIN_2 = 8; // Yellow - 28BYJ48 pin 3 coil3
+  const unsigned int MOTOR_PIN_3 = 9; // Pink   - 28BYJ48 pin 2 coil2
+  const unsigned int MOTOR_PIN_4 = 10;// Blue - 28BYJ48 pin 4 coil1
+#elif defined SEEED_XIAO_RP2040
+  const unsigned int MOTOR_PIN_1 = 1; // Orange   - 28BYJ48 pin 1 coil4
+  const unsigned int MOTOR_PIN_2 = 2; // Yellow - 28BYJ48 pin 3 coil3
+  const unsigned int MOTOR_PIN_3 = 4; // Pink   - 28BYJ48 pin 2 coil2
+  const unsigned int MOTOR_PIN_4 = 3;// Blue - 28BYJ48 pin 4 coil1
+#elif defined WAVESHARE_RP2040_ZERO
+  const unsigned int MOTOR_PIN_1 = 27; // Orange   - 28BYJ48 pin 1 coil4
+  const unsigned int MOTOR_PIN_2 = 26; // Yellow - 28BYJ48 pin 3 coil3
+  const unsigned int MOTOR_PIN_3 = 15; // Pink   - 28BYJ48 pin 2 coil2
+  const unsigned int MOTOR_PIN_4 = 14;// Blue - 28BYJ48 pin 4 coil1
+#else
+  const unsigned int MOTOR_PIN_1 = 11; // Blue   - 28BYJ48 pin 1
+  const unsigned int MOTOR_PIN_2 = 9; // Yellow - 28BYJ48 pin 3
+  const unsigned int MOTOR_PIN_3 = 10; // Pink   - 28BYJ48 pin 2
+  const unsigned int MOTOR_PIN_4 = 8; // Orange - 28BYJ48 pin 4
+#endif
 
 const unsigned int EEPROM_MAGIC_NUMBER = 0x12345678;
 const unsigned int EEPROM_MAGIC_NUMBER_ADDR = 0;
@@ -104,6 +127,11 @@ void setup() {
     pinMode(MOTOR_PIN_2, OUTPUT);
     pinMode(MOTOR_PIN_3, OUTPUT);
     pinMode(MOTOR_PIN_4, OUTPUT);
+    
+    digitalWrite(MOTOR_PIN_1, LOW);
+    digitalWrite(MOTOR_PIN_2, LOW);
+    digitalWrite(MOTOR_PIN_3, LOW);
+    digitalWrite(MOTOR_PIN_4, LOW);
 
     steps_left = 0;
     direction = forward;
@@ -126,6 +154,10 @@ void setup() {
         EEPROM.put(EEPROM_POSITION_BASE_ADDR, position);
         // And mark the value as trustworthy...
         EEPROM.put(EEPROM_MAGIC_NUMBER_ADDR, EEPROM_MAGIC_NUMBER);
+        #if PICO_RP2040 == 1
+            EEPROM.commit();
+        #endif
+
     }
 }
 
@@ -191,23 +223,23 @@ void step() {
             position--;
         }
 
-        switch (mod(position, 4)) {
-            case 0: // 1010
+        switch (mod(position, 8)) {
+            case 0: // 0111
+                digitalWrite(MOTOR_PIN_1, LOW);
+                digitalWrite(MOTOR_PIN_2, HIGH);
+                digitalWrite(MOTOR_PIN_3, HIGH);
+                digitalWrite(MOTOR_PIN_4, HIGH);
+                break;
+            case 1: // 0011
+                digitalWrite(MOTOR_PIN_1, LOW);
+                digitalWrite(MOTOR_PIN_2, LOW);
+                digitalWrite(MOTOR_PIN_3, HIGH);
+                digitalWrite(MOTOR_PIN_4, HIGH);
+                break;
+            case 2: // 1011
                 digitalWrite(MOTOR_PIN_1, HIGH);
                 digitalWrite(MOTOR_PIN_2, LOW);
                 digitalWrite(MOTOR_PIN_3, HIGH);
-                digitalWrite(MOTOR_PIN_4, LOW);
-                break;
-            case 1: // 0110
-                digitalWrite(MOTOR_PIN_1, LOW);
-                digitalWrite(MOTOR_PIN_2, HIGH);
-                digitalWrite(MOTOR_PIN_3, HIGH);
-                digitalWrite(MOTOR_PIN_4, LOW);
-                break;
-            case 2: // 0101
-                digitalWrite(MOTOR_PIN_1, LOW);
-                digitalWrite(MOTOR_PIN_2, HIGH);
-                digitalWrite(MOTOR_PIN_3, LOW);
                 digitalWrite(MOTOR_PIN_4, HIGH);
                 break;
             case 3: // 1001
@@ -215,6 +247,30 @@ void step() {
                 digitalWrite(MOTOR_PIN_2, LOW);
                 digitalWrite(MOTOR_PIN_3, LOW);
                 digitalWrite(MOTOR_PIN_4, HIGH);
+                break;
+            case 4: // 1101
+                digitalWrite(MOTOR_PIN_1, HIGH);
+                digitalWrite(MOTOR_PIN_2, HIGH);
+                digitalWrite(MOTOR_PIN_3, LOW);
+                digitalWrite(MOTOR_PIN_4, HIGH);
+                break;
+            case 5: // 1100
+                digitalWrite(MOTOR_PIN_1, HIGH);
+                digitalWrite(MOTOR_PIN_2, HIGH);
+                digitalWrite(MOTOR_PIN_3, LOW);
+                digitalWrite(MOTOR_PIN_4, LOW);
+                break;
+            case 6: // 1110
+                digitalWrite(MOTOR_PIN_1, HIGH);
+                digitalWrite(MOTOR_PIN_2, HIGH);
+                digitalWrite(MOTOR_PIN_3, HIGH);
+                digitalWrite(MOTOR_PIN_4, LOW);
+                break;
+            case 7: // 0110
+                digitalWrite(MOTOR_PIN_1, LOW);
+                digitalWrite(MOTOR_PIN_2, HIGH);
+                digitalWrite(MOTOR_PIN_3, HIGH);
+                digitalWrite(MOTOR_PIN_4, LOW);
                 break;
         }
 
@@ -230,6 +286,10 @@ void stop() {
 
     // Store the final position in EEPROM.
     EEPROM.put(EEPROM_POSITION_BASE_ADDR, position);
+    #if PICO_RP2040 == 1
+        EEPROM.commit();
+    #endif
+
 
     // And de-energize the stepper by setting all the pins to LOW to save power,
     // prevent heat build up, and eliminate vibrations.
@@ -256,6 +316,9 @@ void setFocuserZeroPosition() {
     if (steps_left == 0) {
         position = 0;
         EEPROM.put(EEPROM_POSITION_BASE_ADDR, position);
+        #if PICO_RP2040 == 1
+            EEPROM.commit();
+        #endif
         Serial.println(OK);
     } else {
         // Cannot set zero position while focuser is still moving...
